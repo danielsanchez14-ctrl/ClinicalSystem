@@ -6,6 +6,7 @@ package com.mycompany.Models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -31,6 +32,15 @@ public class Appointment {
         this.duration = duration;
         this.patient = patient;
         this.doctor = doctor;
+    }
+
+    public String getScheduledAtAsString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return scheduledAt.format(formatter);
+    }
+
+    public String getDurationAsString() {
+        return duration.toString();
     }
 
     /**
@@ -109,11 +119,5 @@ public class Appointment {
     public void setStatus(AppointmentStatus status) {
         this.status = status;
     }
-    
-    
-    
-   
-
- 
 
 }
