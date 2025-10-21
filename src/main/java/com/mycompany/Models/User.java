@@ -3,23 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.Models;
+
 import java.util.UUID;
 
 /**
- *  Representa a un usuario dentro del sistema de gestión de citas y consultas
+ * Representa a un usuario dentro del sistema de gestión de citas y consultas
  * médicas.
+ *
  * @author kosmo
  */
 public class User {
-    
+
     private final String id; //Identificador único del usuario.
     private String username;
     private String phoneNumber;
     private String password;
     private boolean currentStatus;
-    
-    
-    public User(){
+
+    public User() {
         this.id = UUID.randomUUID().toString();
     }
 
@@ -31,27 +32,62 @@ public class User {
         this.currentStatus = false;
     }
 
-   //Métodos de encapsulamiento
-    public String getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public boolean isCurrentStatus() {
         return currentStatus;
     }
 
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
+     * @return the phoneNumber
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * @param phoneNumber the phoneNumber to set
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @param currentStatus the currentStatus to set
+     */
     public void setCurrentStatus(boolean currentStatus) {
         this.currentStatus = currentStatus;
     }
