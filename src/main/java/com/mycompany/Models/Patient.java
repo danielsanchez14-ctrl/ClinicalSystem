@@ -4,10 +4,43 @@
  */
 package com.mycompany.Models;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author kosmo
  */
-public class Patient {
-    
+public class Patient extends User {
+
+    private LocalDate birthDate;
+
+    public Patient() {
+        super();
+    }
+
+    public Patient(String username, String phoneNumber, String password, LocalDate birthDate) {
+        super(username, phoneNumber, password);
+        this.birthDate = birthDate;
+    }
+
+    public String getBirthDateAsString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return birthDate.format(formatter);
+    }
+
+    /**
+     * @return the birthDate
+     */
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    /**
+     * @param birthDate the birthDate to set
+     */
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
 }
