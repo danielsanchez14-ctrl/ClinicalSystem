@@ -18,6 +18,7 @@ import java.util.Optional;
  * @author camil
  */
 public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctorRepository {
+
     private List<Doctor> doctors = new ArrayList<>();
 
     @Override
@@ -30,7 +31,9 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public boolean add(Doctor doctor) {
-        if (doctor == null || searchById(doctor.getId()).isPresent()) return false;
+        if (doctor == null || searchById(doctor.getId()).isPresent()) {
+            return false;
+        }
         return doctors.add(doctor);
     }
 
@@ -60,7 +63,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     @Override
     public List<Doctor> searchBySpecialty(Specialty specialty) {
         return doctors.stream()
-                .filter(d -> d.getMedicalSpecialty().equals(specialty))
+                .filter(d -> d.getMedicalSpecialty() != null && d.getMedicalSpecialty().equals(specialty))
                 .toList();
     }
 
@@ -68,6 +71,4 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     public List<Doctor> listAll() {
         return new ArrayList<>(doctors);
     }
-    
-    
 }
