@@ -35,7 +35,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     }
 
     @Override
-    public boolean delete(String id) {
+    public boolean deleteById(String id) {
         return doctors.removeIf(d -> d.getId().equals(id));
     }
 

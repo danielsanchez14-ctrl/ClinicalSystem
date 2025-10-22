@@ -50,7 +50,7 @@ public class AuthenticationService implements IAuthentication {
 
     @Override
     public Optional<Patient> registerPatient(Patient patient) {
-       for (IAuthenticableRepository repo : repositories){
+        for (IAuthenticableRepository repo : repositories){
            // TODO: activar cuando IPatientRepository esté implementado
             /*if (repo instanceof Interfaces.IPatientRepository patientRepo){
                 boolean added = patientRepo.addPatient(patient);

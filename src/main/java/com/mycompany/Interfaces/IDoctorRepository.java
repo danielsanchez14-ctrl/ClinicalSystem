@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface IDoctorRepository {
     
     boolean add(Doctor doctor);
-    boolean delete(String id);
+    boolean deleteById(String id);
     boolean update(Doctor doctor);
 
     Optional<Doctor> searchById(String id);
