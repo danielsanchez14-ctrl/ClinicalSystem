@@ -32,6 +32,8 @@ public class ConsultationService {
     }
 
     /**
+     * Permite generar consultas y aplicar las validaciones.
+     *
      * @param consultation es la consulta a guardar.
      * @return un boolean que indica si la consulta se añadió o no.
      */
@@ -61,6 +63,13 @@ public class ConsultationService {
         }
     }
 
+    /**
+     * Retorna la lista de consultas de un paciente específico.
+     *
+     * @param patientID es la identificación del paciente.
+     * @return una lista con las consultas del paciente (vacía si no encuentra
+     * ninguna).
+     */
     public List<Consultation> getConsultHistoryForPatient(String patientID) {
         try {
             if (patientID == null || patientID.isBlank()) {
@@ -76,6 +85,35 @@ public class ConsultationService {
             Collections.reverse(patientHistory);
 
             return patientHistory;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return List.of();
+        }
+    }
+
+    /**
+     * Retorna la lista de consultas de un paciente específico.
+     *
+     * @param doctorID es la identificación del médico.
+     * @return una lista con las consultas realizadas por el médico específico
+     * (vacía si no encuentra ninguna).
+     *
+     */
+    public List<Consultation> getConsultHistoryForDoctor(String doctorID) {
+        try {
+            if (doctorID == null || doctorID.isBlank()) {
+                return List.of(); //Retorna lista vacía.
+            }
+
+            List<Consultation> doctorHistory = this.repo.searchByDoctor(doctorID);
+
+            if (doctorHistory.isEmpty()) {
+                return List.of();
+            }
+
+            Collections.reverse(doctorHistory);
+
+            return doctorHistory;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return List.of();
