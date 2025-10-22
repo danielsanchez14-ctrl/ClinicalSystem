@@ -32,12 +32,13 @@ public class DoctorService {
      * @return {@code true} si el doctor fue registrado exitosamente; {@code false} en caso contrario.
      */
     public boolean registerDoctor(Doctor doctor) {
-        if (doctor == null) {
-            return false;
-        }
-        if (repository.searchById(doctor.getId()).isPresent()) {
-            return false;
-        }
+        if (doctor == null) return false;
+        if (doctor.getId() == null || doctor.getId().isEmpty()) return false;
+        if (doctor.getFullName() == null || doctor.getFullName().isEmpty()) return false;
+        if (doctor.getMedicalSpecialty() == null) return false;
+
+        if (repository.searchById(doctor.getId()).isPresent()) return false;
+
         return repository.add(doctor);
     }
 
@@ -47,7 +48,7 @@ public class DoctorService {
      * @return {@code true} si el doctor fue eliminado exitosamente; {@code false} en caso contrario.
      */
     public boolean removeDoctor(String id) {
-        if (id == null || id.isEmpty()) {
+        if (id == null || id.trim().isEmpty()) {
             return false;
         }
         return repository.deleteById(id);
@@ -59,12 +60,13 @@ public class DoctorService {
      * @return {@code true} si el doctor fue actualizado exitosamente; {@code false} en caso contrario.
      */
     public boolean updateDoctor(Doctor doctor) {
-        if (doctor == null) {
-            return false;
-        }
-        if (repository.searchById(doctor.getId()).isEmpty()) {
-            return false;
-        }
+        if (doctor == null) return false;
+        if (doctor.getId() == null || doctor.getId().isEmpty()) return false;
+        if (doctor.getFullName() == null || doctor.getFullName().isEmpty()) return false;
+        if (doctor.getMedicalSpecialty() == null) return false;
+
+        if (repository.searchById(doctor.getId()).isEmpty()) return false;
+
         return repository.update(doctor);
     }
 
@@ -74,7 +76,7 @@ public class DoctorService {
      * @return Un {@code Optional} que contiene el doctor si se encuentra; de lo contrario, un {@code Optional.empty()}.
      */
     public Optional<Doctor> searchById(String id) {
-        if (id == null || id.isEmpty()) {
+        if (id == null || id.trim().isEmpty()) {
             return Optional.empty();
         }
         return repository.searchById(id);
@@ -95,7 +97,7 @@ public class DoctorService {
      * @return {@code true} si la especialidad fue asignada exitosamente; {@code false} en caso contrario.
      */
     public boolean assignSpecialty(String id, Specialty specialty) {
-        if (id == null || id.isEmpty() || specialty == null) {
+        if (id == null || id.trim().isEmpty() || specialty == null) {
             return false;
         }
 
@@ -115,6 +117,9 @@ public class DoctorService {
      * @return Una lista de doctores que tienen la especialidad especificada.
      */
     public List<Doctor> searchBySpecialty(Specialty specialty) {
+        if (specialty == null) {
+            return List.of();
+        }
         return repository.searchBySpecialty(specialty);
     }
 }

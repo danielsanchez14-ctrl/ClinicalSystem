@@ -26,7 +26,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     public Optional<User> searchByUsername(String username) {
         return doctors.stream()
                 .filter(Doctor::isCurrentStatus)
-                .filter(d -> d.getUsername().equalsIgnoreCase(username))
+                .filter(d -> d.getUsername().equalsIgnoreCase(username.trim()))
                 .map(d -> (User) d)
                 .findFirst();
     }
@@ -41,7 +41,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public boolean deleteById(String id) {
-        if (id == null || id.isEmpty()) {
+        if (id == null || id.trim().isEmpty()) {
             return false;
         }
         return doctors.stream()

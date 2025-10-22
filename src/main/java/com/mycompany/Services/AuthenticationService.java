@@ -39,12 +39,16 @@ public class AuthenticationService implements IAuthentication {
      */
     @Override
     public Optional<User> login(String userName, String password) {
-        if (userName == null || password == null) {
+        if (userName == null || userName.trim().isEmpty()){
+            return Optional.empty();
+        }
+
+        if (password == null || password.trim().isEmpty()){
             return Optional.empty();
         }
 
         for (IAuthenticableRepository repo : repositories) {
-            Optional<User> userOpt = repo.searchByUsername(userName);
+            Optional<User> userOpt = repo.searchByUsername(userName.trim());
 
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
@@ -79,6 +83,9 @@ public class AuthenticationService implements IAuthentication {
      */
     @Override
     public Optional<Patient> registerPatient(Patient patient) {
+        if (patient == null) return Optional.empty();
+        if (patient.getId() == null || patient.getId().trim().isEmpty()) return Optional.empty();
+        if (patient.getFullName() == null || patient.getFullName().trim().isEmpty()) return Optional.empty();
         for (IAuthenticableRepository repo : repositories){
            // TODO: activar cuando IPatientRepository esté implementado
             /*if (repo instanceof Interfaces.IPatientRepository patientRepo){
