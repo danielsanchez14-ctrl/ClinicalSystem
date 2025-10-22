@@ -26,7 +26,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     public Optional<User> searchByUsername(String username) {
         return doctors.stream()
                 .filter(Doctor::isCurrentStatus)
-                .filter(d -> d.getUsername().equalsIgnoreCase(username.trim()))
+                .filter(d -> d.getUsername().equals(username.trim()))
                 .map(d -> (User) d)
                 .findFirst();
     }
