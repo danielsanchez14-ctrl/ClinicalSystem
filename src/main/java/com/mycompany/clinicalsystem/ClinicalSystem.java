@@ -23,6 +23,7 @@ public class ClinicalSystem {
         ConsultationService service = new ConsultationService(repo);
         //Crea una cita falsa
         Appointment ap1 = new Appointment();
+        /*
         Consultation co1 = new Consultation(ap1, "Gripe", "Dolex");
         
         //Registrar consulta
@@ -47,6 +48,10 @@ public class ClinicalSystem {
         
         boolean result4 = service.createConsultation(co4);
         System.out.println("Consulta 4 creada: "+ result4);
+        */
         
+        Consultation c = new Consultation(ap1, "d", "");
+        boolean result = service.createConsultation(c);
+        System.out.println(result);
     }
 }
