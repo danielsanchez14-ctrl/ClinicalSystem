@@ -19,7 +19,7 @@ public class Patient extends User {
         super();
     }
 
-    public Patient(String username, String phoneNumber, String password, 
+    public Patient(String username, String phoneNumber, String password,
             String fullName, String documentNumber, LocalDate birthDate) {
         super(username, phoneNumber, password, fullName, documentNumber);
         this.birthDate = birthDate;
