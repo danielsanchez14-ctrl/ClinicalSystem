@@ -13,19 +13,34 @@ public class PatientService {
         this.repository = patientRepository;
     }
 
-    public boolean add(Patient patient) {
+    public boolean addPatient(Patient patient) {
+        if(patient==null|| repository.searchById(patient.getId()).isPresent()){
+            return  false;
+        }
         return repository.add(patient);
     }
 
     public boolean deletePatient(String id) {
-        return repository.deleteById(id);
+        if (id==null || id.isEmpty()) {
+            return false;
+        }
+        if (repository.searchById(id).isPresent()){
+            return repository.deleteById(id);
+        }
+        return false;
     }
 
     public boolean updatePatient(Patient patient) {
+        if (patient == null || !repository.searchById(patient.getId()).isPresent()) {   
+            return false;
+        }   
         return repository.update(patient);
     }
 
     public Optional<Patient> searchById(String id) {
+        if (id == null || id.isEmpty()) {   
+            return Optional.empty();
+        }
         return repository.searchById(id);
     }
 
