@@ -8,6 +8,7 @@ import com.mycompany.Interfaces.IConsultationRepository;
 import com.mycompany.Models.Consultation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +54,13 @@ public class ConsultationRepositoryMemory implements IConsultationRepository {
     @Override
     public List<Consultation> listAll() {
         return this.repo;
+    }
+
+    @Override
+    public Optional<Consultation> searchByAppointment(String appointmentID) {
+        return this.repo.stream().
+                filter(c -> c.getAppointment() != null).
+                filter(c -> c.getAppointment().getId().equals(appointmentID)).findFirst();
     }
 
 }
