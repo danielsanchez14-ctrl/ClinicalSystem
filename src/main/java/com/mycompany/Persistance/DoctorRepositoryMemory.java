@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * Implementación en memoria del repositorio de doctores.
+ * 
  * @author camil
  */
 public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctorRepository {
@@ -24,6 +25,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     @Override
     public Optional<User> searchByUsername(String username) {
         return doctors.stream()
+                .filter(Doctor::isCurrentStatus)
                 .filter(d -> d.getUsername().equalsIgnoreCase(username))
                 .map(d -> (User) d)
                 .findFirst();
@@ -31,7 +33,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public boolean add(Doctor doctor) {
-        if (doctor == null || searchById(doctor.getId()).isPresent()) {
+        if (doctor == null) {
             return false;
         }
         return doctors.add(doctor);
@@ -39,11 +41,24 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public boolean deleteById(String id) {
-        return doctors.removeIf(d -> d.getId().equals(id));
+        if (id == null || id.isEmpty()) {
+            return false;
+        }
+        return doctors.stream()
+                .filter(d -> d.getId().equals(id))
+                .findFirst()
+                .map(doctor -> {
+                    doctor.setCurrentStatus(false);
+                    return true;
+                })
+                .orElse(false);
     }
 
     @Override
     public boolean update(Doctor doctor) {
+        if (doctor == null) {
+            return false;
+        }
         for (int i = 0; i < doctors.size(); i++) {
             if (doctors.get(i).getId().equals(doctor.getId())) {
                 doctors.set(i, doctor);
@@ -55,7 +70,11 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public Optional<Doctor> searchById(String id) {
+        if (id == null || id.isEmpty()) {
+            return Optional.empty();
+        }
         return doctors.stream()
+                .filter(Doctor::isCurrentStatus)
                 .filter(d -> d.getId().equals(id))
                 .findFirst();
     }
@@ -63,12 +82,15 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     @Override
     public List<Doctor> searchBySpecialty(Specialty specialty) {
         return doctors.stream()
-                .filter(d -> d.getMedicalSpecialty() != null && d.getMedicalSpecialty().equals(specialty))
+                .filter(Doctor::isCurrentStatus)
+                .filter(d -> specialty.equals(d.getMedicalSpecialty()))
                 .toList();
     }
 
     @Override
     public List<Doctor> listAll() {
-        return new ArrayList<>(doctors);
+        return doctors.stream()
+                .filter(Doctor::isCurrentStatus)
+                .toList();
     }
 }
