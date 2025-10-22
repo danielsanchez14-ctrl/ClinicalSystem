@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ *Sercicio encargado de manejar la autenticación de usuarios, incluyendo session mannagement.
+
  * @author camil
  */
 public class AuthenticationService implements IAuthentication {
@@ -21,13 +22,27 @@ public class AuthenticationService implements IAuthentication {
     private List<IAuthenticableRepository> repositories;
     private User currentUser;
 
+    /**
+     * Constructor de la clase AuthenticationService.
+     * @param repositories Lista de repositorios autenticables.
+     */
     public AuthenticationService(List<IAuthenticableRepository> repositories) {
         this.repositories = repositories != null ? repositories : new ArrayList<>();
         this.currentUser = null;
     }
 
+    /**
+     * Permite a un usuario iniciar sesión si es un usuario activo y las credenciales son correctas.
+     * @param userName Nombre de usuario.
+     * @param password Contraseña del usuario.
+     * @return Un {@code Optional} que contiene el usuario autenticado si las credenciales son válidas; de lo contrario, un {@code Optional.empty()}.
+     */
     @Override
     public Optional<User> login(String userName, String password) {
+        if (userName == null || password == null) {
+            return Optional.empty();
+        }
+
         for (IAuthenticableRepository repo : repositories) {
             Optional<User> userOpt = repo.searchByUsername(userName);
 
@@ -46,6 +61,9 @@ public class AuthenticationService implements IAuthentication {
         return Optional.empty();
     }
 
+    /**
+     * Permite a un usuario cerrar sesión.
+     */
     @Override
     public void logout() {
         if (currentUser != null) {
@@ -54,6 +72,11 @@ public class AuthenticationService implements IAuthentication {
         }
     }
 
+    /**
+     * Permite registrar un nuevo paciente en el sistema.
+     * @param patient El paciente a registrar.
+     * @return Un {@code Optional} que contiene el paciente registrado si la operación fue exitosa; de lo contrario, un {@code Optional.empty()}.
+     */
     @Override
     public Optional<Patient> registerPatient(Patient patient) {
         for (IAuthenticableRepository repo : repositories){
@@ -66,6 +89,10 @@ public class AuthenticationService implements IAuthentication {
         return Optional.empty();
     }
 
+    /**
+     * Retorna el usuario actualmente autenticado.
+     * @return Un {@code Optional} que contiene el usuario actual si hay una sesión activa; de lo contrario, un {@code Optional.empty()}.
+     */
     @Override
     public Optional<User> getCurrentUser() {
         return Optional.ofNullable(currentUser);
