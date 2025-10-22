@@ -6,6 +6,7 @@ package com.mycompany.Interfaces;
 
 import com.mycompany.Models.Consultation;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -21,4 +22,5 @@ public interface IConsultationRepository {
 
     public List<Consultation> listAll();
 
+    public Optional<Consultation> searchByAppointment(String appointmentID);
 }
