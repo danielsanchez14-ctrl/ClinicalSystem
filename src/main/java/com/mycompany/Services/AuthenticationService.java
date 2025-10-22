@@ -31,10 +31,16 @@ public class AuthenticationService implements IAuthentication {
         for (IAuthenticableRepository repo : repositories) {
             Optional<User> userOpt = repo.searchByUsername(userName);
 
-            if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
-                currentUser = userOpt.get();
-                currentUser.setCurrentStatus(true);
-                return Optional.of(currentUser);
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
+                if (!user.isCurrentStatus()){
+                    continue;
+                }
+                if (user.getPassword().equals(password)) {
+                    currentUser = user;
+                    currentUser.setActiveSession(true);
+                    return Optional.of(user);
+                }
             }
         }
         return Optional.empty();
@@ -43,14 +49,14 @@ public class AuthenticationService implements IAuthentication {
     @Override
     public void logout() {
         if (currentUser != null) {
-            currentUser.setCurrentStatus(false);
+            currentUser.setActiveSession(false);
             currentUser = null;
         }
     }
 
     @Override
     public Optional<Patient> registerPatient(Patient patient) {
-       for (IAuthenticableRepository repo : repositories){
+        for (IAuthenticableRepository repo : repositories){
            // TODO: activar cuando IPatientRepository esté implementado
             /*if (repo instanceof Interfaces.IPatientRepository patientRepo){
                 boolean added = patientRepo.addPatient(patient);
