@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctorRepository {
 
-    private List<Doctor> doctors = new ArrayList<>();
+    private final List<Doctor> doctors = new ArrayList<>();
 
     @Override
     public Optional<User> searchByUsername(String username) {

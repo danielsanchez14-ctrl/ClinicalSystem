@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public class AuthenticationService implements IAuthentication {
 
-    private List<IAuthenticableRepository> repositories;
+    private final List<IAuthenticableRepository> repositories;
     private User currentUser;
 
     public AuthenticationService(List<IAuthenticableRepository> repositories) {

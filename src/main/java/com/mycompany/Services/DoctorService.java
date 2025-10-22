@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public class DoctorService {
 
-    private IDoctorRepository repository;
+    private final IDoctorRepository repository;
 
     /**
      * Constructor del servicio de doctores.
