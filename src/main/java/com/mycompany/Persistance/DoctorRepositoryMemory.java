@@ -15,7 +15,7 @@ import java.util.Optional;
 
 /**
  * Implementación en memoria del repositorio de doctores.
- * 
+ *
  * @author camil
  */
 public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctorRepository {
@@ -33,17 +33,11 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public boolean add(Doctor doctor) {
-        if (doctor == null) {
-            return false;
-        }
         return doctors.add(doctor);
     }
 
     @Override
     public boolean deleteById(String id) {
-        if (id == null || id.trim().isEmpty()) {
-            return false;
-        }
         return doctors.stream()
                 .filter(d -> d.getId().equals(id))
                 .findFirst()
@@ -56,9 +50,6 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public boolean update(Doctor doctor) {
-        if (doctor == null) {
-            return false;
-        }
         for (int i = 0; i < doctors.size(); i++) {
             if (doctors.get(i).getId().equals(doctor.getId())) {
                 doctors.set(i, doctor);
@@ -70,9 +61,9 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public Optional<Doctor> searchById(String id) {
-        if (id == null || id.isEmpty()) {
-            return Optional.empty();
-        }
+        //if (id == null || id.isEmpty()) {
+            //return Optional.empty();
+        //}
         return doctors.stream()
                 .filter(Doctor::isCurrentStatus)
                 .filter(d -> d.getId().equals(id))

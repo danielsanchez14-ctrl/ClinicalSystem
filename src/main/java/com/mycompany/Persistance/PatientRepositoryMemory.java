@@ -12,34 +12,44 @@ import com.mycompany.Models.User;
 /**
  * Implementación en memoria del repositorio de pacientes.
  * <p>
- * Esta implementación utiliza una lista interna para almacenar instancias de {@link Patient}.
+ * Esta implementación utiliza una lista interna para almacenar instancias de
+ * {@link Patient}.
  */
 public class PatientRepositoryMemory implements IAuthenticableRepository, IPatientRepository {
+
     List<Patient> patients = new ArrayList<>();
 
     /**
      * Agrega un paciente a la lista en memoria.
      *
      * @param patient paciente a agregar
-     * @return true si se añadió; false si el paciente es nulo o ya existe según su id
+     * @return true si se añadió; false si el paciente es nulo o ya existe según
+     * su id
      */
     @Override
     public boolean add(Patient patient) {
-        if (patient==null||searchById(patient.getId()).isPresent()){
-            return false;
-        }
+        //if (patient == null || searchById(patient.getId()).isPresent()) {
+        //return false;
+        //}
         return patients.add(patient);
     }
 
     /**
      * Elimina pacientes cuyo id coincida con el proporcionado.
      *
-     * @param Id identificador del paciente a eliminar
-     * @return true si se eliminó al menos un elemento; false si no se encontró
+     * @param id identificador del paciente a eliminar
+     * @return true si se eliminó; false si no se encontró
      */
     @Override
-    public boolean deleteById(String Id) {
-        return patients.removeIf(p -> p.getId().equals(Id));
+    public boolean deleteById(String id) {
+        return patients.stream()
+                .filter(p -> p.getId().equals(id))
+                .findFirst()
+                .map(patient -> {
+                    patient.setCurrentStatus(false);
+                    return true;
+                })
+                .orElse(false);
     }
 
     /**
@@ -50,8 +60,8 @@ public class PatientRepositoryMemory implements IAuthenticableRepository, IPatie
      */
     @Override
     public boolean update(Patient patient) {
-        for(int i = 0; i < patients.size();i++){
-            if (patients.get(i).getId().equals(patient.getId())){
+        for (int i = 0; i < patients.size(); i++) {
+            if (patients.get(i).getId().equals(patient.getId())) {
                 patients.set(i, patient);
                 return true;
             }
@@ -62,16 +72,17 @@ public class PatientRepositoryMemory implements IAuthenticableRepository, IPatie
     /**
      * Busca un paciente por id usando stream.
      *
-     * @param Id identificador a buscar
+     * @param id identificador a buscar
      * @return Optional con el paciente si se encuentra; Optional.empty() si no
      */
     @Override
-    public Optional<Patient> searchById(String Id) {
-        return patients.stream().filter(p -> p.getId().equals(Id)).findFirst();
+    public Optional<Patient> searchById(String id) {
+        return patients.stream().filter(p -> p.getId().equals(id)).findFirst();
     }
 
     /**
-     * Devuelve una copia de la lista de pacientes para evitar exposición del almacenamiento interno.
+     * Devuelve una copia de la lista de pacientes para evitar exposición del
+     * almacenamiento interno.
      *
      * @return nueva lista con los pacientes actuales
      */
@@ -81,10 +92,11 @@ public class PatientRepositoryMemory implements IAuthenticableRepository, IPatie
     }
 
     /**
-     * Busca un usuario (autenticable) por nombre de usuario.
+     * Busca un paciente por su nombre de usuario.
      * <p>
-     * Esta implementación filtra sobre la lista de pacientes, compara el username
-     * ignorando mayúsculas/minúsculas y devuelve el primer elemento convertido a User.
+     * Esta implementación filtra sobre la lista de pacientes, compara el
+     * username ignorando mayúsculas/minúsculas y devuelve el primer elemento
+     * convertido a User.
      * </p>
      *
      * @param username nombre de usuario a buscar
@@ -93,10 +105,9 @@ public class PatientRepositoryMemory implements IAuthenticableRepository, IPatie
     @Override
     public Optional<User> searchByUsername(String username) {
         return patients.stream()
-                .filter(p -> p.getUsername().equalsIgnoreCase(username))
+                .filter(p -> p.getUsername().equals(username.trim()))
                 .map(p -> (User) p)
                 .findFirst();
     }
-
 
 }

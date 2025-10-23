@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Sercicio encargado de manejar la autenticación de usuarios, incluyendo
  * session mannagement.
- * 
+ *
  * @author camil
  */
 public class AuthenticationService implements IAuthentication {
@@ -25,7 +25,7 @@ public class AuthenticationService implements IAuthentication {
 
     /**
      * Constructor de la clase AuthenticationService.
-     * 
+     *
      * @param repositories Lista de repositorios autenticables.
      */
     public AuthenticationService(List<IAuthenticableRepository> repositories) {
@@ -36,12 +36,11 @@ public class AuthenticationService implements IAuthentication {
     /**
      * Permite a un usuario iniciar sesión si es un usuario activo y las
      * credenciales son correctas.
-     * 
+     *
      * @param userName Nombre de usuario.
      * @param password Contraseña del usuario.
      * @return Un {@code Optional} que contiene el usuario autenticado si las
-     *         credenciales son válidas; de lo contrario, un
-     *         {@code Optional.empty()}.
+     * credenciales son válidas; de lo contrario, un {@code Optional.empty()}.
      */
     @Override
     public Optional<User> login(String userName, String password) {
@@ -83,74 +82,14 @@ public class AuthenticationService implements IAuthentication {
     }
 
     /**
-     * Permite registrar un nuevo paciente en el sistema.
-     * 
-     * @param patient El paciente a registrar.
-     * @return Un {@code Optional} que contiene el paciente registrado si la
-     *         operación fue exitosa; de lo contrario, un {@code Optional.empty()}.
-     */
-    @Override
-    public Optional<Patient> registerPatient(Patient patient) {
-        if (patient == null)
-            return Optional.empty();
-        if (patient.getId() == null || patient.getId().trim().isEmpty())
-            return Optional.empty();
-        if (patient.getFullName() == null || patient.getFullName().trim().isEmpty())
-            return Optional.empty();
-        if (patient.getUsername() == null || patient.getUsername().trim().isEmpty())
-            return Optional.empty();
-
-        // Validación: no permitir dos usuarios con el mismo username
-        String username = patient.getUsername().trim();
-        if (isUsernameTaken(username)) return Optional.empty();
-
-        for (IAuthenticableRepository repo : repositories) {
-            // TODO: activar cuando IPatientRepository esté implementado
-            /*
-             * if (repo instanceof Interfaces.IPatientRepository patientRepo){
-             * boolean added = patientRepo.addPatient(patient);
-             * if (added) return Optional.of(patient);
-             * }
-             */
-        }
-        return Optional.empty();
-    }
-
-    /**
      * Retorna el usuario actualmente autenticado.
-     * 
-     * @return Un {@code Optional} que contiene el usuario actual si hay una sesión
-     *         activa; de lo contrario, un {@code Optional.empty()}.
+     *
+     * @return Un {@code Optional} que contiene el usuario actual si hay una
+     * sesión activa; de lo contrario, un {@code Optional.empty()}.
      */
     @Override
     public Optional<User> getCurrentUser() {
         return Optional.ofNullable(currentUser);
-    }
-
-    /**
-     * Verifica si un nombre de usuario ya está en uso en los repositorios
-     * autenticables.
-     * @param username
-     * @return true si el nombre de usuario ya está en uso; false si está disponible.
-     */
-    private boolean isUsernameTaken(String username) {
-        if (username == null || username.trim().isEmpty()) {
-            return true; // considerar inválido si es null o vacío
-        }
-
-        String uname = username.trim();
-
-        // Revisar en todos los repositorios autenticables
-        for (IAuthenticableRepository repo : repositories) {
-            if (repo != null) {
-                Optional<User> userOpt = repo.searchByUsername(uname);
-                if (userOpt.isPresent()) {
-                    return true; // username ya existe
-                }
-            }
-        }
-
-        return false; // username disponible
     }
 
 }
