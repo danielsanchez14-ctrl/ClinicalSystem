@@ -34,14 +34,20 @@ public class GlobalUsernameValidator {
      * repositorios
      *
      * @param username el nombre de usuario que se desea verificar.
+     * @param excludeUserId id del usuario a excluir de la búsqueda (puede ser
+     * null)
      * @return true si dicho nombre ya está en uso.
      */
-    public boolean usernameExists(String username) {
+    public boolean usernameExists(String username, String excludeUserId) {
 
         String trimmedUsername = username.trim();
         for (IAuthenticableRepository repo : repositories) {
             var found = repo.searchByUsername(trimmedUsername);
             if (found.isPresent()) {
+
+                if (excludeUserId != null && found.get().getId().equals(excludeUserId)) {
+                    continue; //En caso de que el usuario que encontró es el exluido
+                }
                 return true; //Ya existe ese usuario.
             }
         }

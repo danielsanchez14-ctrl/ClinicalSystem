@@ -123,7 +123,8 @@ public class DoctorService {
         }
 
         //Validación global del userName duplicado
-        if (globalValidator.usernameExists(username) && globalValidator != null) {
+        if (globalValidator != null && globalValidator.usernameExists(username, 
+                doctor.getId())) {
             return false;
         }
 
