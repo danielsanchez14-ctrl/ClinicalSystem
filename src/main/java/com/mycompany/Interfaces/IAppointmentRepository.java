@@ -6,9 +6,8 @@ package com.mycompany.Interfaces;
 
 import com.mycompany.Models.Appointment;
 import com.mycompany.Models.AppointmentStatus;
-import com.mycompany.Models.Doctor;
-import com.mycompany.Models.Patient;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -19,11 +18,11 @@ public interface IAppointmentRepository {
     
     public boolean updateState(String appointmentID, AppointmentStatus newState);
     
-    public Appointment searchById(String id);
+    public Optional<Appointment> searchById(String id);
     
-    public List<Appointment> searchByPatient(Patient patient);
+    public List<Appointment> searchByPatient(String patientId);
     
-    public List<Appointment> searchByDoctor(Doctor doctor);
+    public List<Appointment> searchByDoctor(String doctorId);
     
     public List<Appointment> listAll();
 }

@@ -11,6 +11,7 @@ import com.mycompany.Models.Doctor;
 import com.mycompany.Models.Patient;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -30,50 +31,45 @@ public class AppointmentRepositoryMemory implements IAppointmentRepository{
 
     @Override
     public boolean add(Appointment appointment) {
-        if (appointment != null){
-            this.appointment.add(appointment); //Si el valor ingresado en el parámetro es diferente de null, se añade la cita ingresada a la lista appointment
-            return true;
-        } else {
-            return false;
-        }
+        this.appointment.add(appointment); //Si el valor ingresado en el parámetro es diferente de null, se añade la cita ingresada a la lista appointment
+        return true;
     }
 
     @Override
     public boolean updateState(String appointmentID, AppointmentStatus newState) {
-        Appointment appt = this.appointment.stream().
+        Optional<Appointment> appt = this.appointment.stream().
                 filter(a -> a.getId().equals(appointmentID)). //Selecciona la cita que coincide con el id ingresado
-                findFirst(). //Selecciona el primer elemento de los seleccionados por filter, en este caso habrá un solo elemento ya que el id es único.
-                orElse(null); //Si no se encontro ninguna cita con el id ingresado, asigna el valor null a la variable appt
-        if (appt != null){ 
-            appt.setStatus(newState); //Se le asigna el nuevo estado a la cita con el id previamente ingresado
+                findFirst(); //Selecciona el primer elemento de los seleccionados por filter, en este caso habrá un solo elemento ya que el id es único.
+        if (appt.isPresent()){ 
+            appt.get().setStatus(newState); //Se le asigna el nuevo estado a la cita con el id previamente ingresado
             return true;
-        } else {
-            return false; //Retorna false en caso de no haber encontrado la cita
-        }
+        } 
+        
+        return false; //Retorna false en caso de no haber encontrado la cita
+        
     }
 
     @Override
-    public Appointment searchById(String id) {
+    public Optional<Appointment> searchById(String id) {
         return this.appointment.stream(). //appointment -> a
                 filter(a -> a.getId().equals(id)). // Selecciona la cita
-                findFirst(). //Selecciona el primer elemento de los seleccionados por filter, en este caso habrá un solo elemento ya que el id es único.
-                orElse(null); //Si no se encontro ninguna cita con el id ingresado, se retornará un valor null
+                findFirst(); //Selecciona el primer elemento de los seleccionados por filter, en este caso habrá un solo elemento ya que el id es único.
     }
 
     @Override
-    public List<Appointment> searchByPatient(Patient patient) {
+    public List<Appointment> searchByPatient(String patientId) {
         return this.appointment.stream().
-                filter(a -> a.getPatient().equals(patient)). //Selecciona las citas que tiene el paciente ingresado
-                collect(Collectors.toList()); //Almacena las citas que tiene el paciente ingresado en una lista
+                filter(a -> a.getPatient().getId().equals(patientId)). //Selecciona las citas que coinciden con el id del paciente ingresado
+                collect(Collectors.toList()); //Almacena las citas que tiene el paciente en una lista
     }
 
     @Override
-    public List<Appointment> searchByDoctor(Doctor doctor) {
+    public List<Appointment> searchByDoctor(String doctorId) {
         return this.appointment.stream().
-                filter(a -> a.getDoctor().equals(doctor)). //Selecciona las citas que tiene el doctor ingresado
-                collect(Collectors.toList()); //Almacena las citas que tiene el doctor ingresado en una lista
+                filter(a -> a.getDoctor().getId().equals(doctorId)). //Selecciona las citas que coinciden con el id del doctor ingresado
+                collect(Collectors.toList()); //Almacena las citas que tiene el doctor en una lista
     }
-        
+    
     @Override
     public List<Appointment> listAll(){
         return this.appointment; //Returna la lista de citas
