@@ -13,8 +13,12 @@ import java.util.Optional;
  * @author camil
  */
 public interface IAuthentication {
+
     public Optional<User> login(String userName, String password);
+
     public void logout();
-    public Optional<Patient> registerPatient(Patient patient);
+
+    //public Optional<Patient> registerPatient(Patient patient);
+
     public Optional<User> getCurrentUser();
 }

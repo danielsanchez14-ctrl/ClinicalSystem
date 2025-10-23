@@ -13,8 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *Sercicio encargado de manejar la autenticación de usuarios, incluyendo session mannagement.
-
+ * Sercicio encargado de manejar la autenticación de usuarios, incluyendo
+ * session mannagement.
+ *
  * @author camil
  */
 public class AuthenticationService implements IAuthentication {
@@ -24,6 +25,7 @@ public class AuthenticationService implements IAuthentication {
 
     /**
      * Constructor de la clase AuthenticationService.
+     *
      * @param repositories Lista de repositorios autenticables.
      */
     public AuthenticationService(List<IAuthenticableRepository> repositories) {
@@ -32,23 +34,30 @@ public class AuthenticationService implements IAuthentication {
     }
 
     /**
-     * Permite a un usuario iniciar sesión si es un usuario activo y las credenciales son correctas.
+     * Permite a un usuario iniciar sesión si es un usuario activo y las
+     * credenciales son correctas.
+     *
      * @param userName Nombre de usuario.
      * @param password Contraseña del usuario.
-     * @return Un {@code Optional} que contiene el usuario autenticado si las credenciales son válidas; de lo contrario, un {@code Optional.empty()}.
+     * @return Un {@code Optional} que contiene el usuario autenticado si las
+     * credenciales son válidas; de lo contrario, un {@code Optional.empty()}.
      */
     @Override
     public Optional<User> login(String userName, String password) {
-        if (userName == null || password == null) {
+        if (userName == null || userName.trim().isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (password == null || password.trim().isEmpty()) {
             return Optional.empty();
         }
 
         for (IAuthenticableRepository repo : repositories) {
-            Optional<User> userOpt = repo.searchByUsername(userName);
+            Optional<User> userOpt = repo.searchByUsername(userName.trim());
 
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
-                if (!user.isCurrentStatus()){
+                if (!user.isCurrentStatus()) {
                     continue;
                 }
                 if (user.getPassword().equals(password)) {
@@ -73,25 +82,10 @@ public class AuthenticationService implements IAuthentication {
     }
 
     /**
-     * Permite registrar un nuevo paciente en el sistema.
-     * @param patient El paciente a registrar.
-     * @return Un {@code Optional} que contiene el paciente registrado si la operación fue exitosa; de lo contrario, un {@code Optional.empty()}.
-     */
-    @Override
-    public Optional<Patient> registerPatient(Patient patient) {
-        for (IAuthenticableRepository repo : repositories){
-           // TODO: activar cuando IPatientRepository esté implementado
-            /*if (repo instanceof Interfaces.IPatientRepository patientRepo){
-                boolean added = patientRepo.addPatient(patient);
-                if (added) return Optional.of(patient);
-            }*/
-        }
-        return Optional.empty();
-    }
-
-    /**
      * Retorna el usuario actualmente autenticado.
-     * @return Un {@code Optional} que contiene el usuario actual si hay una sesión activa; de lo contrario, un {@code Optional.empty()}.
+     *
+     * @return Un {@code Optional} que contiene el usuario actual si hay una
+     * sesión activa; de lo contrario, un {@code Optional.empty()}.
      */
     @Override
     public Optional<User> getCurrentUser() {

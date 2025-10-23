@@ -14,12 +14,16 @@ import java.util.Optional;
  * @author camil
  */
 public interface IDoctorRepository {
-    
+
     boolean add(Doctor doctor);
+
     boolean deleteById(String id);
+
     boolean update(Doctor doctor);
 
     Optional<Doctor> searchById(String id);
+
     List<Doctor> searchBySpecialty(Specialty specialty);
+
     List<Doctor> listAll();
 }
