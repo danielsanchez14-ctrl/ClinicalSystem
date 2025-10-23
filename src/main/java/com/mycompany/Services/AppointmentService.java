@@ -170,7 +170,7 @@ public class AppointmentService {
 
             //Filtrar citas según la fecha ingresada.
             return (List<Appointment>) this.repo.listAll().stream().
-                    filter(a -> a.getScheduledAt().equals(date)).
+                    filter(a -> a.getScheduledAt().toLocalDate().equals(date.toLocalDate())).
                     collect(Collectors.toList());
         } catch (Exception e) {
             System.out.println(e.getMessage());
