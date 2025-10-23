@@ -61,10 +61,10 @@ public class DoctorService {
     }
 
     /**
-     * Valida un doctor antes de registrarlo o actualizarlo.
-     * @param doctor El doctor a validar.
-     * @param isUpdate Indica si la validación es para una actualización.
-     * @return {@code true} si el doctor es válido; {@code false} en caso contrario.
+     * Valida un doctor antes de crear o actualizar.
+     * @param doctor El doctor a validar
+     * @param isUpdate true si es una actualización, false si es creación
+     * @return true si el doctor es válido, false en caso contrario
      */
     private boolean validateDoctor(Doctor doctor, boolean isUpdate) {
         if (doctor == null) return false;
