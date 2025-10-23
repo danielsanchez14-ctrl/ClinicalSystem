@@ -4,10 +4,12 @@
  */
 package com.mycompany.Services;
 
+import com.mycompany.Interfaces.IAuthenticableRepository;
 import com.mycompany.Interfaces.IDoctorRepository;
 import com.mycompany.Models.Doctor;
 import com.mycompany.Models.Specialty;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,13 +34,7 @@ public class DoctorService {
      * @return {@code true} si el doctor fue registrado exitosamente; {@code false} en caso contrario.
      */
     public boolean registerDoctor(Doctor doctor) {
-        if (doctor == null) return false;
-        if (doctor.getId() == null || doctor.getId().isEmpty()) return false;
-        if (doctor.getFullName() == null || doctor.getFullName().isEmpty()) return false;
-        if (doctor.getMedicalSpecialty() == null) return false;
-
-        if (repository.searchById(doctor.getId()).isPresent()) return false;
-
+        if (!validateDoctor(doctor, false)) return false;
         return repository.add(doctor);
     }
 
@@ -60,14 +56,44 @@ public class DoctorService {
      * @return {@code true} si el doctor fue actualizado exitosamente; {@code false} en caso contrario.
      */
     public boolean updateDoctor(Doctor doctor) {
-        if (doctor == null) return false;
-        if (doctor.getId() == null || doctor.getId().isEmpty()) return false;
-        if (doctor.getFullName() == null || doctor.getFullName().isEmpty()) return false;
-        if (doctor.getMedicalSpecialty() == null) return false;
-
-        if (repository.searchById(doctor.getId()).isEmpty()) return false;
-
+        if (!validateDoctor(doctor, true)) return false;
         return repository.update(doctor);
+    }
+
+    /**
+     * Valida un doctor antes de registrarlo o actualizarlo.
+     * @param doctor El doctor a validar.
+     * @param isUpdate Indica si la validación es para una actualización.
+     * @return {@code true} si el doctor es válido; {@code false} en caso contrario.
+     */
+    private boolean validateDoctor(Doctor doctor, boolean isUpdate) {
+        if (doctor == null) return false;
+        if (doctor.getId() == null || doctor.getId().trim().isEmpty()) {
+            return false;
+        }
+        if (doctor.getFullName() == null || doctor.getFullName().trim().isEmpty()) return false;
+        if (doctor.getMedicalSpecialty() == null) return false;
+        if (doctor.getUsername() == null || doctor.getUsername().trim().isEmpty()) return false;
+
+        // Para register: id no debe existir ya; para update: debe existir previamente
+        boolean exists = repository.searchById(doctor.getId()).isPresent();
+        if (!isUpdate && exists) return false;
+        if (isUpdate && !exists) return false;
+
+        // Validación de username duplicado (case-sensitive).
+        String username = doctor.getUsername().trim();
+        if (repository instanceof IAuthenticableRepository) {
+            IAuthenticableRepository authRepo = (IAuthenticableRepository) repository;
+            var found = authRepo.searchByUsername(username);
+            if (found.isPresent()) {
+                // Si el username existe y pertenece a otro doctor -> inválido
+                if (!Objects.equals(found.get().getId(), doctor.getId())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
