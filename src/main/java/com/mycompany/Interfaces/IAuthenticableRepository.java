@@ -12,5 +12,6 @@ import java.util.Optional;
  * @author camil
  */
 public interface IAuthenticableRepository {
+
     public Optional<User> searchByUsername(String username);
 }

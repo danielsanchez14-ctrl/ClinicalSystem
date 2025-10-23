@@ -14,16 +14,19 @@ import java.util.UUID;
  */
 public class User {
 
-    private final String id; //Identificador único del usuario.
+    private final String id; // Identificador único del usuario.
     private String fullName;
     private String documentNumber;
     private String username;
     private String phoneNumber;
     private String password;
-    private boolean currentStatus;
+    private boolean currentStatus; // true = cuenta activa, false = eliminada lógicamente
+    private boolean activeSession; // true = sesión activa (logueado)
 
     public User() {
         this.id = UUID.randomUUID().toString();
+        this.currentStatus = true;
+        this.activeSession = false;
     }
 
     public User(String username, String phoneNumber, String password, String fullName, String documentNumber) {
@@ -33,13 +36,19 @@ public class User {
         this.password = password;
         this.fullName = fullName;
         this.documentNumber = documentNumber;
-        this.currentStatus = false;
+        this.currentStatus = true;
+        this.activeSession = false;
     }
 
     public boolean isCurrentStatus() {
         return currentStatus;
     }
 
+    public boolean isActiveSession() {
+        return activeSession;
+    }
+
+    
     /**
      * @return the id
      */
@@ -74,26 +83,33 @@ public class User {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
+    
     /**
      * @return the password
      */
     public String getPassword() {
         return password;
     }
-
+    
     /**
      * @param password the password to set
      */
     public void setPassword(String password) {
         this.password = password;
     }
-
+    
     /**
      * @param currentStatus the currentStatus to set
      */
     public void setCurrentStatus(boolean currentStatus) {
         this.currentStatus = currentStatus;
+    }
+    
+    /**
+     * @param activeSession the activeSession to set
+     */
+    public void setActiveSession(boolean activeSession) {
+        this.activeSession = activeSession;
     }
 
     /**
