@@ -95,7 +95,7 @@ public class PatientRepositoryMemory implements IAuthenticableRepository, IPatie
      * Busca un paciente por su nombre de usuario.
      * <p>
      * Esta implementación filtra sobre la lista de pacientes, compara el
-     * username ignorando mayúsculas/minúsculas y devuelve el primer elemento
+     * username ignorando y devuelve el primer elemento
      * convertido a User.
      * </p>
      *
