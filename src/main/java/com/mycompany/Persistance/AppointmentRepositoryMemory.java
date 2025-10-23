@@ -7,8 +7,6 @@ package com.mycompany.Persistance;
 import com.mycompany.Interfaces.IAppointmentRepository;
 import com.mycompany.Models.Appointment;
 import com.mycompany.Models.AppointmentStatus;
-import com.mycompany.Models.Doctor;
-import com.mycompany.Models.Patient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
