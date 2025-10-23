@@ -18,15 +18,20 @@ import java.util.Objects;
 public class PatientService {
 
     private final IPatientRepository repository;
+    private final GlobalUsernameValidator globalValidator;
 
     /**
      * Crea una instancia del servicio con el repositorio especificado.
      *
      * @param patientRepository repositorio usado para persistencia; no se
      * valida nulo aquí.
+     * @param globalValidator encargado de garantizar la unicidad de los nombres
+     * de usuario.
      */
-    public PatientService(IPatientRepository patientRepository) {
+    public PatientService(IPatientRepository patientRepository,
+            GlobalUsernameValidator globalValidator) {
         this.repository = patientRepository;
+        this.globalValidator = globalValidator;
     }
 
     /**
@@ -92,6 +97,10 @@ public class PatientService {
             }
         }
 
+        //Validación global del userName duplicado
+        if (globalValidator.usernameExists(username) && globalValidator != null) {
+            return false;
+        }
         return true;
     }
 

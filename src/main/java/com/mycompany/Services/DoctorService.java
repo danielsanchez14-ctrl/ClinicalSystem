@@ -14,34 +14,46 @@ import java.util.Optional;
 
 /**
  * Servicio para gestionar operaciones relacionadas con doctores.
+ *
  * @author camil
  */
 public class DoctorService {
 
     private final IDoctorRepository repository;
+    private final GlobalUsernameValidator globalValidator;
 
     /**
      * Constructor del servicio de doctores.
+     *
      * @param repository El repositorio de doctores a utilizar.
+     * @param globalValidator Encargado de validar nombres de usuario.
      */
-    public DoctorService(IDoctorRepository repository) {
+    public DoctorService(IDoctorRepository repository,
+            GlobalUsernameValidator globalValidator) {
         this.repository = repository;
+        this.globalValidator = globalValidator;
     }
 
     /**
      * Registra un nuevo doctor.
+     *
      * @param doctor El doctor a registrar.
-     * @return {@code true} si el doctor fue registrado exitosamente; {@code false} en caso contrario.
+     * @return {@code true} si el doctor fue registrado exitosamente;
+     * {@code false} en caso contrario.
      */
     public boolean registerDoctor(Doctor doctor) {
-        if (!validateDoctor(doctor, false)) return false;
+        if (!validateDoctor(doctor, false)) {
+            return false;
+        }
         return repository.add(doctor);
     }
 
     /**
      * Elimina un doctor por su ID.
+     *
      * @param id El ID del doctor a eliminar.
-     * @return {@code true} si el doctor fue eliminado exitosamente; {@code false} en caso contrario.
+     * @return {@code true} si el doctor fue eliminado exitosamente;
+     * {@code false} en caso contrario.
      */
     public boolean removeDoctor(String id) {
         if (id == null || id.trim().isEmpty()) {
@@ -52,33 +64,50 @@ public class DoctorService {
 
     /**
      * Actualiza la información de un doctor.
+     *
      * @param doctor El doctor con la información actualizada.
-     * @return {@code true} si el doctor fue actualizado exitosamente; {@code false} en caso contrario.
+     * @return {@code true} si el doctor fue actualizado exitosamente;
+     * {@code false} en caso contrario.
      */
     public boolean updateDoctor(Doctor doctor) {
-        if (!validateDoctor(doctor, true)) return false;
+        if (!validateDoctor(doctor, true)) {
+            return false;
+        }
         return repository.update(doctor);
     }
 
     /**
      * Valida un doctor antes de crear o actualizar.
+     *
      * @param doctor El doctor a validar
      * @param isUpdate true si es una actualización, false si es creación
      * @return true si el doctor es válido, false en caso contrario
      */
     private boolean validateDoctor(Doctor doctor, boolean isUpdate) {
-        if (doctor == null) return false;
+        if (doctor == null) {
+            return false;
+        }
         if (doctor.getId() == null || doctor.getId().trim().isEmpty()) {
             return false;
         }
-        if (doctor.getFullName() == null || doctor.getFullName().trim().isEmpty()) return false;
-        if (doctor.getMedicalSpecialty() == null) return false;
-        if (doctor.getUsername() == null || doctor.getUsername().trim().isEmpty()) return false;
+        if (doctor.getFullName() == null || doctor.getFullName().trim().isEmpty()) {
+            return false;
+        }
+        if (doctor.getMedicalSpecialty() == null) {
+            return false;
+        }
+        if (doctor.getUsername() == null || doctor.getUsername().trim().isEmpty()) {
+            return false;
+        }
 
         // Para register: id no debe existir ya; para update: debe existir previamente
         boolean exists = repository.searchById(doctor.getId()).isPresent();
-        if (!isUpdate && exists) return false;
-        if (isUpdate && !exists) return false;
+        if (!isUpdate && exists) {
+            return false;
+        }
+        if (isUpdate && !exists) {
+            return false;
+        }
 
         // Validación de username duplicado (case-sensitive).
         String username = doctor.getUsername().trim();
@@ -93,13 +122,20 @@ public class DoctorService {
             }
         }
 
+        //Validación global del userName duplicado
+        if (globalValidator.usernameExists(username) && globalValidator != null) {
+            return false;
+        }
+
         return true;
     }
 
     /**
      * Busca un doctor por su ID.
+     *
      * @param id El ID del doctor a buscar.
-     * @return Un {@code Optional} que contiene el doctor si se encuentra; de lo contrario, un {@code Optional.empty()}.
+     * @return Un {@code Optional} que contiene el doctor si se encuentra; de lo
+     * contrario, un {@code Optional.empty()}.
      */
     public Optional<Doctor> searchById(String id) {
         if (id == null || id.trim().isEmpty()) {
@@ -119,9 +155,11 @@ public class DoctorService {
 
     /**
      * Asigna una especialidad médica a un doctor.
+     *
      * @param id El ID del doctor.
      * @param specialty La especialidad médica a asignar.
-     * @return {@code true} si la especialidad fue asignada exitosamente; {@code false} en caso contrario.
+     * @return {@code true} si la especialidad fue asignada exitosamente;
+     * {@code false} en caso contrario.
      */
     public boolean assignSpecialty(String id, Specialty specialty) {
         if (id == null || id.trim().isEmpty() || specialty == null) {
@@ -140,6 +178,7 @@ public class DoctorService {
 
     /**
      * Busca doctores por su especialidad médica.
+     *
      * @param specialty La especialidad médica a buscar.
      * @return Una lista de doctores que tienen la especialidad especificada.
      */
