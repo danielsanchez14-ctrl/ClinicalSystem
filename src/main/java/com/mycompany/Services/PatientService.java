@@ -75,6 +75,20 @@ public class PatientService {
             return false;
         }
 
+        if (patient.getPassword() == null || patient.getPassword().trim().isEmpty()) {
+            return false;
+        }
+
+        if (patient.getPhoneNumber() == null
+                || !patient.getPhoneNumber().matches("^(?:\\+57|57)?3\\d{9}$")) {
+            return false;
+        }
+
+        if (patient.getDocumentNumber() == null
+                || !patient.getDocumentNumber().matches("^\\d+$")) {
+            return false;
+        }
+
         // Para register: id no debe existir ya; para update: debe existir previamente
         boolean exists = repository.searchById(patient.getId()).isPresent();
         if (!isUpdate && exists) {

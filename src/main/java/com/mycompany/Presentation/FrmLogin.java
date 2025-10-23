@@ -31,11 +31,11 @@ public class FrmLogin extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtUsernameField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        txtPasswordField = new javax.swing.JPasswordField();
+        btnRegister = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Clinical System");
@@ -82,18 +82,18 @@ public class FrmLogin extends javax.swing.JFrame {
         jPanel1.add(jLabel2);
         jLabel2.setBounds(420, 180, 80, 21);
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField1.setSelectedTextColor(new java.awt.Color(0, 0, 0));
-        jTextField1.setSelectionColor(new java.awt.Color(0, 0, 0));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtUsernameField.setBackground(new java.awt.Color(255, 255, 255));
+        txtUsernameField.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        txtUsernameField.setForeground(new java.awt.Color(0, 0, 0));
+        txtUsernameField.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        txtUsernameField.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtUsernameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtUsernameFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(420, 210, 320, 40);
+        jPanel1.add(txtUsernameField);
+        txtUsernameField.setBounds(420, 210, 320, 40);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -101,33 +101,33 @@ public class FrmLogin extends javax.swing.JFrame {
         jPanel1.add(jLabel3);
         jLabel3.setBounds(420, 290, 80, 16);
 
-        jPasswordField1.setBackground(new java.awt.Color(255, 255, 255));
-        jPasswordField1.setForeground(new java.awt.Color(0, 0, 0));
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        txtPasswordField.setBackground(new java.awt.Color(255, 255, 255));
+        txtPasswordField.setForeground(new java.awt.Color(0, 0, 0));
+        txtPasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                txtPasswordFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(jPasswordField1);
-        jPasswordField1.setBounds(420, 320, 320, 40);
+        jPanel1.add(txtPasswordField);
+        txtPasswordField.setBounds(420, 320, 320, 40);
 
-        jButton1.setText("Register");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnRegister.setText("Register");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnRegisterActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(670, 380, 70, 40);
+        jPanel1.add(btnRegister);
+        btnRegister.setBounds(670, 380, 70, 40);
 
-        jButton2.setText("Login");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2);
-        jButton2.setBounds(580, 380, 70, 40);
+        jPanel1.add(btnLogin);
+        btnLogin.setBounds(580, 380, 70, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,33 +147,33 @@ public class FrmLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtUsernameFieldActionPerformed
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+    private void txtPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    }//GEN-LAST:event_txtPasswordFieldActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnLoginActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnRegister;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField txtPasswordField;
+    private javax.swing.JTextField txtUsernameField;
     // End of variables declaration//GEN-END:variables
 }
