@@ -51,7 +51,7 @@ public class PatientService {
     /**
      * Valida un paciente antes de crear o actualizar.
      *
-     * @param patient El doctor a validar
+     * @param patient El paciente a validar
      * @param isUpdate true si es una actualización, false si es creación
      * @return true si el paciente es válido, false en caso contrario
      */
@@ -113,7 +113,7 @@ public class PatientService {
      * Actualiza la información de un paciente.
      *
      * @param patient El paciente con la información actualizada.
-     * @return {@code true} si el doctor fue actualizado exitosamente;
+     * @return {@code true} si el paciente fue actualizado exitosamente;
      * {@code false} en caso contrario.
      */
     public boolean updatePatient(Patient patient) {
@@ -140,7 +140,7 @@ public class PatientService {
     /**
      * Lista todos los pacientes.
      *
-     * @return Una lista de todos los doctores.
+     * @return Una lista de todos los pacientes.
      */
     public List<Patient> listAllPatients() {
         return repository.listAll();
