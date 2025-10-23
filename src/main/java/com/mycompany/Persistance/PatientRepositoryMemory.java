@@ -105,8 +105,9 @@ public class PatientRepositoryMemory implements IAuthenticableRepository, IPatie
     @Override
     public Optional<User> searchByUsername(String username) {
         return patients.stream()
-                .filter(p -> p.getUsername().equals(username.trim()))
-                .map(p -> (User) p)
+                .filter(Patient::isCurrentStatus)
+                .filter(d -> d.getUsername().equals(username.trim()))
+                .map(d -> (User) d)
                 .findFirst();
     }
 
