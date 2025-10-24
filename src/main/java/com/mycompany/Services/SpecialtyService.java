@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Servicio para gestionar operaciones relacionadas con especialidades médicas.
  * Aplica principios SOLID: SRP, OCP y DIP.
+ *
  * @author David
  */
 public class SpecialtyService {
@@ -20,14 +21,14 @@ public class SpecialtyService {
 
     /**
      * Registra una nueva especialidad.
+     *
      * @param specialty La especialidad a registrar.
-     * @return true si se registró correctamente, false si ya existe o es inválida.
+     * @return true si se registró correctamente, false si ya existe o es
+     * inválida.
      */
     public boolean registerSpecialty(Specialty specialty) {
-        if (specialty == null 
-                || specialty.getSpecialtyName() == null 
-                || specialty.getDescription() == null 
-                || specialty.getDescription().trim().isEmpty()) {
+        if (specialty == null
+                || specialty.getSpecialtyName() == null) {
             return false;
         }
         // Evita duplicados
@@ -38,25 +39,14 @@ public class SpecialtyService {
     }
 
     /**
-     * Elimina una especialidad.
-     * @param specialty La especialidad a eliminar.
-     * @return true si se eliminó correctamente, false si no existe.
-     */
-    public boolean removeSpecialty(Specialty specialty) {
-        if (specialty == null || specialty.getId() == null) {
-            return false;
-        }
-        return repository.deleteById(specialty.getId());
-    }
-
-    /**
      * Actualiza los datos de una especialidad existente.
+     *
      * @param id Identificador de la especialidad.
      * @param name Nuevo nombre (enum) de la especialidad.
-     * @param description Nueva descripción.
+     *
      * @return true si se actualizó correctamente.
      */
-    public boolean updateSpecialty(String id, SpecialtyName name, String description) {
+    public boolean updateSpecialty(String id, SpecialtyName name) {
         if (id == null || id.trim().isEmpty() || name == null) {
             return false;
         }
@@ -65,16 +55,18 @@ public class SpecialtyService {
                 .filter(s -> s.getId().equals(id))
                 .findFirst();
 
-        if (existing.isEmpty()) return false;
+        if (existing.isEmpty()) {
+            return false;
+        }
 
         Specialty s = existing.get();
         s.setSpecialtyName(name);
-        s.setDescription(description != null ? description.trim() : "");
         return repository.update(s);
     }
 
     /**
      * Lista todas las especialidades registradas.
+     *
      * @return Lista de especialidades.
      */
     public List<Specialty> listAllSpecialties() {

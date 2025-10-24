@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.Repositories;
+package com.mycompany.Persistance;
 
 import com.mycompany.Interfaces.ISpecialtyRepository;
 import com.mycompany.Models.Specialty;
@@ -12,13 +12,14 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Esta clase implementa la interfaz {@link ISpecialtyRepository}
- * y gestiona las especialidades médicas en memoria.
+ * Esta clase implementa la interfaz {@link ISpecialtyRepository} y gestiona las
+ * especialidades médicas en memoria.
  *
- * <p>Utiliza una lista interna para almacenar las especialidades,
- * cumpliendo el principio de Inversión de Dependencias (DIP)
- * al ofrecer una implementación concreta de la abstracción.</p>
- * 
+ * <p>
+ * Utiliza una lista interna para almacenar las especialidades, cumpliendo el
+ * principio de Inversión de Dependencias (DIP) al ofrecer una implementación
+ * concreta de la abstracción.</p>
+ *
  * @author David
  */
 public class SpecialtyRepositoryMemory implements ISpecialtyRepository {
@@ -30,33 +31,23 @@ public class SpecialtyRepositoryMemory implements ISpecialtyRepository {
 
     /**
      * Agrega una nueva especialidad al repositorio.
-     * 
+     *
      * @param specialty la especialidad que se desea agregar.
-     * @return {@code true} si se agregó correctamente, {@code false} si ya existe.
+     * @return {@code true} si se agregó correctamente, {@code false} si ya
+     * existe.
      */
     @Override
     public boolean add(Specialty specialty) {
-        if (specialty == null) return false;
-        if (searchByName(specialty.getSpecialtyName()).isPresent()) return false;
+
         return specialties.add(specialty);
     }
 
     /**
-     * Elimina una especialidad según su ID.
-     * 
-     * @param id el identificador de la especialidad.
-     * @return {@code true} si fue eliminada correctamente, {@code false} si no existe.
-     */
-    @Override
-    public boolean deleteById(String id) {
-        return specialties.removeIf(s -> s.getId().equals(id));
-    }
-
-    /**
      * Actualiza los datos de una especialidad existente.
-     * 
+     *
      * @param specialty la especialidad actualizada.
-     * @return {@code true} si se actualizó correctamente, {@code false} si no se encontró.
+     * @return {@code true} si se actualizó correctamente, {@code false} si no
+     * se encontró.
      */
     @Override
     public boolean update(Specialty specialty) {
@@ -71,10 +62,10 @@ public class SpecialtyRepositoryMemory implements ISpecialtyRepository {
 
     /**
      * Busca una especialidad por su nombre (enum {@link SpecialtyName}).
-     * 
+     *
      * @param name el nombre de la especialidad.
-     * @return un {@code Optional} con la especialidad encontrada,
-     * o vacío si no existe.
+     * @return un {@code Optional} con la especialidad encontrada, o vacío si no
+     * existe.
      */
     @Override
     public Optional<Specialty> searchByName(SpecialtyName name) {
@@ -85,7 +76,7 @@ public class SpecialtyRepositoryMemory implements ISpecialtyRepository {
 
     /**
      * Lista todas las especialidades almacenadas.
-     * 
+     *
      * @return una lista con todas las especialidades registradas.
      */
     @Override

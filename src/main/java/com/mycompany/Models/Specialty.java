@@ -7,23 +7,24 @@ package com.mycompany.Models;
 import java.util.UUID;
 
 /**
- *  Representa la especialidad de un médico.
+ * Representa la especialidad de un médico.
+ *
  * @author kosmo
  */
 public class Specialty {
 
     private final String id; //Identificador único de la especialidad
     private SpecialtyName specialtyName; //Enumerado que indica su nombre
-    private String description;
+    //private String description;
 
     public Specialty() {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Specialty(SpecialtyName specialtyName, String description) {
+    public Specialty(SpecialtyName specialtyName) {
         this.id = UUID.randomUUID().toString();
         this.specialtyName = specialtyName;
-        this.description = description;
+        //this.description = description;
     }
 
     /**
@@ -47,19 +48,4 @@ public class Specialty {
         this.specialtyName = specialtyName;
     }
 
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-  
 }
