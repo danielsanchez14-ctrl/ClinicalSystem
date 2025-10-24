@@ -11,6 +11,7 @@ import com.mycompany.Models.Patient;
 import com.mycompany.Models.Specialty;
 import com.mycompany.Models.SpecialtyName;
 import com.mycompany.Persistance.ConsultationRepositoryMemory;
+import com.mycompany.Presentation.FrmRegisterPatient;
 import com.mycompany.Services.ConsultationService;
 import java.time.LocalDate;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ClinicalSystem {
 
     public static void main(String[] args) {
-        System.out.println("Goodbye World!");
+        FrmRegisterPatient p = new FrmRegisterPatient();
+        p.setVisible(true);
     }
 }
