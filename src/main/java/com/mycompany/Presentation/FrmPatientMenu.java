@@ -37,6 +37,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         btnNewAppointment = new javax.swing.JButton();
         btnAppointmentHistory = new javax.swing.JButton();
         btnEditPatientInfo = new javax.swing.JButton();
+        upperPanel = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -54,23 +55,28 @@ public class FrmPatientMenu extends javax.swing.JFrame {
             }
         });
         desktopPane.add(btnSignOut);
-        btnSignOut.setBounds(650, 420, 110, 40);
+        btnSignOut.setBounds(650, 390, 110, 40);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Patient menu");
+        jLabel1.setText("Welcome, x");
         desktopPane.add(jLabel1);
-        jLabel1.setBounds(320, 50, 150, 32);
+        jLabel1.setBounds(330, 70, 150, 32);
 
         btnScheduledAppointments.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnScheduledAppointments.setText("Scheduled Appointments");
+        btnScheduledAppointments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnScheduledAppointmentsMouseClicked(evt);
+            }
+        });
         btnScheduledAppointments.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnScheduledAppointmentsActionPerformed(evt);
             }
         });
         desktopPane.add(btnScheduledAppointments);
-        btnScheduledAppointments.setBounds(60, 140, 180, 160);
+        btnScheduledAppointments.setBounds(60, 170, 180, 160);
 
         btnNewAppointment.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnNewAppointment.setText("New Appointment");
@@ -88,17 +94,44 @@ public class FrmPatientMenu extends javax.swing.JFrame {
             }
         });
         desktopPane.add(btnNewAppointment);
-        btnNewAppointment.setBounds(310, 140, 180, 160);
+        btnNewAppointment.setBounds(310, 170, 180, 160);
 
         btnAppointmentHistory.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        btnAppointmentHistory.setText("AppointmentHistory");
+        btnAppointmentHistory.setText("Appointment History");
+        btnAppointmentHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAppointmentHistoryMouseClicked(evt);
+            }
+        });
         desktopPane.add(btnAppointmentHistory);
-        btnAppointmentHistory.setBounds(560, 140, 180, 160);
+        btnAppointmentHistory.setBounds(560, 170, 180, 160);
 
         btnEditPatientInfo.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnEditPatientInfo.setText("Edit Profile");
+        btnEditPatientInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEditPatientInfoMouseClicked(evt);
+            }
+        });
         desktopPane.add(btnEditPatientInfo);
-        btnEditPatientInfo.setBounds(635, 60, 100, 40);
+        btnEditPatientInfo.setBounds(640, 90, 100, 40);
+
+        upperPanel.setBackground(new java.awt.Color(102, 102, 255));
+        upperPanel.setPreferredSize(new java.awt.Dimension(800, 50));
+
+        javax.swing.GroupLayout upperPanelLayout = new javax.swing.GroupLayout(upperPanel);
+        upperPanel.setLayout(upperPanelLayout);
+        upperPanelLayout.setHorizontalGroup(
+            upperPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        upperPanelLayout.setVerticalGroup(
+            upperPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        desktopPane.add(upperPanel);
+        upperPanel.setBounds(0, 0, 800, 50);
 
         menuBar.setBackground(new java.awt.Color(102, 102, 255));
         menuBar.setForeground(new java.awt.Color(102, 102, 255));
@@ -112,7 +145,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
         );
 
         pack();
@@ -129,10 +162,12 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     private void btnSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignOutActionPerformed
         JOptionPane.showMessageDialog(this, "You signed out!");
         //Al cerrar sesión se regresará al login:
+        /*
         FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
         login.setLocationRelativeTo(null);
             
         this.dispose();
+        */
     }//GEN-LAST:event_btnSignOutActionPerformed
 
     private void btnNewAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewAppointmentMouseClicked
@@ -140,6 +175,24 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         this.desktopPane.add(newAppt);
         newAppt.setVisible(true);
     }//GEN-LAST:event_btnNewAppointmentMouseClicked
+
+    private void btnScheduledAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnScheduledAppointmentsMouseClicked
+        FrmScheduledAppointments scheduledAppt = new FrmScheduledAppointments();
+        this.desktopPane.add(scheduledAppt);
+        scheduledAppt.setVisible(true);
+    }//GEN-LAST:event_btnScheduledAppointmentsMouseClicked
+
+    private void btnAppointmentHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAppointmentHistoryMouseClicked
+        FrmPatientHistory patientHistory = new FrmPatientHistory();
+        this.desktopPane.add(patientHistory);
+        patientHistory.setVisible(true);
+    }//GEN-LAST:event_btnAppointmentHistoryMouseClicked
+
+    private void btnEditPatientInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditPatientInfoMouseClicked
+        FrmInformation information = new FrmInformation();
+        desktopPane.add(information);
+        information.setVisible(true);
+    }//GEN-LAST:event_btnEditPatientInfoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -185,6 +238,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JPanel upperPanel;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -4,18 +4,16 @@
  */
 package com.mycompany.Presentation;
 
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author mateo
  */
-public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
+public class FrmPatientHistory extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form FrmScheduledAppointments
+     * Creates new form FrmPatientHistory
      */
-    public FrmScheduledAppointments() {
+    public FrmPatientHistory() {
         initComponents();
     }
 
@@ -33,40 +31,33 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSchedule = new javax.swing.JTable();
         btnBack = new javax.swing.JButton();
-        btnCancelAppointment = new javax.swing.JButton();
         upperPanel = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(700, 400));
+        setRequestFocusEnabled(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Scheduled appointments");
+        jLabel1.setText("Clinical history");
 
         tblSchedule.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         tblSchedule.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Doctor", "Date and hour", "Select"
+                "Date and hour", "Doctor", "Diagnostic", "Treatment"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
-            };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -83,14 +74,6 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
         btnBack.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnBackMouseClicked(evt);
-            }
-        });
-
-        btnCancelAppointment.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        btnCancelAppointment.setText("Cancel selected");
-        btnCancelAppointment.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCancelAppointmentMouseClicked(evt);
             }
         });
 
@@ -114,33 +97,28 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnCancelAppointment)
-                .addGap(18, 18, 18)
                 .addComponent(btnBack)
                 .addGap(29, 29, 29))
-            .addComponent(upperPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(upperPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 688, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(198, 198, 198)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGap(70, 70, 70)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(258, 258, 258))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(upperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelAppointment, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(14, 14, 14))
         );
 
@@ -162,29 +140,9 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
         this.dispose();
     }//GEN-LAST:event_btnBackMouseClicked
 
-    private void btnCancelAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelAppointmentMouseClicked
-        int option = JOptionPane.showConfirmDialog(
-            this,
-            "¿Estás seguro de cancelar esta/s cita/s?",
-            "Confirmar cancelación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
-
-        if (option == JOptionPane.YES_OPTION) {
-            // Aquí cancelas las citas seleccionadas
-            System.out.println("Cita(s) cancelada(s)");
-        } else {
-            // Aquí vuelves o simplemente no haces nada
-            System.out.println("Operación cancelada");
-        }
-
-    }//GEN-LAST:event_btnCancelAppointmentMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnCancelAppointment;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
