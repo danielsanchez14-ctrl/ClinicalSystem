@@ -4,17 +4,30 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Patient;
+import com.mycompany.Services.PatientService;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author kosmo
  */
 public class FrmRegisterPatient extends javax.swing.JFrame {
 
+    //El método debe conocer al servicio para pasarle los datos que recibe
+    private final PatientService patientService;
+
     /**
      * Creates new form FrmRegisterPatient
+     *
+     * @param patientService el servicio de pacientes que maneja la lógica
+     * subyacente.
      */
-    public FrmRegisterPatient() {
+    public FrmRegisterPatient(PatientService patientService) {
         initComponents();
+        this.patientService = patientService;
     }
 
     /**
@@ -33,7 +46,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
         txtPhoneNumberField = new javax.swing.JTextField();
         txtUsernameField = new javax.swing.JTextField();
         txtDocumentNumberField = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
+        txtPasswordField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -74,47 +87,22 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
         txtFullNameField.setBackground(new java.awt.Color(255, 255, 255));
         txtFullNameField.setForeground(new java.awt.Color(0, 0, 0));
         txtFullNameField.setPreferredSize(new java.awt.Dimension(300, 50));
-        txtFullNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFullNameFieldActionPerformed(evt);
-            }
-        });
 
         txtPhoneNumberField.setBackground(new java.awt.Color(255, 255, 255));
         txtPhoneNumberField.setForeground(new java.awt.Color(0, 0, 0));
         txtPhoneNumberField.setPreferredSize(new java.awt.Dimension(300, 50));
-        txtPhoneNumberField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPhoneNumberFieldActionPerformed(evt);
-            }
-        });
 
         txtUsernameField.setBackground(new java.awt.Color(255, 255, 255));
         txtUsernameField.setForeground(new java.awt.Color(0, 0, 0));
         txtUsernameField.setPreferredSize(new java.awt.Dimension(300, 50));
-        txtUsernameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsernameFieldActionPerformed(evt);
-            }
-        });
 
         txtDocumentNumberField.setBackground(new java.awt.Color(255, 255, 255));
         txtDocumentNumberField.setForeground(new java.awt.Color(0, 0, 0));
         txtDocumentNumberField.setPreferredSize(new java.awt.Dimension(300, 50));
-        txtDocumentNumberField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDocumentNumberFieldActionPerformed(evt);
-            }
-        });
 
-        jTextField9.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField9.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField9.setPreferredSize(new java.awt.Dimension(300, 50));
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
-            }
-        });
+        txtPasswordField.setBackground(new java.awt.Color(255, 255, 255));
+        txtPasswordField.setForeground(new java.awt.Color(0, 0, 0));
+        txtPasswordField.setPreferredSize(new java.awt.Dimension(300, 50));
 
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Full Name");
@@ -177,7 +165,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtDocumentNumberField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtPasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addGap(0, 0, Short.MAX_VALUE)
                                     .addComponent(btnRegisterPatient)
@@ -213,7 +201,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUsernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegisterPatient)
@@ -240,64 +228,47 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameFieldActionPerformed
-
-    private void txtFullNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFullNameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFullNameFieldActionPerformed
-
-    private void txtDocumentNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDocumentNumberFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDocumentNumberFieldActionPerformed
-
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
-
-    private void txtPhoneNumberFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhoneNumberFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPhoneNumberFieldActionPerformed
-
+    /**
+     * Este método ejecuta la acción de oprimir el botón registrar
+     *
+     */
     private void btnRegisterPatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterPatientActionPerformed
-        // TODO add your handling code here:
+        //Obtener los datos de los campos de texto
+        var realName = txtFullNameField.getText();
+        var username = txtUsernameField.getText();
+        var password = txtPasswordField.getText();
+        var documentNumber = txtDocumentNumberField.getText();
+        var phoneNumber = txtPhoneNumberField.getText();
+        //Obtener la fecha de nacimiento y volverla un String
+        var birthdate = jDateChooser1.getDate(); //Retorna un objeto Date
+        //El objeto date es convertido a String y luego a LocalDate
+        LocalDate birthdateFinal; //Donde se guarda el resultado final
+        if (birthdate != null) {
+            SimpleDateFormat converter = new SimpleDateFormat("yyyy-MM-dd");
+            String birthdateString = converter.format(birthdate);
+
+            //Convertir el String en LocalDate
+            birthdateFinal = LocalDate.parse(birthdateString);
+
+        } else {
+            birthdateFinal = null;
+        }
+
+        //Una vez obtenido, se llama al servicio de pacientes:
+        if (this.patientService.addPatient(new Patient(username, phoneNumber,
+                password, realName, documentNumber, birthdateFinal))) {
+            JOptionPane.showMessageDialog(this, "Registration Success!");
+            //Si se registra exitosamente, se les regresa al login:
+            FrmLogin login = new FrmLogin();
+            login.setVisible(true);
+            this.dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Registration Failed!",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRegisterPatientActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmRegisterPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmRegisterPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmRegisterPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmRegisterPatient.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmRegisterPatient().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelRegistration;
@@ -312,9 +283,9 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField9;
     private javax.swing.JTextField txtDocumentNumberField;
     private javax.swing.JTextField txtFullNameField;
+    private javax.swing.JTextField txtPasswordField;
     private javax.swing.JTextField txtPhoneNumberField;
     private javax.swing.JTextField txtUsernameField;
     private javax.swing.JPanel upperPanel;
