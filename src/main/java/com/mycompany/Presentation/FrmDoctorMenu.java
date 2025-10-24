@@ -35,10 +35,11 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         desktopPane = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
-        btnHistorialConsultas = new javax.swing.JButton();
-        btnAgenda = new javax.swing.JButton();
+        btnRecords = new javax.swing.JButton();
+        btnSchedule = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
         lblWelcome = new javax.swing.JLabel();
+        btnUserInfo = new javax.swing.JButton();
         upperPanel = new javax.swing.JPanel();
 
         jMenuItem1.setText("jMenuItem1");
@@ -46,22 +47,26 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         jButton2.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 500));
 
         desktopPane.setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        btnHistorialConsultas.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        btnHistorialConsultas.setText("View Patient Records");
-        btnHistorialConsultas.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
-
-        btnAgenda.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        btnAgenda.setText("View Schedule");
-        btnAgenda.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
-        btnAgenda.addActionListener(new java.awt.event.ActionListener() {
+        btnRecords.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnRecords.setText("View Patient Records");
+        btnRecords.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
+        btnRecords.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgendaActionPerformed(evt);
+                btnRecordsActionPerformed(evt);
+            }
+        });
+
+        btnSchedule.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnSchedule.setText("View Schedule");
+        btnSchedule.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
+        btnSchedule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScheduleActionPerformed(evt);
             }
         });
 
@@ -69,38 +74,56 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         btnLogout.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnLogout.setForeground(new java.awt.Color(255, 255, 255));
         btnLogout.setText("Cerrar Sesión");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         lblWelcome.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         lblWelcome.setText("Welcome, Juanito Pérez");
+
+        btnUserInfo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnUserInfo.setText("Info");
+        btnUserInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUserInfoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(234, 234, 234)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(btnHistorialConsultas, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
-                    .addComponent(btnAgenda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(261, 261, 261))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLogout)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(234, 234, 234)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(btnRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                            .addComponent(btnSchedule, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(147, 147, 147)
+                        .addComponent(btnUserInfo))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogout)))
                 .addGap(39, 39, 39))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(btnAgenda, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUserInfo))
+                .addGap(40, 40, 40)
+                .addComponent(btnSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(34, 34, 34)
-                .addComponent(btnHistorialConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel2);
@@ -137,9 +160,27 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendaActionPerformed
+    private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
+        FrmDoctorSchedule schedule = new FrmDoctorSchedule();
+        desktopPane.add(schedule);
+        schedule.setVisible(true);
+    }//GEN-LAST:event_btnScheduleActionPerformed
+
+    private void btnRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordsActionPerformed
+        FrmDoctorHistory records = new FrmDoctorHistory();
+        desktopPane.add(records);
+        records.setVisible(true);
+    }//GEN-LAST:event_btnRecordsActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgendaActionPerformed
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserInfoActionPerformed
+        FrmInformation information = new FrmInformation();
+        desktopPane.add(information);
+        information.setVisible(true);
+    }//GEN-LAST:event_btnUserInfoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,9 +218,10 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgenda;
-    private javax.swing.JButton btnHistorialConsultas;
     private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnRecords;
+    private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnUserInfo;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JButton jButton2;
     private javax.swing.JMenuItem jMenuItem1;

@@ -92,6 +92,11 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
         btnCancel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         btnRegisterConsultation.setBackground(new java.awt.Color(102, 102, 225));
         btnRegisterConsultation.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -150,6 +155,10 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane ScrollPane;
