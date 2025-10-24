@@ -4,17 +4,30 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Services.AuthenticationService;
+import com.mycompany.Services.PatientService;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author kosmo
  */
 public class FrmLogin extends javax.swing.JFrame {
 
+    private final PatientService patientService;
+    private final AuthenticationService authenticationService;
+
     /**
      * Creates new form FrmLogin
+     *
+     * @param patientService es el servicio de pacientes.
+     * @param authenticationService es el servicio de autenticación
      */
-    public FrmLogin() {
+    public FrmLogin(PatientService patientService, AuthenticationService
+            authenticationService) {
         initComponents();
+        this.patientService = patientService;
+        this.authenticationService = authenticationService;
     }
 
     /**
@@ -40,6 +53,7 @@ public class FrmLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Clinical System");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -96,11 +110,6 @@ public class FrmLogin extends javax.swing.JFrame {
         txtUsernameField.setForeground(new java.awt.Color(0, 0, 0));
         txtUsernameField.setSelectedTextColor(new java.awt.Color(0, 0, 0));
         txtUsernameField.setSelectionColor(new java.awt.Color(0, 0, 0));
-        txtUsernameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsernameFieldActionPerformed(evt);
-            }
-        });
         jPanel1.add(txtUsernameField);
         txtUsernameField.setBounds(420, 210, 320, 40);
 
@@ -112,11 +121,6 @@ public class FrmLogin extends javax.swing.JFrame {
 
         txtPasswordField.setBackground(new java.awt.Color(255, 255, 255));
         txtPasswordField.setForeground(new java.awt.Color(0, 0, 0));
-        txtPasswordField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordFieldActionPerformed(evt);
-            }
-        });
         jPanel1.add(txtPasswordField);
         txtPasswordField.setBounds(420, 320, 320, 40);
 
@@ -156,21 +160,34 @@ public class FrmLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameFieldActionPerformed
-
-    private void txtPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordFieldActionPerformed
-
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
+        // Obtiene los campos de usuario y contraseña
+        var username = txtUsernameField.getText();
+        var password = txtPasswordField.getPassword();
+        String passwordString = new String(password); //Convierte la contraseña a String
+        
+        //Se utiliza el servicio de autenticación:
+        if (authenticationService.login(username, passwordString).isPresent()) {
+            //Si la autenticación es exitosa:
+            JOptionPane.showMessageDialog(this, "Authentication Succesful", "Login",
+                    JOptionPane.INFORMATION_MESSAGE);
+            //Se muestra el menú de médico o paciente:
+            //TO-DO
+        } else {
+            JOptionPane.showMessageDialog(this, "Authentication Failed! Please "
+                    + "check your username and password.", 
+                              "Login Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         //Cierra este frame y abre el frame de registro de pacientes
-        //FrmRegisterPatient register = new FrmRegisterPatient();
+        FrmRegisterPatient register = new FrmRegisterPatient(this.patientService,
+        this.authenticationService);
+        register.setVisible(true);
+        this.dispose();
+
     }//GEN-LAST:event_btnRegisterActionPerformed
 
 

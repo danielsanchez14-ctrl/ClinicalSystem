@@ -5,6 +5,7 @@
 package com.mycompany.Presentation;
 
 import com.mycompany.Models.Patient;
+import com.mycompany.Services.AuthenticationService;
 import com.mycompany.Services.PatientService;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,16 +19,20 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
 
     //El método debe conocer al servicio para pasarle los datos que recibe
     private final PatientService patientService;
+    private final AuthenticationService authenticationService;
 
     /**
      * Creates new form FrmRegisterPatient
      *
      * @param patientService el servicio de pacientes que maneja la lógica
      * subyacente.
+     * @param authenticationService el servicio de autenticación
      */
-    public FrmRegisterPatient(PatientService patientService) {
+    public FrmRegisterPatient(PatientService patientService,
+            AuthenticationService authenticationService) {
         initComponents();
         this.patientService = patientService;
+        this.authenticationService = authenticationService;
     }
 
     /**
@@ -59,6 +64,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
@@ -130,6 +136,11 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
         });
 
         btnCancelRegistration.setText("Cancel");
+        btnCancelRegistration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelRegistrationActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
@@ -259,7 +270,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
                 password, realName, documentNumber, birthdateFinal))) {
             JOptionPane.showMessageDialog(this, "Registration Success!");
             //Si se registra exitosamente, se les regresa al login:
-            FrmLogin login = new FrmLogin();
+            FrmLogin login = new FrmLogin(this.patientService, this.authenticationService);
             login.setVisible(true);
             this.dispose();
 
@@ -268,6 +279,14 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegisterPatientActionPerformed
+
+    private void btnCancelRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelRegistrationActionPerformed
+        // Regresa al login
+        FrmLogin login = new FrmLogin(this.patientService,
+                this.authenticationService);
+        login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCancelRegistrationActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

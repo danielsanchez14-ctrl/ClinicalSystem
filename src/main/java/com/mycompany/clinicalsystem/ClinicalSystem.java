@@ -16,6 +16,7 @@ import com.mycompany.Persistance.ConsultationRepositoryMemory;
 import com.mycompany.Persistance.PatientRepositoryMemory;
 import com.mycompany.Presentation.FrmLogin;
 import com.mycompany.Presentation.FrmRegisterPatient;
+import com.mycompany.Services.AuthenticationService;
 import com.mycompany.Services.ConsultationService;
 import com.mycompany.Services.GlobalUsernameValidator;
 import com.mycompany.Services.PatientService;
@@ -33,11 +34,10 @@ public class ClinicalSystem {
         IPatientRepository repo = new PatientRepositoryMemory();
         List<IAuthenticableRepository> list = new ArrayList<>();
         list.add((IAuthenticableRepository) repo);
+        AuthenticationService auth = new AuthenticationService(list);
         GlobalUsernameValidator validator = new GlobalUsernameValidator(list);
         PatientService service = new PatientService(repo, validator);
-        FrmRegisterPatient p = new FrmRegisterPatient(service);
-        //p.setVisible(true);
-        FrmLogin l = new FrmLogin();
+        FrmLogin l = new FrmLogin(service, auth);
         l.setVisible(true);
     }
 }
