@@ -15,7 +15,6 @@ public class Specialty {
 
     private final String id; //Identificador único de la especialidad
     private SpecialtyName specialtyName; //Enumerado que indica su nombre
-    //private String description;
 
     public Specialty() {
         this.id = UUID.randomUUID().toString();
@@ -24,7 +23,7 @@ public class Specialty {
     public Specialty(SpecialtyName specialtyName) {
         this.id = UUID.randomUUID().toString();
         this.specialtyName = specialtyName;
-        //this.description = description;
+
     }
 
     /**
