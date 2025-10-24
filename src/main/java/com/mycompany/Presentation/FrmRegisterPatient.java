@@ -5,8 +5,8 @@
 package com.mycompany.Presentation;
 
 import com.mycompany.Models.Patient;
-import com.mycompany.Services.AuthenticationService;
 import com.mycompany.Services.PatientService;
+import com.mycompany.Services.ServiceLocator;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import javax.swing.JOptionPane;
@@ -19,20 +19,18 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
 
     //El método debe conocer al servicio para pasarle los datos que recibe
     private final PatientService patientService;
-    private final AuthenticationService authenticationService;
 
     /**
      * Creates new form FrmRegisterPatient
      *
      * @param patientService el servicio de pacientes que maneja la lógica
      * subyacente.
-     * @param authenticationService el servicio de autenticación
+     * 
      */
-    public FrmRegisterPatient(PatientService patientService,
-            AuthenticationService authenticationService) {
+    public FrmRegisterPatient(PatientService patientService) {
         initComponents();
         this.patientService = patientService;
-        this.authenticationService = authenticationService;
+
     }
 
     /**
@@ -270,7 +268,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
                 password, realName, documentNumber, birthdateFinal))) {
             JOptionPane.showMessageDialog(this, "Registration Success!");
             //Si se registra exitosamente, se les regresa al login:
-            FrmLogin login = new FrmLogin(this.patientService, this.authenticationService);
+            FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
             login.setVisible(true);
             this.dispose();
 
@@ -282,8 +280,7 @@ public class FrmRegisterPatient extends javax.swing.JFrame {
 
     private void btnCancelRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelRegistrationActionPerformed
         // Regresa al login
-        FrmLogin login = new FrmLogin(this.patientService,
-                this.authenticationService);
+        FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
         login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCancelRegistrationActionPerformed

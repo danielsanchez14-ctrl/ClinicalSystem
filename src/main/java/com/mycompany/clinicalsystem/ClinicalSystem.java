@@ -20,6 +20,7 @@ import com.mycompany.Services.AuthenticationService;
 import com.mycompany.Services.ConsultationService;
 import com.mycompany.Services.GlobalUsernameValidator;
 import com.mycompany.Services.PatientService;
+import com.mycompany.Services.ServiceLocator;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +32,27 @@ import java.util.List;
 public class ClinicalSystem {
 
     public static void main(String[] args) {
-        IPatientRepository repo = new PatientRepositoryMemory();
-        List<IAuthenticableRepository> list = new ArrayList<>();
-        list.add((IAuthenticableRepository) repo);
-        AuthenticationService auth = new AuthenticationService(list);
-        GlobalUsernameValidator validator = new GlobalUsernameValidator(list);
-        PatientService service = new PatientService(repo, validator);
-        FrmLogin l = new FrmLogin(service, auth);
-        l.setVisible(true);
+        //IPatientRepository repo = new PatientRepositoryMemory();
+        //List<IAuthenticableRepository> list = new ArrayList<>();
+        //list.add((IAuthenticableRepository) repo);
+        //AuthenticationService auth = new AuthenticationService(list);
+        //GlobalUsernameValidator validator = new GlobalUsernameValidator(list);
+        //PatientService service = new PatientService(repo, validator);
+        //FrmLogin l = new FrmLogin(service, auth);
+        //l.setVisible(true);
+        
+        //Arrancar programa
+        IPatientRepository repo1 = new PatientRepositoryMemory();
+        List<IAuthenticableRepository> listadeRepos = new ArrayList<>();
+        listadeRepos.add((IAuthenticableRepository) repo1);
+        AuthenticationService auth = new AuthenticationService(listadeRepos);
+        GlobalUsernameValidator validator = new GlobalUsernameValidator(listadeRepos);
+        
+        //Servicios
+        PatientService p = new PatientService(repo1, validator);
+        ServiceLocator.initialize(p, null, auth, null, null);
+        
+        FrmLogin main = new FrmLogin(auth);
+        main.setVisible(true);
     }
 }

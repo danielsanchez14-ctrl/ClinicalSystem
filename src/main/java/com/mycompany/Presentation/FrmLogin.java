@@ -5,7 +5,7 @@
 package com.mycompany.Presentation;
 
 import com.mycompany.Services.AuthenticationService;
-import com.mycompany.Services.PatientService;
+import com.mycompany.Services.ServiceLocator;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,20 +14,18 @@ import javax.swing.JOptionPane;
  */
 public class FrmLogin extends javax.swing.JFrame {
 
-    private final PatientService patientService;
     private final AuthenticationService authenticationService;
 
     /**
      * Creates new form FrmLogin
      *
-     * @param patientService es el servicio de pacientes.
-     * @param authenticationService es el servicio de autenticación
+     * @param auth
+     *
      */
-    public FrmLogin(PatientService patientService, AuthenticationService
-            authenticationService) {
+    public FrmLogin(AuthenticationService auth) {
         initComponents();
-        this.patientService = patientService;
-        this.authenticationService = authenticationService;
+        this.authenticationService = auth;
+
     }
 
     /**
@@ -165,7 +163,7 @@ public class FrmLogin extends javax.swing.JFrame {
         var username = txtUsernameField.getText();
         var password = txtPasswordField.getPassword();
         String passwordString = new String(password); //Convierte la contraseña a String
-        
+
         //Se utiliza el servicio de autenticación:
         if (authenticationService.login(username, passwordString).isPresent()) {
             //Si la autenticación es exitosa:
@@ -175,16 +173,17 @@ public class FrmLogin extends javax.swing.JFrame {
             //TO-DO
         } else {
             JOptionPane.showMessageDialog(this, "Authentication Failed! Please "
-                    + "check your username and password.", 
-                              "Login Error", JOptionPane.ERROR_MESSAGE);
+                    + "check your username and password.",
+                    "Login Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         //Cierra este frame y abre el frame de registro de pacientes
-        FrmRegisterPatient register = new FrmRegisterPatient(this.patientService,
-        this.authenticationService);
+        FrmRegisterPatient register = new FrmRegisterPatient(ServiceLocator.
+                getInstance().
+                getPatientService());
         register.setVisible(true);
         this.dispose();
 
