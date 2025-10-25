@@ -4,6 +4,7 @@ import com.mycompany.Interfaces.*;
 import com.mycompany.Models.*;
 import com.mycompany.Persistance.*;
 import com.mycompany.Presentation.FrmDoctorMenu;
+import com.mycompany.Presentation.FrmPatientMenu;
 import com.mycompany.Services.*;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -77,7 +78,15 @@ public class ClinicalSystem {
         ServiceLocator.initialize(patientService, doctorService, auth, appointmentService, consultationService);
 
         // ======== ARRANCAR DIRECTO EL MENÚ DEL DOCTOR ========
+        /*
         FrmDoctorMenu menu = new FrmDoctorMenu(doc1); // Muestra el menú del Dr. Smith
         menu.setVisible(true);
+        */
+        
+        // ======== ARRANCAR DIRECTO EL MENÚ DEL PACIENTE ========
+        /*
+        FrmPatientMenu menuP = new FrmPatientMenu(pat1); // Muestra el menú Juan Pérez
+        menuP.setVisible(true);
+        */
     }
 }
