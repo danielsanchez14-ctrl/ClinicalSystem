@@ -5,16 +5,20 @@
 package com.mycompany.Presentation;
 
 import com.mycompany.Models.Appointment;
+import com.mycompany.Models.AppointmentStatus;
 import com.mycompany.Models.Doctor;
 import com.mycompany.Models.Patient;
 import com.mycompany.Models.User;
 import com.mycompany.Services.AppointmentService;
 import com.mycompany.Services.AuthenticationService;
+import com.mycompany.Services.DoctorService;
+import com.mycompany.Services.PatientService;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 import javax.swing.JOptionPane;
 
@@ -26,18 +30,81 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
 
     private final AppointmentService appointmentService; 
     private final AuthenticationService authenticationService;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
+    
+    private List<Doctor> doctorsList;
     
     /**
      * Creates new form FrmNewAppointment
      * @param appointmentService
      * @param authenticationService
      */
-    public FrmNewAppointment(AppointmentService appointmentService, AuthenticationService authenticationService) {
+    public FrmNewAppointment(AppointmentService appointmentService, AuthenticationService authenticationService, DoctorService doctorService,
+                                PatientService patientService) {
         initComponents();
         this.appointmentService = appointmentService;
         this.authenticationService = authenticationService;
+        this.patientService = patientService;
+        this.doctorService = doctorService;
+        
+        loadAllDoctors();
     }
     
+    private void loadAllDoctors(){
+        //Limpiar el ComboBox
+        cmbDoctorsAvailable.removeAllItems();
+        
+        //Obtener todos los doctores
+        doctorsList = doctorService.listAllDoctors();
+        
+        if (doctorsList == null || doctorsList.isEmpty()){
+            cmbDoctorsAvailable.addItem("No doctors available");
+        } else {
+            //Agregar cada doctor al ComboBox
+            for (Doctor doctor: doctorsList){
+                String displayText = doctor.getFullName() + " - " + doctor.getMedicalSpecialty().getSpecialtyName();
+                cmbDoctorsAvailable.addItem(displayText);
+            }
+        }
+    }
+    
+    private boolean isDoctorAvailable(Doctor doctor, LocalDateTime dateTime) {
+        // Obtener todas las citas del doctor
+        List<Appointment> doctorAppointments = this.appointmentService.getAppointmentsByDoctor(doctor.getId(), AppointmentStatus.PROGRAMADA);
+
+        if (doctorAppointments == null || doctorAppointments.isEmpty()) {
+            return true; // Doctor disponible si no tiene citas
+        }
+
+        // Verificar si el doctor tiene una cita en la fecha y hora seleccionadas
+        for (Appointment appointment : doctorAppointments) {
+            LocalDateTime appointmentDateTime = appointment.getScheduledAt();
+
+            // Si coincide la fecha y hora exacta, el doctor NO está disponible
+            if (appointmentDateTime.equals(dateTime)) {
+                return false;
+            }
+
+            // También verificar si hay conflicto considerando la duración
+            LocalDateTime appointmentEnd = appointmentDateTime.plus(appointment.getDuration());
+            LocalDateTime newAppointmentEnd = dateTime.plus(Duration.ofHours(1));
+            
+            if (appointmentEnd == null){
+                return false;
+            }
+            
+            // Verificar si hay solapamiento de horarios
+            if ((dateTime.isBefore(appointmentEnd) && dateTime.isAfter(appointmentDateTime)) ||
+                (newAppointmentEnd.isAfter(appointmentDateTime) && newAppointmentEnd.isBefore(appointmentEnd)) ||
+                (dateTime.isBefore(appointmentDateTime) && newAppointmentEnd.isAfter(appointmentEnd))) {
+                return false;
+            }
+            
+        }
+    
+        return true; // Doctor disponible
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,8 +150,8 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Date");
 
-        cmbDoctorsAvailable.setBackground(new java.awt.Color(255, 255, 255));
         cmbDoctorsAvailable.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbDoctorsAvailable.setBackground(new java.awt.Color(255, 255, 255));
 
         upperPanel2.setBackground(new java.awt.Color(102, 102, 255));
         upperPanel2.setPreferredSize(new java.awt.Dimension(800, 50));
@@ -113,11 +180,16 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
             }
         });
 
-        btnScheduleAppointment.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnScheduleAppointment.setText("Schedule");
+        btnScheduleAppointment.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnScheduleAppointment.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnScheduleAppointmentMouseClicked(evt);
+            }
+        });
+        btnScheduleAppointment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScheduleAppointmentActionPerformed(evt);
             }
         });
 
@@ -206,45 +278,114 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
     private void btnScheduleAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnScheduleAppointmentMouseClicked
         var date = btnDateChooser.getDate(); //Retorna un objeto Date
         var hour = btnHourSelection.getTime(); //Retorna un objeto LocalTime
+        
+        //Verificar fecha
+        if (date == null) {
+            JOptionPane.showMessageDialog(this, "Please select a date", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        //Verificar hora
+        if (hour == null) {
+            JOptionPane.showMessageDialog(this, "Please select an hour", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         var doctorSelected = cmbDoctorsAvailable.getSelectedItem();
-        Duration duration = Duration.ofHours(2);
+        //Obtener el índice seleccionado en lugar del item
+        int selectedIndex = cmbDoctorsAvailable.getSelectedIndex();
+        Duration duration = Duration.ofHours(1);
         
         // Se obtiene el usuario actual, verificando que exista y realizando un casting a Patient antes de continuar
         Optional<User> optionalUser = this.authenticationService.getCurrentUser();
+        //Optional<User> optionalUser = this.authenticationService.login("juanp", "abc123"); //Prueba (se agrega directamente el usuario usando .login)
         Patient patient = null;
         if (optionalUser.isPresent() && optionalUser.get() instanceof Patient) {
             patient = (Patient) optionalUser.get();
         }
+        
+        //Verificar paciente
+        if (patient == null) {
+            JOptionPane.showMessageDialog(this, "Patient not found. Please log in again.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         Doctor doctor = null;
-        if (doctorSelected != null && doctorSelected instanceof Doctor){
-            doctor = (Doctor) doctorSelected;
+        if (selectedIndex >= 0 && selectedIndex < doctorsList.size()) {
+            doctor = doctorsList.get(selectedIndex);
+        }
+        
+        //Verificar doctor
+        if (doctor == null) {
+            JOptionPane.showMessageDialog(this, "Please select a doctor", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
             
-        LocalDateTime dateTimeFinal; // Aquí se guardará la fecha y hora final
-        if (date != null && hour != null) {
-            // Convertir Date a LocalDate
-            Instant instant = date.toInstant();
-            ZoneId zone = ZoneId.systemDefault();
-            LocalDate localDate = instant.atZone(zone).toLocalDate();
-
-            // Combinar LocalDate y LocalTime
-            dateTimeFinal = LocalDateTime.of(localDate, hour);
-
-            System.out.println("Fecha y hora seleccionada: " + dateTimeFinal);
-        } else {
-            dateTimeFinal = null;
+        // Convertir Date a LocalDateTime
+        Instant instant = date.toInstant();
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDate localDate = instant.atZone(zone).toLocalDate();
+        LocalDateTime dateTimeFinal = LocalDateTime.of(localDate, hour);
+        
+        if (dateTimeFinal.isBefore(LocalDateTime.now())){
+            JOptionPane.showMessageDialog(this, "Invalid date", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        //Una vez obtenido, se llama al servicio de citas:
-        if (this.appointmentService.scheduleAppointment(new Appointment(
-                dateTimeFinal, duration, patient, doctor))){
-            JOptionPane.showMessageDialog(this, "Appointment Scheduled Successfully!");
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Appointment Schedule Failed!",
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        System.out.println("=== DEBUG INFO ===");
+        System.out.println("Fecha y hora seleccionada: " + dateTimeFinal);
+        System.out.println("Doctor seleccionado: " + doctor.getFullName() + " (ID: " + doctor.getId() + ")");
+        System.out.println("Paciente: " + patient.getFullName() + " (ID: " + patient.getId() + ")");
+        System.out.println("Duración: " + duration);
+        
+        if (!isDoctorAvailable(doctor, dateTimeFinal)) {
+            JOptionPane.showMessageDialog(this, 
+                "Sorry, Dr. " + doctor.getFullName() + " is not available at that date and time.\n" +
+                "Please select a different doctor or time slot.", 
+                "Doctor Not Available", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Una vez validado todo, se llama al servicio de citas:
+        try {
+            Appointment newAppointment = new Appointment(dateTimeFinal, duration, patient, doctor);
+            System.out.println("Creando cita: " + newAppointment);
+
+            boolean success = this.appointmentService.scheduleAppointment(newAppointment);
+
+            System.out.println("Resultado del servicio scheduleAppointment: " + success);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, 
+                    "Appointment Scheduled Successfully!\n\n" +
+                    "Doctor: " + doctor.getFullName() + "\n" +
+                    "Date: " + dateTimeFinal.toLocalDate() + "\n" +
+                    "Time: " + dateTimeFinal.toLocalTime(),
+                    "Success", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "Appointment Schedule Failed!\n" +
+                    "The service returned false. Please check the logs.",
+                    "ERROR", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            System.err.println("=== ERROR AL AGENDAR ===");
+            System.err.println("Mensaje: " + e.getMessage());
+            e.printStackTrace();
+
+            JOptionPane.showMessageDialog(this, 
+                "Error scheduling appointment:\n" + e.getMessage(),
+                "ERROR", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnScheduleAppointmentMouseClicked
+
+    private void btnScheduleAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleAppointmentActionPerformed
+        
+    }//GEN-LAST:event_btnScheduleAppointmentActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -258,8 +399,6 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel upperPanel;
-    private javax.swing.JPanel upperPanel1;
     private javax.swing.JPanel upperPanel2;
     // End of variables declaration//GEN-END:variables
 }
