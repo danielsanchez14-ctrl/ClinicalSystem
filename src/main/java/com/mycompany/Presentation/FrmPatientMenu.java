@@ -223,7 +223,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAppointmentHistoryMouseClicked
 
     private void btnEditPatientInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditPatientInfoMouseClicked
-        FrmInformation information = new FrmInformation(null);
+        FrmInformation information = new FrmInformation(patient);
         desktopPane.add(information);
         information.setVisible(true);
     }//GEN-LAST:event_btnEditPatientInfoMouseClicked
