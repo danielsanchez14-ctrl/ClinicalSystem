@@ -4,26 +4,101 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.AppointmentStatus;
+import com.mycompany.Models.Consultation;
+import com.mycompany.Models.Patient;
 import com.mycompany.Services.AppointmentService;
-import com.mycompany.Services.AuthenticationService;
+import com.mycompany.Services.ConsultationService;
 /**
  *
  * @author mateo
  */
 public class FrmPatientHistory extends javax.swing.JInternalFrame {
 
-    private final AuthenticationService authenticationService;
     private final AppointmentService appointmentService;
+    private final Patient patient;
+    private final ConsultationService consultationService;
     
     /**
      * Creates new form FrmPatientHistory
      * @param appointmentService
-     * @param authenticationService
+     * @param consultationService
+     * @param patient
      */
-    public FrmPatientHistory(AppointmentService appointmentService, AuthenticationService authenticationService) {
+    public FrmPatientHistory(AppointmentService appointmentService, ConsultationService consultationService
+                            , Patient patient) {
         initComponents();
         this.appointmentService = appointmentService;
-        this.authenticationService = authenticationService;
+        this.consultationService = consultationService;
+        this.patient = patient;
+        
+        loadPatientAppointments();
+    }
+    
+    private void loadPatientAppointments(){
+        // Traer las citas del paciente
+        var appointments = appointmentService.getAppointmentsByPatient(patient.getId(), AppointmentStatus.COMPLETADA);
+        var consultations = consultationService.getConsultHistoryForPatient(patient.getId());
+        // Modelo de tabla
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new Object[]{"Date", "Doctor", "Diagnosis", "Treatment"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // todas las celdas son solo lectura
+            }
+        };
+
+        //Llenar la tabla combinando appointments y consultations
+        for (var appointment : appointments) {
+            //Buscar la consulta correspondiente a esta cita
+            Consultation matchingConsultation = null;
+            for (var consultation : consultations){
+                //Verificar si la consulta corresponde a esta cita
+                //Ajustar esta condición según cómo se relaciona Appointment y Consultation
+                if (consultation.getAppointment() != null && consultation.getAppointment().getId().equals(appointment.getId())){
+                    matchingConsultation = consultation;
+                    break;
+                }
+            }
+            
+            //Agregar fila con datos de appointment y consultation
+            model.addRow(new Object[]{
+                appointment.getScheduledAtAsString(), //Date (de Appointment)
+                appointment.getDoctor().getFullName(), //Doctor (de Appointment)
+                matchingConsultation != null ? matchingConsultation.getDiagnosis() : "N/A", //Diagnosis (de Consultation)
+                matchingConsultation != null ? matchingConsultation.getTreatment() : "N/A"  //Diagnosis (de Consultation)
+            });
+        }
+
+        tblAppointments.setModel(model);
+
+        // Permitir scroll horizontal si el texto es muy largo
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tblAppointments.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        // Ajustar anchos iniciales de columnas (puedes ajustarlos a gusto)
+        tblAppointments.getColumnModel().getColumn(0).setPreferredWidth(120); // Date
+        tblAppointments.getColumnModel().getColumn(1).setPreferredWidth(150); // Patient
+        tblAppointments.getColumnModel().getColumn(2).setPreferredWidth(250); // Diagnosis
+        tblAppointments.getColumnModel().getColumn(3).setPreferredWidth(300); // Treatment
+
+        // Tooltip para mostrar texto completo al pasar el mouse
+        tblAppointments.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int row = tblAppointments.rowAtPoint(e.getPoint());
+                int col = tblAppointments.columnAtPoint(e.getPoint());
+                if (row > -1 && col > -1) {
+                    Object value = tblAppointments.getValueAt(row, col);
+                    if (value != null) {
+                        tblAppointments.setToolTipText(value.toString());
+                    } else {
+                        tblAppointments.setToolTipText(null);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -38,7 +113,7 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblSchedule = new javax.swing.JTable();
+        tblAppointments = new javax.swing.JTable();
         btnBack = new javax.swing.JButton();
         upperPanel = new javax.swing.JPanel();
 
@@ -52,8 +127,8 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Clinical history");
 
-        tblSchedule.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        tblSchedule.setModel(new javax.swing.table.DefaultTableModel(
+        tblAppointments.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        tblAppointments.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -72,11 +147,11 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblSchedule.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tblSchedule.setRowHeight(40);
-        tblSchedule.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblSchedule.setShowGrid(true);
-        jScrollPane1.setViewportView(tblSchedule);
+        tblAppointments.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblAppointments.setRowHeight(40);
+        tblAppointments.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblAppointments.setShowGrid(true);
+        jScrollPane1.setViewportView(tblAppointments);
 
         btnBack.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnBack.setText("Back");
@@ -155,7 +230,7 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblSchedule;
+    private javax.swing.JTable tblAppointments;
     private javax.swing.JPanel upperPanel;
     // End of variables declaration//GEN-END:variables
 }

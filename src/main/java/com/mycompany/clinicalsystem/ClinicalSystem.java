@@ -111,15 +111,14 @@ public class ClinicalSystem {
 
         // ======== SERVICE LOCATOR ========
         ServiceLocator.initialize(patientService, doctorService, auth, appointmentService, consultationService);
-
+        
         // ======== INICIO DIRECTO ========
         FrmDoctorMenu menu = new FrmDoctorMenu(doc1); // Cardiólogo con 3 pacientes
         menu.setVisible(true);
-        */
         
         // ======== ARRANCAR DIRECTO EL MENÚ DEL PACIENTE ========
         /*
-        FrmPatientMenu menuP = new FrmPatientMenu(pat1); // Muestra el menú Juan Pérez
+        FrmPatientMenu menuP = new FrmPatientMenu(pat2);
         menuP.setVisible(true);
         */
     }

@@ -5,6 +5,7 @@
 package com.mycompany.Presentation;
 
 import com.mycompany.Models.Patient;
+import com.mycompany.Models.User;
 import com.mycompany.Services.ServiceLocator;
 import javax.swing.JOptionPane;
 
@@ -72,7 +73,9 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         desktopPane.setBackground(new java.awt.Color(255, 255, 255));
         desktopPane.setPreferredSize(new java.awt.Dimension(800, 500));
 
+        btnSignOut.setBackground(new java.awt.Color(102, 102, 255));
         btnSignOut.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnSignOut.setForeground(new java.awt.Color(255, 255, 255));
         btnSignOut.setText("Sign out");
         btnSignOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -82,10 +85,12 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         desktopPane.add(btnSignOut);
         btnSignOut.setBounds(650, 390, 110, 40);
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Welcome, x");
         desktopPane.add(jLabel1);
-        jLabel1.setBounds(240, 70, 340, 32);
+        jLabel1.setBounds(60, 80, 570, 47);
 
         btnScheduledAppointments.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         btnScheduledAppointments.setText("Scheduled Appointments");
@@ -209,8 +214,9 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnScheduledAppointmentsMouseClicked
 
     private void btnAppointmentHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAppointmentHistoryMouseClicked
-        FrmPatientHistory patientHistory = new FrmPatientHistory(ServiceLocator.getInstance().getAppointmentService(), 
-                                                                    ServiceLocator.getInstance().getAuthenticationService());
+        FrmPatientHistory patientHistory = new FrmPatientHistory(ServiceLocator.getInstance().getAppointmentService(),
+                                                                    ServiceLocator.getInstance().getConsultationService(), 
+                                                                    (Patient) (User) patient);
         this.desktopPane.add(patientHistory);
         patientHistory.setVisible(true);
     }//GEN-LAST:event_btnAppointmentHistoryMouseClicked
