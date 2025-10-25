@@ -7,6 +7,7 @@ package com.mycompany.Presentation;
 import com.mycompany.Models.AppointmentStatus;
 import com.mycompany.Models.Doctor;
 import com.mycompany.Services.AppointmentService;
+import com.mycompany.Services.ServiceLocator;
 
 /**
  *
@@ -16,11 +17,13 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
     private final AppointmentService appointmentService;
     private final Doctor doctor;
+    private java.util.List<com.mycompany.Models.Appointment> appointments;
 
     /**
      * Creates new form FrmDoctorSchedule
      *
      * @param appointmentService
+     * @param doctor
      */
     public FrmDoctorSchedule(AppointmentService appointmentService, Doctor doctor) {
         initComponents();
@@ -32,7 +35,7 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
     private void loadSchedule() {
         // Obtener Citas Programadas del doctor
-        var appointments = appointmentService.getAppointmentsByDoctor(doctor.getId(), AppointmentStatus.PROGRAMADA);
+        appointments = appointmentService.getAppointmentsByDoctor(doctor.getId(), AppointmentStatus.PROGRAMADA);
 
         // Modelo de la tabla
         javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
@@ -45,7 +48,7 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 3; // solo el checkbox es editable
+                return column == 3;
             }
         };
 
@@ -59,8 +62,6 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
         }
 
         tblSchedule.setModel(model);
-
-        // Asegurar selección única para crear consultas
         model.addTableModelListener(e -> enforceSingleSelection(model, e.getFirstRow(), e.getColumn()));
     }
 
@@ -237,13 +238,22 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Please select one appointment to register a consultation.");
             return;
         }
-        
-        String patientName = model.getValueAt(selectedRow, 0).toString();
-        String date = model.getValueAt(selectedRow, 2).toString();
-        
-        javax.swing.JOptionPane.showMessageDialog(this, "Resgisterinf consultation for: " + patientName + "\nDate: " + date);
 
-        // TODO: abrir FrmConsultation para la generación de la consulta
+        // Obtenemos la cita seleccionada
+        var appointment = appointments.get(selectedRow);
+
+        // Creamos el frame de consulta
+        FrmConsultationCreate frm = new FrmConsultationCreate(
+                appointment,
+                ServiceLocator.getInstance().getConsultationService(),
+                appointmentService,
+                this::loadSchedule // para refrescar al guardar
+        );
+
+        // Mostrar dentro del mismo contenedor MDI
+        this.getDesktopPane().add(frm);
+        frm.setVisible(true);
+        frm.toFront();
     }//GEN-LAST:event_btnRegisterConsultationActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

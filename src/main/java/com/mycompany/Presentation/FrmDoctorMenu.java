@@ -8,7 +8,6 @@ import com.mycompany.Models.Doctor;
 import com.mycompany.Models.User;
 import com.mycompany.Services.ServiceLocator;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 
 /**
  *
@@ -55,7 +54,8 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
 
         try {
             frame.setSelected(true);
-        } catch (java.beans.PropertyVetoException ignored) {
+        } catch (java.beans.PropertyVetoException e) {
+            System.err.println("Error selecting frame: " + e.getMessage());
         }
     }
 
@@ -208,7 +208,6 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
     private void btnRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordsActionPerformed
         System.out.println(">>> Abriendo FrmDoctorHistory...");
         FrmDoctorHistory frm = new FrmDoctorHistory(ServiceLocator.getInstance().getConsultationService(), doctor);
-        desktopPane.add(frm);
         openInternalFrame(frm);
     }//GEN-LAST:event_btnRecordsActionPerformed
 
@@ -220,7 +219,6 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
     private void btnUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserInfoActionPerformed
         System.out.println(">>> Abriendo FrmInformation...");
         FrmInformation frm = new FrmInformation((User) doctor);
-        desktopPane.add(frm);
         openInternalFrame(frm);
     }//GEN-LAST:event_btnUserInfoActionPerformed
 
