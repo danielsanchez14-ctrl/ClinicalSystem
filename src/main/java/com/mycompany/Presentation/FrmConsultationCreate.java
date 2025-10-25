@@ -124,7 +124,7 @@ public class FrmConsultationCreate extends javax.swing.JInternalFrame {
         btnSave.setBackground(new java.awt.Color(102, 102, 225));
         btnSave.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("Save Changes");
+        btnSave.setText("Save Consultation");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
