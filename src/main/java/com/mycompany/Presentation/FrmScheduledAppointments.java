@@ -4,6 +4,8 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.AppointmentStatus;
+import com.mycompany.Models.Consultation;
 import com.mycompany.Models.Patient;
 import com.mycompany.Services.AppointmentService;
 import javax.swing.JOptionPane;
@@ -26,8 +28,91 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
         initComponents();
         this.appointmentService = appointmentService;
         this.patient = patient;
+        loadPatientAppointments();
+        
+        addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            @Override
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
+                loadPatientAppointments(); // Recargar datos cada vez que se activa
+            }
+        });
     }
 
+    private void loadPatientAppointments(){
+        // Traer las citas del paciente (citas programadas)
+        var appointments = appointmentService.getAppointmentsByPatient(patient.getId(), AppointmentStatus.PROGRAMADA);
+
+         // Modelo de la tabla
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new Object[]{"Doctor", "Date", "Select"}, 0
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return (columnIndex == 2) ? Boolean.class : String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 2;
+            }
+        };
+        
+        
+        if (appointments != null && !appointments.isEmpty()) {
+            for (var a : appointments) {
+                model.addRow(new Object[]{
+                    a.getDoctor().getFullName(),
+                    a.getScheduledAtAsString(),
+                    Boolean.FALSE
+                });
+            }
+        } else {
+            System.out.println("No hay citas programadas para mostrar");
+        }
+
+        tblSchedule.setModel(model);
+        model.addTableModelListener(e -> {
+            if (e.getColumn() == 2) {
+                enforceSingleSelection(model, e.getFirstRow(), e.getColumn());
+            }
+        });
+
+        // Permitir scroll horizontal si el texto es muy largo
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tblSchedule.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+        // Ajustar anchos iniciales de columnas (se pueden ajustar al gusto)
+        tblSchedule.getColumnModel().getColumn(0).setPreferredWidth(240); // Doctor
+        tblSchedule.getColumnModel().getColumn(1).setPreferredWidth(238); // Date
+
+        // Tooltip para mostrar texto completo al pasar el mouse
+        tblSchedule.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int row = tblSchedule.rowAtPoint(e.getPoint());
+                int col = tblSchedule.columnAtPoint(e.getPoint());
+                if (row > -1 && col > -1) {
+                    Object value = tblSchedule.getValueAt(row, col);
+                    if (value != null) {
+                        tblSchedule.setToolTipText(value.toString());
+                    } else {
+                        tblSchedule.setToolTipText(null);
+                    }
+                }
+            }
+        });
+    }
+    
+    private void enforceSingleSelection(javax.swing.table.DefaultTableModel model, int row, int column) {
+        if (column == 2 && Boolean.TRUE.equals(model.getValueAt(row, column))) {
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (i != row) {
+                    model.setValueAt(false, i, 2); //
+                }
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,22 +257,74 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBackMouseClicked
 
     private void btnCancelAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCancelAppointmentMouseClicked
+        //Verificar si hay una cita seleccionada
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tblSchedule.getModel();
+
+        int selectedRow = -1;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            Boolean isSelected = (Boolean) model.getValueAt(i, 2); // Columna "Select"
+            if (isSelected != null && isSelected) {
+                selectedRow = i;
+                break;
+            }
+        }
+        
+        // ✅ PASO 3: Confirmar la cancelación
+        String doctorName = (String) model.getValueAt(selectedRow, 0);
+        String dateTime = (String) model.getValueAt(selectedRow, 1);
+
         int option = JOptionPane.showConfirmDialog(
             this,
-            "¿Estás seguro de cancelar esta/s cita/s?",
-            "Confirmar cancelación",
+            "Are you sure you want to cancel this appointment?\n\n" +
+            "Doctor: " + doctorName + "\n" +
+            "Date: " + dateTime,
+            "Confirm Cancellation",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE
         );
 
         if (option == JOptionPane.YES_OPTION) {
-            // Aquí cancelas las citas seleccionadas
-            System.out.println("Cita(s) cancelada(s)");
-        } else {
-            // Aquí vuelves o simplemente no haces nada
-            System.out.println("Operación cancelada");
-        }
+            try {
+                //Obtener la cita correspondiente
+                var appointments = appointmentService.getAppointmentsByPatient(
+                    patient.getId(), 
+                    AppointmentStatus.PROGRAMADA
+                );
 
+                if (appointments != null && selectedRow < appointments.size()) {
+                    var appointmentToCancel = appointments.get(selectedRow);
+
+                    System.out.println("Cancelando cita ID: " + appointmentToCancel.getId());
+
+                    //Cancelar la cita usando el servicio
+                    boolean success = appointmentService.updateAppointmentStatus(appointmentToCancel.getId(), AppointmentStatus.CANCELADA);
+
+                    if (success) {
+                        JOptionPane.showMessageDialog(this,
+                            "Appointment cancelled successfully!",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                        //Recargar la tabla
+                        loadPatientAppointments();
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                            "Failed to cancel appointment. Please try again.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error al cancelar cita: " + e.getMessage());
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                    "Error cancelling appointment: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            System.out.println("Cancelación abortada por el usuario");
+        }
     }//GEN-LAST:event_btnCancelAppointmentMouseClicked
 
 

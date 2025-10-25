@@ -339,6 +339,7 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
         // Una vez validado todo, se llama al servicio de citas:
         try {
             Appointment newAppointment = new Appointment(dateTimeFinal, duration, patient, doctor);
+            newAppointment.setStatus(AppointmentStatus.PROGRAMADA);
             System.out.println("Creando cita: " + newAppointment);
 
             boolean success = this.appointmentService.scheduleAppointment(newAppointment);
