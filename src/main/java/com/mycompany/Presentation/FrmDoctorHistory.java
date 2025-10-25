@@ -4,17 +4,84 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Doctor;
+import com.mycompany.Services.ConsultationService;
+
 /**
  *
  * @author camil
  */
 public class FrmDoctorHistory extends javax.swing.JInternalFrame {
 
+    private final ConsultationService consultationService;
+    private final Doctor doctor;
+
     /**
      * Creates new form FrmDoctorHistory
+     *
+     * @param consultationService
+     * @param doctor
      */
-    public FrmDoctorHistory() {
+    public FrmDoctorHistory(ConsultationService consultationService, Doctor doctor) {
         initComponents();
+        this.consultationService = consultationService;
+        this.doctor = doctor;
+        setSize(800, 500);
+
+        loadConsultations();
+    }
+
+    private void loadConsultations() {
+        // Traer las consultas del doctor
+        var consultations = consultationService.getConsultHistoryForDoctor(doctor.getId());
+        // Modelo de tabla
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new Object[]{"Date", "Patient", "Diagnosis", "Treatment"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // todas las celdas son solo lectura
+            }
+        };
+
+        // Llenar la tabla
+        for (var c : consultations) {
+            model.addRow(new Object[]{
+                c.getRegistrationDateAsString(),
+                c.getAppointment().getPatient().getFullName(),
+                c.getDiagnosis(),
+                c.getTreatment()});
+        }
+
+        tblConsultations.setModel(model);
+
+        // Permitir scroll horizontal si el texto es muy largo
+        ScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tblConsultations.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+
+// Ajustar anchos iniciales de columnas (puedes ajustarlos a gusto)
+        tblConsultations.getColumnModel().getColumn(0).setPreferredWidth(120); // Date
+        tblConsultations.getColumnModel().getColumn(1).setPreferredWidth(150); // Patient
+        tblConsultations.getColumnModel().getColumn(2).setPreferredWidth(250); // Diagnosis
+        tblConsultations.getColumnModel().getColumn(3).setPreferredWidth(300); // Treatment
+
+// Tooltip para mostrar texto completo al pasar el mouse
+        tblConsultations.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int row = tblConsultations.rowAtPoint(e.getPoint());
+                int col = tblConsultations.columnAtPoint(e.getPoint());
+                if (row > -1 && col > -1) {
+                    Object value = tblConsultations.getValueAt(row, col);
+                    if (value != null) {
+                        tblConsultations.setToolTipText(value.toString());
+                    } else {
+                        tblConsultations.setToolTipText(null);
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -133,7 +200,7 @@ public class FrmDoctorHistory extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
 

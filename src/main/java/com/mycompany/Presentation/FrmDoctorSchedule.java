@@ -4,17 +4,74 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.AppointmentStatus;
+import com.mycompany.Models.Doctor;
+import com.mycompany.Services.AppointmentService;
+
 /**
  *
  * @author camil
  */
 public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
+    private final AppointmentService appointmentService;
+    private final Doctor doctor;
+
     /**
      * Creates new form FrmDoctorSchedule
+     *
+     * @param appointmentService
      */
-    public FrmDoctorSchedule() {
+    public FrmDoctorSchedule(AppointmentService appointmentService, Doctor doctor) {
         initComponents();
+        this.appointmentService = appointmentService;
+        this.doctor = doctor;
+
+        loadSchedule();
+    }
+
+    private void loadSchedule() {
+        // Obtener Citas Programadas del doctor
+        var appointments = appointmentService.getAppointmentsByDoctor(doctor.getId(), AppointmentStatus.PROGRAMADA);
+
+        // Modelo de la tabla
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new Object[]{"Patient", "Document", "Date", "Select"}, 0
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return (columnIndex == 3) ? Boolean.class : String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 3; // solo el checkbox es editable
+            }
+        };
+
+        // Llenamos la tabla
+        for (var a : appointments) {
+            model.addRow(new Object[]{
+                a.getPatient().getFullName(),
+                a.getPatient().getDocumentNumber(),
+                a.getScheduledAtAsString(),
+                false});
+        }
+
+        tblSchedule.setModel(model);
+
+        // Asegurar selección única para crear consultas
+        model.addTableModelListener(e -> enforceSingleSelection(model, e.getFirstRow(), e.getColumn()));
+    }
+
+    private void enforceSingleSelection(javax.swing.table.DefaultTableModel model, int row, int column) {
+        if (column == 3 && Boolean.TRUE.equals(model.getValueAt(row, column))) {
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (i != row) {
+                    model.setValueAt(false, i, 3);
+                }
+            }
+        }
     }
 
     /**
@@ -102,6 +159,11 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
         btnRegisterConsultation.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegisterConsultation.setForeground(new java.awt.Color(255, 255, 255));
         btnRegisterConsultation.setText("Register Consultation");
+        btnRegisterConsultation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterConsultationActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,6 +221,30 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnRegisterConsultationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterConsultationActionPerformed
+        int selectedRow = -1;
+        var model = (javax.swing.table.DefaultTableModel) tblSchedule.getModel();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (Boolean.TRUE.equals(model.getValueAt(i, 3))) {
+                selectedRow = i;
+                break;
+            }
+        }
+
+        if (selectedRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select one appointment to register a consultation.");
+            return;
+        }
+        
+        String patientName = model.getValueAt(selectedRow, 0).toString();
+        String date = model.getValueAt(selectedRow, 2).toString();
+        
+        javax.swing.JOptionPane.showMessageDialog(this, "Resgisterinf consultation for: " + patientName + "\nDate: " + date);
+
+        // TODO: abrir FrmConsultation para la generación de la consulta
+    }//GEN-LAST:event_btnRegisterConsultationActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane ScrollPane;

@@ -4,17 +4,46 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.User;
+import com.mycompany.Services.DoctorService;
+import com.mycompany.Services.PatientService;
+import com.mycompany.Services.ServiceLocator;
+import java.awt.HeadlessException;
+
 /**
  *
  * @author camil
  */
 public class FrmInformation extends javax.swing.JInternalFrame {
 
+    private final User user;
+    private final DoctorService doctorService;
+    private final PatientService patientService;
+
     /**
      * Creates new form FrmInformation
+     *
+     * @param user
      */
-    public FrmInformation() {
+    public FrmInformation(User user) {
         initComponents();
+        this.user = user;
+
+        // Obtener los servicios del ServiceLocator
+        this.doctorService = ServiceLocator.getInstance().getDoctorService();
+        this.patientService = ServiceLocator.getInstance().getPatientService();
+
+        // Configurar la UI
+        setSize(800, 500);
+        loadUserInformation();
+        txtDocument.setEnabled(false); // documento no editable
+    }
+
+    private void loadUserInformation() {
+        txtFullName2.setText(user.getFullName());
+        txtDocument.setText(user.getDocumentNumber());
+        txtPhoneNumber.setText(user.getPhoneNumber());
+        txtUserName.setText(user.getUsername());
     }
 
     /**
@@ -111,6 +140,11 @@ public class FrmInformation extends javax.swing.JInternalFrame {
         btnRegisterConsultation.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegisterConsultation.setForeground(new java.awt.Color(255, 255, 255));
         btnRegisterConsultation.setText("Save Changes");
+        btnRegisterConsultation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterConsultationActionPerformed(evt);
+            }
+        });
 
         btnCancel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnCancel.setText("Cancel");
@@ -213,6 +247,44 @@ public class FrmInformation extends javax.swing.JInternalFrame {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnRegisterConsultationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterConsultationActionPerformed
+        try {
+            String fullName = txtFullName2.getText().trim();
+            String phone = txtPhoneNumber.getText().trim();
+            String username = txtUserName.getText().trim();
+
+            if (fullName.isEmpty() || phone.isEmpty() || username.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields before saving.");
+                return;
+            }
+
+            // Actualizamos los valores locales
+            user.setFullName(fullName);
+            user.setPhoneNumber(phone);
+            user.setUsername(username);
+
+            // Llamar al servicio correspondiente
+            boolean success;
+            if (user instanceof com.mycompany.Models.Doctor doctor) {
+                success = doctorService.updateDoctor(doctor);
+            } else if (user instanceof com.mycompany.Models.Patient patient) {
+                success = patientService.updatePatient(patient);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Unknown user type.");
+                return;
+            }
+
+            if (success) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Information updated successfully!");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Failed to update information.");
+            }
+
+        } catch (HeadlessException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error updating information: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnRegisterConsultationActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
