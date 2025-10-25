@@ -4,6 +4,18 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Appointment;
+import com.mycompany.Models.Doctor;
+import com.mycompany.Models.Patient;
+import com.mycompany.Models.User;
+import com.mycompany.Services.AppointmentService;
+import com.mycompany.Services.AuthenticationService;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Optional;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,13 +24,20 @@ import javax.swing.JOptionPane;
  */
 public class FrmNewAppointment extends javax.swing.JInternalFrame {
 
+    private final AppointmentService appointmentService; 
+    private final AuthenticationService authenticationService;
+    
     /**
      * Creates new form FrmNewAppointment
+     * @param appointmentService
+     * @param authenticationService
      */
-    public FrmNewAppointment() {
+    public FrmNewAppointment(AppointmentService appointmentService, AuthenticationService authenticationService) {
         initComponents();
+        this.appointmentService = appointmentService;
+        this.authenticationService = authenticationService;
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,7 +53,7 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
         btnDateChooser = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        comboBoxDoctorsAvailable = new javax.swing.JComboBox<>();
+        cmbDoctorsAvailable = new javax.swing.JComboBox<>();
         btnHourSelection = new com.github.lgooddatepicker.components.TimePicker();
         upperPanel2 = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
@@ -64,8 +83,8 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Date");
 
-        comboBoxDoctorsAvailable.setBackground(new java.awt.Color(255, 255, 255));
-        comboBoxDoctorsAvailable.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbDoctorsAvailable.setBackground(new java.awt.Color(255, 255, 255));
+        cmbDoctorsAvailable.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         upperPanel2.setBackground(new java.awt.Color(102, 102, 255));
         upperPanel2.setPreferredSize(new java.awt.Dimension(800, 50));
@@ -111,7 +130,7 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
                 .addGap(102, 102, 102)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(comboBoxDoctorsAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbDoctorsAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +173,7 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
                 .addGap(36, 36, 36)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comboBoxDoctorsAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbDoctorsAvailable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnScheduleAppointment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -185,7 +204,46 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnScheduleAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnScheduleAppointmentMouseClicked
-        //JOptionPane.showMessageDialog(this, "You scheduled a new appointment!");
+        var date = btnDateChooser.getDate(); //Retorna un objeto Date
+        var hour = btnHourSelection.getTime(); //Retorna un objeto LocalTime
+        var doctorSelected = cmbDoctorsAvailable.getSelectedItem();
+        Duration duration = Duration.ofHours(2);
+        
+        // Se obtiene el usuario actual, verificando que exista y realizando un casting a Patient antes de continuar
+        Optional<User> optionalUser = this.authenticationService.getCurrentUser();
+        Patient patient = null;
+        if (optionalUser.isPresent() && optionalUser.get() instanceof Patient) {
+            patient = (Patient) optionalUser.get();
+        }
+        Doctor doctor = null;
+        if (doctorSelected != null && doctorSelected instanceof Doctor){
+            doctor = (Doctor) doctorSelected;
+        }
+            
+        LocalDateTime dateTimeFinal; // Aquí se guardará la fecha y hora final
+        if (date != null && hour != null) {
+            // Convertir Date a LocalDate
+            Instant instant = date.toInstant();
+            ZoneId zone = ZoneId.systemDefault();
+            LocalDate localDate = instant.atZone(zone).toLocalDate();
+
+            // Combinar LocalDate y LocalTime
+            dateTimeFinal = LocalDateTime.of(localDate, hour);
+
+            System.out.println("Fecha y hora seleccionada: " + dateTimeFinal);
+        } else {
+            dateTimeFinal = null;
+        }
+
+        //Una vez obtenido, se llama al servicio de citas:
+        if (this.appointmentService.scheduleAppointment(new Appointment(
+                dateTimeFinal, duration, patient, doctor))){
+            JOptionPane.showMessageDialog(this, "Appointment Scheduled Successfully!");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Appointment Schedule Failed!",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnScheduleAppointmentMouseClicked
 
 
@@ -194,7 +252,7 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
     private com.toedter.calendar.JDateChooser btnDateChooser;
     private com.github.lgooddatepicker.components.TimePicker btnHourSelection;
     private javax.swing.JButton btnScheduleAppointment;
-    private javax.swing.JComboBox<String> comboBoxDoctorsAvailable;
+    private javax.swing.JComboBox<String> cmbDoctorsAvailable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
