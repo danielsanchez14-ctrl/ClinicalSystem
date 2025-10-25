@@ -4,17 +4,53 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Appointment;
+import com.mycompany.Models.AppointmentStatus;
+import com.mycompany.Models.Consultation;
+import com.mycompany.Services.AppointmentService;
+import com.mycompany.Services.ConsultationService;
+import java.awt.HeadlessException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author camil
  */
 public class FrmConsultationCreate extends javax.swing.JInternalFrame {
 
+    private final Appointment appointment;
+    private final ConsultationService consultationService;
+    private final AppointmentService appointmentService;
+    private final Runnable onConsultationCreated; // para refrescar UI
+
     /**
      * Creates new form FrmConsultationCreate
+     *
+     * @param appointment
+     * @param consultationService
+     * @param appointmentService
+     * @param onConsultationCreated
      */
-    public FrmConsultationCreate() {
+    public FrmConsultationCreate(Appointment appointment,
+            ConsultationService consultationService,
+            AppointmentService appointmentService,
+            Runnable onConsultationCreated) {
         initComponents();
+        this.appointment = appointment;
+        this.consultationService = consultationService;
+        this.appointmentService = appointmentService;
+        this.onConsultationCreated = onConsultationCreated;
+
+        // Rellenar campos
+        txtPatientName.setText(appointment.getPatient().getFullName());
+        // Formato para mostrar la fecha actual
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String currentDateTime = LocalDateTime.now().format(formatter);
+        txtDate.setText(currentDateTime);
+        txtPatientName.setEditable(false);
+        txtDate.setEditable(false);
     }
 
     /**
@@ -26,21 +62,263 @@ public class FrmConsultationCreate extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        lbtTitle = new javax.swing.JLabel();
+        upperPanel = new javax.swing.JPanel();
+        txtDate = new javax.swing.JTextField();
+        txtPatientName = new javax.swing.JTextField();
+        lblPatient = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
+        btnSave = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDiagnosis = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtTreatment = new javax.swing.JTextArea();
+        lblDiagnosis = new javax.swing.JLabel();
+        lblTreatment = new javax.swing.JLabel();
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        lbtTitle.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        lbtTitle.setText("Create Consultation");
+
+        upperPanel.setBackground(new java.awt.Color(102, 102, 255));
+        upperPanel.setPreferredSize(new java.awt.Dimension(800, 50));
+
+        javax.swing.GroupLayout upperPanelLayout = new javax.swing.GroupLayout(upperPanel);
+        upperPanel.setLayout(upperPanelLayout);
+        upperPanelLayout.setHorizontalGroup(
+            upperPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        upperPanelLayout.setVerticalGroup(
+            upperPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 38, Short.MAX_VALUE)
+        );
+
+        txtDate.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        txtDate.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        txtDate.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDateActionPerformed(evt);
+            }
+        });
+
+        txtPatientName.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        txtPatientName.setSelectedTextColor(new java.awt.Color(0, 0, 0));
+        txtPatientName.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtPatientName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPatientNameActionPerformed(evt);
+            }
+        });
+
+        lblPatient.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblPatient.setText("Patient:");
+
+        lblDate.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblDate.setText("Date:");
+
+        btnSave.setBackground(new java.awt.Color(102, 102, 225));
+        btnSave.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("Save Changes");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+
+        txtDiagnosis.setLineWrap(true);
+        txtDiagnosis.setWrapStyleWord(true);
+        txtDiagnosis.setColumns(20);
+        txtDiagnosis.setRows(5);
+        jScrollPane1.setViewportView(txtDiagnosis);
+
+        txtTreatment.setLineWrap(true);
+        txtTreatment.setWrapStyleWord(true);
+        txtTreatment.setColumns(20);
+        txtTreatment.setRows(5);
+        jScrollPane2.setViewportView(txtTreatment);
+
+        lblDiagnosis.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblDiagnosis.setText("Diagnosis:");
+
+        lblTreatment.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lblTreatment.setText("Treatment:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(upperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(287, 287, 287)
+                .addComponent(lbtTitle)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTreatment)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblDate)
+                            .addComponent(lblPatient)
+                            .addComponent(lblDiagnosis))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSave, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtPatientName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancel)))
+                .addGap(74, 74, 74))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(upperPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lbtTitle)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPatientName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPatient))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDate))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(lblDiagnosis))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(lblTreatment)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDateActionPerformed
+
+    private void txtPatientNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPatientNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPatientNameActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        try {
+            String diagnosis = txtDiagnosis.getText().trim();
+            String treatment = txtTreatment.getText().trim();
+
+            if (diagnosis.isEmpty() || treatment.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+                return;
+            }
+
+            // Validar que la cita esté programada antes de crear la consulta
+            if (appointment.getStatus() != AppointmentStatus.PROGRAMADA) {
+                JOptionPane.showMessageDialog(this,
+                        "Only scheduled appointments can have consultations.");
+                return;
+            }
+
+            // Crear el objeto consulta
+            Consultation consultation = new Consultation();
+            consultation.setAppointment(appointment);
+            consultation.setDiagnosis(diagnosis);
+            consultation.setTreatment(treatment);
+
+            // Intentar guardarla
+            boolean success = consultationService.createConsultation(consultation);
+
+            if (!success) {
+                JOptionPane.showMessageDialog(this, """
+                                                    Unable to create consultation. Possible reasons:
+                                                    - The consultation already exists.
+                                                    - Missing required information.
+                                                    - Invalid appointment status.""");
+                return;
+            }
+
+            // Solo si se guardó correctamente, marcar la cita como completada
+            appointmentService.updateAppointmentStatus(appointment.getId(), AppointmentStatus.COMPLETADA);
+            appointment.setStatus(AppointmentStatus.COMPLETADA);
+
+            JOptionPane.showMessageDialog(this, "Consultation saved successfully!");
+
+            if (onConsultationCreated != null) {
+                onConsultationCreated.run();
+            }
+
+            this.dispose();
+
+        } catch (HeadlessException ex) {
+            JOptionPane.showMessageDialog(this, "Error saving consultation: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblDate;
+    private javax.swing.JLabel lblDiagnosis;
+    private javax.swing.JLabel lblPatient;
+    private javax.swing.JLabel lblTreatment;
+    private javax.swing.JLabel lbtTitle;
+    private javax.swing.JTextField txtDate;
+    private javax.swing.JTextArea txtDiagnosis;
+    private javax.swing.JTextField txtPatientName;
+    private javax.swing.JTextArea txtTreatment;
+    private javax.swing.JPanel upperPanel;
     // End of variables declaration//GEN-END:variables
 }
