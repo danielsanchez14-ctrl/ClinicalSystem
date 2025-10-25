@@ -4,6 +4,8 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Patient;
+import com.mycompany.Services.AppointmentService;
 import javax.swing.JOptionPane;
 
 /**
@@ -11,12 +13,19 @@ import javax.swing.JOptionPane;
  * @author mateo
  */
 public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
+    
+    private final AppointmentService appointmentService;
+    private final Patient patient;
 
     /**
      * Creates new form FrmScheduledAppointments
+     * @param appointmentService
+     * @param patient
      */
-    public FrmScheduledAppointments() {
+    public FrmScheduledAppointments(AppointmentService appointmentService, Patient patient) {
         initComponents();
+        this.appointmentService = appointmentService;
+        this.patient = patient;
     }
 
     /**

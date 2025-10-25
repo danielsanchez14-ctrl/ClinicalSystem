@@ -201,14 +201,15 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSignOutActionPerformed
 
     private void btnNewAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewAppointmentMouseClicked
-        FrmNewAppointment newAppt = new FrmNewAppointment(ServiceLocator.getInstance().getAppointmentService(), ServiceLocator.getInstance().getAuthenticationService(), 
-                                                            ServiceLocator.getInstance().getDoctorService(), ServiceLocator.getInstance().getPatientService());
+        FrmNewAppointment newAppt = new FrmNewAppointment(ServiceLocator.getInstance().getAppointmentService(), 
+                                                            ServiceLocator.getInstance().getDoctorService(), 
+                                                                ServiceLocator.getInstance().getPatientService(), patient);
         this.desktopPane.add(newAppt);
         newAppt.setVisible(true);
     }//GEN-LAST:event_btnNewAppointmentMouseClicked
 
     private void btnScheduledAppointmentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnScheduledAppointmentsMouseClicked
-        FrmScheduledAppointments scheduledAppt = new FrmScheduledAppointments();
+        FrmScheduledAppointments scheduledAppt = new FrmScheduledAppointments(ServiceLocator.getInstance().getAppointmentService(), patient);
         this.desktopPane.add(scheduledAppt);
         scheduledAppt.setVisible(true);
     }//GEN-LAST:event_btnScheduledAppointmentsMouseClicked
@@ -216,7 +217,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     private void btnAppointmentHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAppointmentHistoryMouseClicked
         FrmPatientHistory patientHistory = new FrmPatientHistory(ServiceLocator.getInstance().getAppointmentService(),
                                                                     ServiceLocator.getInstance().getConsultationService(), 
-                                                                    (Patient) (User) patient);
+                                                                    patient);
         this.desktopPane.add(patientHistory);
         patientHistory.setVisible(true);
     }//GEN-LAST:event_btnAppointmentHistoryMouseClicked

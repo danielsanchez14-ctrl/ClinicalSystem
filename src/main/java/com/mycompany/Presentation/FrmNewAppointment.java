@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,24 +28,23 @@ import javax.swing.JOptionPane;
 public class FrmNewAppointment extends javax.swing.JInternalFrame {
 
     private final AppointmentService appointmentService; 
-    private final AuthenticationService authenticationService;
     private final DoctorService doctorService;
-    private final PatientService patientService;
+    private final Patient patient;
     
     private List<Doctor> doctorsList;
     
     /**
      * Creates new form FrmNewAppointment
      * @param appointmentService
-     * @param authenticationService
+     * @param doctorService
+     * @param patientService
+     * @param patient
      */
-    public FrmNewAppointment(AppointmentService appointmentService, AuthenticationService authenticationService, DoctorService doctorService,
-                                PatientService patientService) {
+    public FrmNewAppointment(AppointmentService appointmentService, DoctorService doctorService, PatientService patientService, Patient patient) {
         initComponents();
         this.appointmentService = appointmentService;
-        this.authenticationService = authenticationService;
-        this.patientService = patientService;
         this.doctorService = doctorService;
+        this.patient = patient;
         
         loadAllDoctors();
     }
@@ -294,15 +292,7 @@ public class FrmNewAppointment extends javax.swing.JInternalFrame {
         //Obtener el índice seleccionado en lugar del item
         int selectedIndex = cmbDoctorsAvailable.getSelectedIndex();
         Duration duration = Duration.ofHours(1);
-        
-        // Se obtiene el usuario actual, verificando que exista y realizando un casting a Patient antes de continuar
-        Optional<User> optionalUser = this.authenticationService.getCurrentUser();
-        //Optional<User> optionalUser = this.authenticationService.login("juanp", "abc123"); //Prueba (se agrega directamente el usuario usando .login)
-        Patient patient = null;
-        if (optionalUser.isPresent() && optionalUser.get() instanceof Patient) {
-            patient = (Patient) optionalUser.get();
-        }
-        
+
         //Verificar paciente
         if (patient == null) {
             JOptionPane.showMessageDialog(this, "Patient not found. Please log in again.", "Error", JOptionPane.ERROR_MESSAGE);
