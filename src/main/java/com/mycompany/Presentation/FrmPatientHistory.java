@@ -4,17 +4,26 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Services.AppointmentService;
+import com.mycompany.Services.AuthenticationService;
 /**
  *
  * @author mateo
  */
 public class FrmPatientHistory extends javax.swing.JInternalFrame {
 
+    private final AuthenticationService authenticationService;
+    private final AppointmentService appointmentService;
+    
     /**
      * Creates new form FrmPatientHistory
+     * @param appointmentService
+     * @param authenticationService
      */
-    public FrmPatientHistory() {
+    public FrmPatientHistory(AppointmentService appointmentService, AuthenticationService authenticationService) {
         initComponents();
+        this.appointmentService = appointmentService;
+        this.authenticationService = authenticationService;
     }
 
     /**
