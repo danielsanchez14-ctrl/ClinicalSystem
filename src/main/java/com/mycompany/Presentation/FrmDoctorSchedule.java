@@ -10,11 +10,20 @@ import com.mycompany.Services.AppointmentService;
 import com.mycompany.Services.ServiceLocator;
 
 /**
+ * Ventana interna {@code JInternalFrame} que muestra la agenda del doctor
+ * (citas programadas). Permite seleccionar una cita para registrar una
+ * consulta.
  *
  * @author camil
  */
 public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
 
+    /**
+     * Objeto de tipo {@link Doctor} que representa al usuario (doctor)
+     * actualmente autenticado. Objeto de tipo {@link AppointmentService} que
+     * representa al servicio. Objeto de tipo {@link Appointment} que son las
+     * citas programadas del médico.
+     */
     private final AppointmentService appointmentService;
     private final Doctor doctor;
     private java.util.List<com.mycompany.Models.Appointment> appointments;
@@ -22,8 +31,8 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
     /**
      * Creates new form FrmDoctorSchedule
      *
-     * @param appointmentService
-     * @param doctor
+     * @param appointmentService Servicio encargado de gestionar citas.
+     * @param doctor doctor cuyas citas serán mostradas.
      */
     public FrmDoctorSchedule(AppointmentService appointmentService, Doctor doctor) {
         initComponents();
@@ -33,6 +42,24 @@ public class FrmDoctorSchedule extends javax.swing.JInternalFrame {
         loadSchedule();
     }
 
+    /**
+     * Carga las citas programadas del doctor y las muestra en la tabla.
+     * <p>
+     * Funciona sí:
+     * <ol>
+     * <li> Consulta al {@code AppointmenService} las citas del {@code Doctor}
+     * con estado PROGRAMADA.</li>
+     * <li> Construye un {@link  javax.swing.table.DefaultTableModel} con
+     * columnas "Patient", "Document", "Date", "Select" (siendo la última un
+     * checkbox).</li>
+     * <li> Puebla el modelo con los datos de las citas y lo asigna a
+     * {@code tblSchedule}.</li>
+     * <li> Agrega un {@code TableModelListener} para forzar que solo una fila
+     * pueda estar seleccionada en la columna de checkbox (usa
+     * {@link #enforceSingleSelection(javax.swing.table.DefaultTableModel, int, int)}).
+     * )</li>
+     * </ol>
+     */
     private void loadSchedule() {
         // Obtener Citas Programadas del doctor
         appointments = appointmentService.getAppointmentsByDoctor(doctor.getId(), AppointmentStatus.PROGRAMADA);

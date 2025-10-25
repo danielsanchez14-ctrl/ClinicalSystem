@@ -10,13 +10,41 @@ import com.mycompany.Services.ServiceLocator;
 import javax.swing.JInternalFrame;
 
 /**
+ * Ventana principal del módulo de doctores (MDI Application).
+ * <p>
+ * Esta clase extiende {@link javax.swing.JFrame} y actúa como el contenedor del
+ * área de trabajo del doctor. Internamente contiene un
+ * {@link javax.swing.JDesktopPane}, que funciona como escritorio virtual donde
+ * se abren las distintas ventanas internas ({@link javax.swing.JInternalFrame})
+ * relacionadas con las funciones del doctor, como ver su agenda, generar
+ * consultas y ver el historial de dichas consultas.
+ * <p>
+ *
+ * <p>
+ * Además, muestra un mensaje de bienvenida dinámico con el nombre completo del
+ * doctor y ajusta el texto automáticamente al ancho de la ventana.
+ * </p>
  *
  * @author camil
  */
 public class FrmDoctorMenu extends javax.swing.JFrame {
 
+    /**
+     * Objeto de tipo {@link Doctor} que representa al usuario (doctor)
+     * actualmente autenticado.
+     */
     private final Doctor doctor;
 
+    /**
+     * Crea una nueva instancia del menú principal para doctores.
+     * <p>
+     * Configura los elementos visuales del formulario, muestra un mensaje de
+     * bienvenida con el nombre del doctor e inicializa los componentes gráficos
+     * generados por el editor de NetBeans.
+     * </p>
+     *
+     * @param doctor instancia del doctor autenticado en el sistema.
+     */
     public FrmDoctorMenu(Doctor doctor) {
         initComponents();
         this.doctor = doctor;
@@ -42,18 +70,43 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Abre una ventana interna ({@link javax.swing.JInternalFrame}) dentro del
+     * {@link javax.swing.JDesktopPane}.
+     * <p>
+     * Este método se encarga de ocultar todas las demás ventanas internas
+     * abiertas y mostrar únicamente la que se pasa como parámetro. Si la
+     * ventana aún no ha sido agregada al {@code desktopPane}, se añade
+     * automáticamente.
+     * </p>
+     *
+     * <p>
+     * <strong>Flujo general:</strong></p>
+     * <ol>
+     * <li>Oculta todos los {@code JInternalFrame} actualmente visibles.</li>
+     * <li>Agrega el nuevo {@code frame} al {@code desktopPane} si no está
+     * presente.</li>
+     * <li>Lo hace visible, lo trae al frente y le da el foco.</li>
+     * </ol>
+     *
+     * @param frame instancia de {@link javax.swing.JInternalFrame} que se desea
+     * mostrar.
+     */
     private void openInternalFrame(javax.swing.JInternalFrame frame) {
+        // Oculta las ventanas internas abiertas.
         for (JInternalFrame f : desktopPane.getAllFrames()) {
             f.setVisible(false);
         }
+        // Si la ventana no está en el escritorio, agregarla
         if (frame.getParent() != desktopPane) {
             desktopPane.add(frame);
         }
+        //Mostrar la ventana y traerla al frente
         frame.setVisible(true);
         frame.toFront();
 
         try {
-            frame.setSelected(true);
+            frame.setSelected(true); //Intenta darle foco (recibir las acciones del usuario).
         } catch (java.beans.PropertyVetoException e) {
             System.err.println("Error selecting frame: " + e.getMessage());
         }
@@ -196,26 +249,42 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Abre la ventana interna {@code JInternalFrame} correspondiente a la
+     * agenda de citas pendientes con el médico.
+     *
+     */
     private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
+        // Instancia la pantalla de la agenda del doctor.
         FrmDoctorSchedule frm = new FrmDoctorSchedule(
                 ServiceLocator.getInstance().getAppointmentService(),
                 doctor
         );
-        openInternalFrame(frm);
+        openInternalFrame(frm); // Abre la instancia.
     }//GEN-LAST:event_btnScheduleActionPerformed
-
+    /**
+     * Abre la ventana interna {@code JInternalFrame} con el historial de
+     * consultas del doctor.
+     */
     private void btnRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordsActionPerformed
         System.out.println(">>> Abriendo FrmDoctorHistory...");
+        // Instancia el JInternalFrame del historial del médico
         FrmDoctorHistory frm = new FrmDoctorHistory(ServiceLocator.getInstance().getConsultationService(), doctor);
-        openInternalFrame(frm);
+        openInternalFrame(frm); //Se llama al método que lo abre.
     }//GEN-LAST:event_btnRecordsActionPerformed
-
+    /**
+     * Abre la ventana principal del login {@code JFrame}. Además, cierra al MDI
+     * Application.
+     */
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         dispose();
         new FrmLogin(ServiceLocator.getInstance().getAuthenticationService()).setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
+    /**
+     * Abre la ventana {@code  JInternalFrame} al formulario con la información
+     * del médico (y donde se le permite actualizar su informació básica).
+     */
     private void btnUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserInfoActionPerformed
         System.out.println(">>> Abriendo FrmInformation...");
         FrmInformation frm = new FrmInformation((User) doctor);
