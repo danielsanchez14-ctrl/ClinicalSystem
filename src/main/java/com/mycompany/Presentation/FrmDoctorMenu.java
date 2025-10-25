@@ -4,22 +4,59 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Doctor;
+import com.mycompany.Models.User;
+import com.mycompany.Services.ServiceLocator;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+
 /**
  *
  * @author camil
  */
 public class FrmDoctorMenu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form FrmDoctorMenu
-     */
-    public FrmDoctorMenu() {
+    private final Doctor doctor;
+
+    public FrmDoctorMenu(Doctor doctor) {
         initComponents();
+        this.doctor = doctor;
+        // Texto completo
+        String fullName = doctor.getFullName();
+        String message = "Welcome, Dr. " + fullName;
+
+        // Mostrar todo el nombre en tooltip por si es muy largo
+        lblWelcome.setToolTipText(message);
+
+        // Usar HTML con ajuste automático
+        lblWelcome.setText("<html><div style='text-align:center; white-space: nowrap;'>"
+                + message + "</div></html>");
+
+        // Escucha de cambios en el tamaño del label (por si cambia el ancho de la ventana)
+        lblWelcome.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                int width = lblWelcome.getWidth();
+                lblWelcome.setText("<html><div style='text-align:center; width:" + width + "px;'>"
+                        + message + "</div></html>");
+            }
+        });
     }
 
-    public FrmDoctorMenu(String doctorName) {
-        initComponents();
-        lblWelcome.setText("Welcome Dr." + doctorName);
+    private void openInternalFrame(javax.swing.JInternalFrame frame) {
+        for (JInternalFrame f : desktopPane.getAllFrames()) {
+            f.setVisible(false);
+        }
+        if (frame.getParent() != desktopPane) {
+            desktopPane.add(frame);
+        }
+        frame.setVisible(true);
+        frame.toFront();
+
+        try {
+            frame.setSelected(true);
+        } catch (java.beans.PropertyVetoException ignored) {
+        }
     }
 
     /**
@@ -161,61 +198,35 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
-        FrmDoctorSchedule schedule = new FrmDoctorSchedule();
-        desktopPane.add(schedule);
-        schedule.setVisible(true);
+        FrmDoctorSchedule frm = new FrmDoctorSchedule(
+                ServiceLocator.getInstance().getAppointmentService(),
+                doctor
+        );
+        openInternalFrame(frm);
     }//GEN-LAST:event_btnScheduleActionPerformed
 
     private void btnRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordsActionPerformed
-        FrmDoctorHistory records = new FrmDoctorHistory();
-        desktopPane.add(records);
-        records.setVisible(true);
+        System.out.println(">>> Abriendo FrmDoctorHistory...");
+        FrmDoctorHistory frm = new FrmDoctorHistory(ServiceLocator.getInstance().getConsultationService(), doctor);
+        desktopPane.add(frm);
+        openInternalFrame(frm);
     }//GEN-LAST:event_btnRecordsActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new FrmLogin(ServiceLocator.getInstance().getAuthenticationService()).setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserInfoActionPerformed
-        FrmInformation information = new FrmInformation();
-        desktopPane.add(information);
-        information.setVisible(true);
+        System.out.println(">>> Abriendo FrmInformation...");
+        FrmInformation frm = new FrmInformation((User) doctor);
+        desktopPane.add(frm);
+        openInternalFrame(frm);
     }//GEN-LAST:event_btnUserInfoActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmDoctorMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmDoctorMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmDoctorMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmDoctorMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmDoctorMenu().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;

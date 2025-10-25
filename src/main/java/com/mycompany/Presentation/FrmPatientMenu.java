@@ -58,7 +58,6 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         btnSignOut.setBounds(650, 390, 110, 40);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Welcome, x");
         desktopPane.add(jLabel1);
         jLabel1.setBounds(330, 70, 150, 32);
@@ -189,7 +188,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAppointmentHistoryMouseClicked
 
     private void btnEditPatientInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditPatientInfoMouseClicked
-        FrmInformation information = new FrmInformation();
+        FrmInformation information = new FrmInformation(null);
         desktopPane.add(information);
         information.setVisible(true);
     }//GEN-LAST:event_btnEditPatientInfoMouseClicked
