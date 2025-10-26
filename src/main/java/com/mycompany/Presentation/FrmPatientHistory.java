@@ -4,11 +4,10 @@
  */
 package com.mycompany.Presentation;
 
-import com.mycompany.Models.AppointmentStatus;
-import com.mycompany.Models.Consultation;
 import com.mycompany.Models.Patient;
 import com.mycompany.Services.AppointmentService;
 import com.mycompany.Services.ConsultationService;
+
 /**
  *
  * @author mateo
@@ -18,26 +17,26 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
     private final AppointmentService appointmentService;
     private final Patient patient;
     private final ConsultationService consultationService;
-    
+
     /**
      * Creates new form FrmPatientHistory
+     *
      * @param appointmentService
      * @param consultationService
      * @param patient
      */
-    public FrmPatientHistory(AppointmentService appointmentService, ConsultationService consultationService
-                            , Patient patient) {
+    public FrmPatientHistory(AppointmentService appointmentService, ConsultationService consultationService,
+             Patient patient) {
         initComponents();
         this.appointmentService = appointmentService;
         this.consultationService = consultationService;
         this.patient = patient;
-        
+
         loadPatientAppointments();
     }
-    
-    private void loadPatientAppointments(){
+
+    private void loadPatientAppointments() {
         // Traer las citas del paciente
-        var appointments = appointmentService.getAppointmentsByPatient(patient.getId(), AppointmentStatus.COMPLETADA);
         var consultations = consultationService.getConsultHistoryForPatient(patient.getId());
         // Modelo de tabla
         javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
@@ -49,25 +48,13 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
             }
         };
 
-        //Llenar la tabla combinando appointments y consultations
-        for (var appointment : appointments) {
-            //Buscar la consulta correspondiente a esta cita
-            Consultation matchingConsultation = null;
-            for (var consultation : consultations){
-                //Verificar si la consulta corresponde a esta cita
-                //Ajustar esta condición según cómo se relaciona Appointment y Consultation
-                if (consultation.getAppointment() != null && consultation.getAppointment().getId().equals(appointment.getId())){
-                    matchingConsultation = consultation;
-                    break;
-                }
-            }
-            
-            //Agregar fila con datos de appointment y consultation
+        //Llenar la tabla con las consultations
+        for (var c : consultations) {
             model.addRow(new Object[]{
-                appointment.getScheduledAtAsString(), //Date (de Appointment)
-                appointment.getDoctor().getFullName(), //Doctor (de Appointment)
-                matchingConsultation != null ? matchingConsultation.getDiagnosis() : "N/A", //Diagnosis (de Consultation)
-                matchingConsultation != null ? matchingConsultation.getTreatment() : "N/A"  //Diagnosis (de Consultation)
+                c.getRegistrationDateAsString(),
+                c.getAppointment().getDoctor().getFullName(),
+                c.getDiagnosis(),
+                c.getTreatment()
             });
         }
 
@@ -91,11 +78,7 @@ public class FrmPatientHistory extends javax.swing.JInternalFrame {
                 int col = tblAppointments.columnAtPoint(e.getPoint());
                 if (row > -1 && col > -1) {
                     Object value = tblAppointments.getValueAt(row, col);
-                    if (value != null) {
-                        tblAppointments.setToolTipText(value.toString());
-                    } else {
-                        tblAppointments.setToolTipText(null);
-                    }
+                    tblAppointments.setToolTipText(value != null ? value.toString() : null);
                 }
             }
         });
