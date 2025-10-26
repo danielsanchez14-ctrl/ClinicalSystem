@@ -4,13 +4,9 @@
  */
 package com.mycompany.Presentation;
 
-import com.mycompany.Models.Appointment;
-import com.mycompany.Models.AppointmentStatus;
-import com.mycompany.Models.Doctor;
-import com.mycompany.Services.AppointmentService;
-import com.mycompany.Services.DoctorService;
-import com.mycompany.Services.ServiceLocator;
-import java.util.List;
+import com.mycompany.Models.Specialty;
+import com.mycompany.Models.SpecialtyName;
+import com.mycompany.Services.SpecialtyService;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -18,53 +14,44 @@ import javax.swing.JOptionPane;
  *
  * @author kosmo
  */
-public class FrmRemoveDoctorMenu extends javax.swing.JInternalFrame {
+public class FrmAddNewSpecialtyMenu extends javax.swing.JInternalFrame {
 
-    private final DoctorService doctorService;
-    private final AppointmentService appointmentService;
-    private DefaultListModel<String> doctorsList;
+    private final SpecialtyService specialtyService;
+    private DefaultListModel<String> specialtyList;
 
     /**
-     * Creates new form FrmRemoveDoctorMenu
+     * Creates new form FrmAddNewSpecialtyMenu
      *
-     * @param doctorService el servicio de médicos
-     * @param appointmentService el servicio de citas
+     * @param specialtyService el servicio de gestión de especialidades.
      */
-    public FrmRemoveDoctorMenu(DoctorService doctorService, AppointmentService appointmentService) {
+    public FrmAddNewSpecialtyMenu(SpecialtyService specialtyService) {
         initComponents();
-        this.doctorsList = new DefaultListModel<>();//Para que la lista sea dinámica
-        this.doctorService = doctorService; //Servicio de médicos
-        this.appointmentService = appointmentService; // Servicio de citas
+        this.specialtyList = new DefaultListModel<>(); //Para la lista dinámica.
+        this.specialtyService = specialtyService; //Servicio de especialidades
         initListDynamicModel();
-        loadDoctorsList();
+        loadSpecialtyList();
     }
 
     private DefaultListModel<String> getListModel() {
-        return doctorsList;
+        return specialtyList;
     }
 
     private void initListDynamicModel() {
         if (getListModel() != null) {
             jList1.setModel(getListModel());
         }
-
     }
 
-    private void loadDoctorsList() {
-        //Limpia la lista
-        this.doctorsList.clear();
+    private void loadSpecialtyList() {
+        //Limpiar lista
+        this.specialtyList.clear();
 
-        List<Doctor> doctors = doctorService.listAllDoctors(); //Lista médicos activos
+        //Arreglo con los nombres disponibles
+        SpecialtyName[] specialtyNames = SpecialtyName.values();
 
-        if (doctors == null || doctors.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "There are no Doctors Available.",
-                    "Empty List",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        for (Doctor doctor : doctors) {
-            this.doctorsList.addElement(doctor.getFullName() + " - " + doctor.getId());
+        //Itera el arreglo y asigna a la lista el string con el nombre de la especialidad
+        for (SpecialtyName name : specialtyNames) {
+            this.specialtyList.addElement(name.toString());
         }
     }
 
@@ -79,7 +66,7 @@ public class FrmRemoveDoctorMenu extends javax.swing.JInternalFrame {
 
         desktopPane = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
-        brnDelete = new javax.swing.JButton();
+        btnGenerateSpecialty = new javax.swing.JButton();
         lblWelcome = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -90,17 +77,17 @@ public class FrmRemoveDoctorMenu extends javax.swing.JInternalFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        brnDelete.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        brnDelete.setText("Delete Selected Doctor");
-        brnDelete.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
-        brnDelete.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerateSpecialty.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnGenerateSpecialty.setText("Create Specialty");
+        btnGenerateSpecialty.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
+        btnGenerateSpecialty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                brnDeleteActionPerformed(evt);
+                btnGenerateSpecialtyActionPerformed(evt);
             }
         });
 
         lblWelcome.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        lblWelcome.setText("Remove Doctor Menu");
+        lblWelcome.setText("Create Specialty Menu");
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -120,33 +107,36 @@ public class FrmRemoveDoctorMenu extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(79, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(brnDelete)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(219, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(98, 98, 98)
-                        .addComponent(btnCancel))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70))
+                        .addGap(116, 116, 116)
+                        .addComponent(btnCancel)
+                        .addGap(70, 70, 70))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(196, 196, 196))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnGenerateSpecialty)
+                        .addGap(328, 328, 328))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCancel))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(brnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnGenerateSpecialty, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         desktopPane.add(jPanel2);
@@ -187,48 +177,44 @@ public class FrmRemoveDoctorMenu extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void brnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnDeleteActionPerformed
-        System.out.println(">>> Eliminando Doctor...");
-        if (this.doctorsList.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "There are no Doctors to delete!",
+    private void btnGenerateSpecialtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateSpecialtyActionPerformed
+        System.out.println(">>> Instanciando Especialidad...");
+        if (this.specialtyList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "There are no specialties!",
                     "Empty List.", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int index = jList1.getSelectedIndex();
         if (index == -1) {
-            JOptionPane.showMessageDialog(this, "Please, select a Doctor first.");
+            JOptionPane.showMessageDialog(this, "Please, select a specialty first.");
             return;
         }
         String selected = jList1.getSelectedValue(); //obtiene el string
-        String[] parts = selected.split(" - ", 2); //Separa id y nombre
-        String id = parts[1]; //Guarda id
 
         int confirm = JOptionPane.showConfirmDialog(this,
-                "Are you sure you wish to delete this Doctor?",
-                "Confirm Delete",
+                "Are you sure you wish to generate this specialty?",
+                "Confirm Creation",
                 JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
-            doctorService.removeDoctor(id);
-            //Cancelar citas del médico desactivado
-            List<Appointment> list
-                    = appointmentService.
-                            getAppointmentsByDoctor(id, AppointmentStatus.PROGRAMADA);
+            SpecialtyName specialtyEnum = SpecialtyName.valueOf(selected);
+            Specialty newSpecialty = new Specialty(specialtyEnum);
+            if (specialtyService.registerSpecialty(newSpecialty)) {
+                JOptionPane.showMessageDialog(this, "Specialty created succesfully!",
+                        "Confirmation", JOptionPane.INFORMATION_MESSAGE);
 
-            if (!list.isEmpty()) {
-                for (Appointment appointment : list) {
-                    appointmentService.
-                            updateAppointmentStatus(appointment.getId(),
-                                    AppointmentStatus.CANCELADA);
-                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Specialty could not be created!"
+                        + "\nPlease, check if it already exists or if an error ocurred.",
+                        "ERROR", JOptionPane.INFORMATION_MESSAGE);
             }
 
             System.out.println("=== DEBUG INFO ===");
-            System.out.println("Doctor desactivdo: " + selected);
-            loadDoctorsList();
+            System.out.println("Especialidad generada: " + selected);
+            loadSpecialtyList();
 
         }
-    }//GEN-LAST:event_brnDeleteActionPerformed
+    }//GEN-LAST:event_btnGenerateSpecialtyActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         this.dispose();
@@ -236,8 +222,8 @@ public class FrmRemoveDoctorMenu extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton brnDelete;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnGenerateSpecialty;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel2;

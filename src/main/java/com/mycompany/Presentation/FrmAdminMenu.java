@@ -181,7 +181,9 @@ public class FrmAdminMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnAddNewSpecialtyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewSpecialtyActionPerformed
-
+        FrmAddNewSpecialtyMenu frm = new FrmAddNewSpecialtyMenu(ServiceLocator.
+                getInstance().getSpecialtyService());
+        openInternalFrame(frm);
     }//GEN-LAST:event_btnAddNewSpecialtyActionPerformed
 
     private void btnAddNewDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewDoctorActionPerformed

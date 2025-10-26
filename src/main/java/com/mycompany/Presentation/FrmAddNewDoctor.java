@@ -253,9 +253,7 @@ public class FrmAddNewDoctor extends javax.swing.JInternalFrame {
         if (this.doctorService.registerDoctor(new Doctor(username, phoneNumber,
                 password, realName, documentNumber, specialty))) {
             JOptionPane.showMessageDialog(this, "Registration Success!");
-            //Si se registra exitosamente, se les regresa al login:
-            FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
-            login.setVisible(true);
+            //Si se registra exitosamente, se le regresa al menú de admin
             this.dispose();
 
         } else {
