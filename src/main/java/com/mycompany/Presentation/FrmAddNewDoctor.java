@@ -279,7 +279,7 @@ public class FrmAddNewDoctor extends javax.swing.JInternalFrame {
         }
     }
     private void btnCancelRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelRegistrationActionPerformed
-        // Regresa al login
+        // Regresa al menú admin
         this.dispose();
     }//GEN-LAST:event_btnCancelRegistrationActionPerformed
 
