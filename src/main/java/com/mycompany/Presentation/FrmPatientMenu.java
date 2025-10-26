@@ -5,7 +5,6 @@
 package com.mycompany.Presentation;
 
 import com.mycompany.Models.Patient;
-import com.mycompany.Models.User;
 import com.mycompany.Services.ServiceLocator;
 import java.awt.FontMetrics;
 import javax.swing.JOptionPane;
@@ -116,7 +115,6 @@ public class FrmPatientMenu extends javax.swing.JFrame {
 
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Welcome, x");
         desktopPane.add(jLabel1);
         jLabel1.setBounds(60, 80, 570, 47);

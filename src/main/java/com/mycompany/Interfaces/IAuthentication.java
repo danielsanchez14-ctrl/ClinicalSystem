@@ -18,7 +18,5 @@ public interface IAuthentication {
 
     public void logout();
 
-    //public Optional<Patient> registerPatient(Patient patient);
-
     public Optional<User> getCurrentUser();
 }

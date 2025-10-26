@@ -16,7 +16,7 @@ import java.util.Objects;
  * </p>
  */
 public class PatientService {
-
+    
     private final IPatientRepository repository;
     private final GlobalUsernameValidator globalValidator;
 
@@ -70,20 +70,21 @@ public class PatientService {
         if (patient.getFullName() == null || patient.getFullName().trim().isEmpty()) {
             return false;
         }
-
-        if (patient.getUsername() == null || patient.getUsername().trim().isEmpty()) {
+        
+        if (patient.getUsername() == null || patient.getUsername().trim().isEmpty()
+                || patient.getUsername().equals("admin")) {
             return false;
         }
-
+        
         if (patient.getPassword() == null || patient.getPassword().trim().isEmpty()) {
             return false;
         }
-
+        
         if (patient.getPhoneNumber() == null
                 || !patient.getPhoneNumber().matches("^(?:\\+57|57)?3\\d{9}$")) {
             return false;
         }
-
+        
         if (patient.getDocumentNumber() == null
                 || !patient.getDocumentNumber().matches("^\\d+$")) {
             return false;
@@ -169,5 +170,5 @@ public class PatientService {
     public List<Patient> listAllPatients() {
         return repository.listAll();
     }
-
+    
 }

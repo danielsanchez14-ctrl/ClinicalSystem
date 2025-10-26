@@ -24,7 +24,7 @@ public class ServiceLocator { //this.service = ServiceLocator.instance.getPatien
     private final AuthenticationService authenticationService;
     private final AppointmentService appointmentService;
     private final ConsultationService consultationService;
-    //private SpecialtyService specialtyService; (PENDIENTE)
+    private final SpecialtyService specialtyService;
 
     /**
      * Constructor. En este caso es privado, ya que el método initialize hace
@@ -34,14 +34,15 @@ public class ServiceLocator { //this.service = ServiceLocator.instance.getPatien
             DoctorService doctorService,
             AuthenticationService authenticationService,
             AppointmentService appointmentService,
-            ConsultationService consultationService
+            ConsultationService consultationService,
+            SpecialtyService specialtyService
     ) {
         this.patientService = patientService;
         this.doctorService = doctorService;
         this.authenticationService = authenticationService;
         this.appointmentService = appointmentService;
         this.consultationService = consultationService;
-        //this.specialtyService = specialtyService;
+        this.specialtyService = specialtyService;
     }
 
     /**
@@ -54,16 +55,19 @@ public class ServiceLocator { //this.service = ServiceLocator.instance.getPatien
      * @param authenticationService el servicio de autenticación.
      * @param appointmentService el servicio de citas.
      * @param consultationService el servicio de consultas.
+     * @param specialtyService el servicio de especialidades.
      */
     public static void initialize(PatientService patientService,
             DoctorService doctorService,
             AuthenticationService authenticationService,
             AppointmentService appointmentService,
-            ConsultationService consultationService
+            ConsultationService consultationService,
+            SpecialtyService specialtyService
     ) {
         if (instance == null) {
             instance = new ServiceLocator(patientService, doctorService,
-                    authenticationService, appointmentService, consultationService);
+                    authenticationService, appointmentService, consultationService,
+                    specialtyService);
         }
     }
 
@@ -107,6 +111,13 @@ public class ServiceLocator { //this.service = ServiceLocator.instance.getPatien
      */
     public ConsultationService getConsultationService() {
         return consultationService;
+    }
+
+    /**
+     * @return the specialtyService
+     */
+    public SpecialtyService getSpecialtyService() {
+        return specialtyService;
     }
 
 }
