@@ -280,8 +280,6 @@ public class FrmAddNewDoctor extends javax.swing.JInternalFrame {
     }
     private void btnCancelRegistrationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelRegistrationActionPerformed
         // Regresa al login
-        FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
-        login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCancelRegistrationActionPerformed
 
