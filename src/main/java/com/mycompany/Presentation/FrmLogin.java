@@ -4,6 +4,9 @@
  */
 package com.mycompany.Presentation;
 
+import com.mycompany.Models.Doctor;
+import com.mycompany.Models.Patient;
+import com.mycompany.Models.User;
 import com.mycompany.Services.AuthenticationService;
 import com.mycompany.Services.ServiceLocator;
 import javax.swing.JOptionPane;
@@ -170,7 +173,18 @@ public class FrmLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Authentication Succesful", "Login",
                     JOptionPane.INFORMATION_MESSAGE);
             //Se muestra el menú de médico o paciente:
-            //TO-DO
+            User user = authenticationService.getCurrentUser().get();
+            if (user instanceof Doctor) {
+                //Instancia su menú:
+                FrmDoctorMenu menu = new FrmDoctorMenu((Doctor) user);
+                menu.setVisible(true);
+                this.dispose();
+
+            } else {
+                FrmPatientMenu menu = new FrmPatientMenu((Patient) user);
+                menu.setVisible(true);
+                this.dispose();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Authentication Failed! Please "
                     + "check your username and password.",

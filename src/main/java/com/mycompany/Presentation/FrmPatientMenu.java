@@ -53,7 +53,7 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     private void refreshWelcomeMessage() {
         if (patient != null) {
             String fullName = patient.getFullName();
-            String message = "Welcome, Dr. " + fullName;
+            String message = "Welcome, Patient " + fullName;
 
             jLabel1.setToolTipText(message);
 

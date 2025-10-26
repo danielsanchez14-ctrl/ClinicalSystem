@@ -51,7 +51,7 @@
                   <Component id="btnBack" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               </Group>
-              <Component id="upperPanel" alignment="0" pref="688" max="32767" attributes="0"/>
+              <Component id="upperPanel" alignment="0" pref="698" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">

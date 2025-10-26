@@ -15,12 +15,13 @@ import javax.swing.JOptionPane;
  * @author mateo
  */
 public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
-    
+
     private final AppointmentService appointmentService;
     private final Patient patient;
 
     /**
      * Creates new form FrmScheduledAppointments
+     *
      * @param appointmentService
      * @param patient
      */
@@ -29,7 +30,7 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
         this.appointmentService = appointmentService;
         this.patient = patient;
         loadPatientAppointments();
-        
+
         addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
             @Override
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
@@ -38,11 +39,11 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
         });
     }
 
-    private void loadPatientAppointments(){
+    private void loadPatientAppointments() {
         // Traer las citas del paciente (citas programadas)
         var appointments = appointmentService.getAppointmentsByPatient(patient.getId(), AppointmentStatus.PROGRAMADA);
 
-         // Modelo de la tabla
+        // Modelo de la tabla
         javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
                 new Object[]{"Doctor", "Date", "Select"}, 0
         ) {
@@ -56,8 +57,7 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
                 return column == 2;
             }
         };
-        
-        
+
         if (appointments != null && !appointments.isEmpty()) {
             for (var a : appointments) {
                 model.addRow(new Object[]{
@@ -102,7 +102,7 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
             }
         });
     }
-    
+
     private void enforceSingleSelection(javax.swing.table.DefaultTableModel model, int row, int column) {
         if (column == 2 && Boolean.TRUE.equals(model.getValueAt(row, column))) {
             for (int i = 0; i < model.getRowCount(); i++) {
@@ -112,7 +112,7 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
             }
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -268,27 +268,33 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
                 break;
             }
         }
-        
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select an appointment to cancel",
+                    "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
+            return; // Salir del método
+        }
         // ✅ PASO 3: Confirmar la cancelación
         String doctorName = (String) model.getValueAt(selectedRow, 0);
         String dateTime = (String) model.getValueAt(selectedRow, 1);
 
         int option = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to cancel this appointment?\n\n" +
-            "Doctor: " + doctorName + "\n" +
-            "Date: " + dateTime,
-            "Confirm Cancellation",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
+                this,
+                "Are you sure you want to cancel this appointment?\n\n"
+                + "Doctor: " + doctorName + "\n"
+                + "Date: " + dateTime,
+                "Confirm Cancellation",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
         );
 
         if (option == JOptionPane.YES_OPTION) {
             try {
                 //Obtener la cita correspondiente
                 var appointments = appointmentService.getAppointmentsByPatient(
-                    patient.getId(), 
-                    AppointmentStatus.PROGRAMADA
+                        patient.getId(),
+                        AppointmentStatus.PROGRAMADA
                 );
 
                 if (appointments != null && selectedRow < appointments.size()) {
@@ -301,26 +307,26 @@ public class FrmScheduledAppointments extends javax.swing.JInternalFrame {
 
                     if (success) {
                         JOptionPane.showMessageDialog(this,
-                            "Appointment cancelled successfully!",
-                            "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
+                                "Appointment cancelled successfully!",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
 
                         //Recargar la tabla
                         loadPatientAppointments();
                     } else {
                         JOptionPane.showMessageDialog(this,
-                            "Failed to cancel appointment. Please try again.",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                                "Failed to cancel appointment. Please try again.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } catch (Exception e) {
                 System.err.println("Error al cancelar cita: " + e.getMessage());
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this,
-                    "Error cancelling appointment: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Error cancelling appointment: " + e.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } else {
             System.out.println("Cancelación abortada por el usuario");

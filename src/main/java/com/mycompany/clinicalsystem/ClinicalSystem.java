@@ -4,6 +4,7 @@ import com.mycompany.Interfaces.*;
 import com.mycompany.Models.*;
 import com.mycompany.Persistance.*;
 import com.mycompany.Presentation.FrmDoctorMenu;
+import com.mycompany.Presentation.FrmLogin;
 import com.mycompany.Presentation.FrmPatientMenu;
 import com.mycompany.Services.*;
 import java.time.Duration;
@@ -37,9 +38,12 @@ public class ClinicalSystem {
                 "Anna Lee", "22222222", peds);
         Doctor doc3 = new Doctor("drRojas", "3003334455", "123",
                 "Andrés Rojas", "33333333", internista);
+        Doctor doc4 = new Doctor("drSmith", "3007344089", "123",
+                "John Smith", "44444444", general);
         doctorRepo.add(doc1);
         doctorRepo.add(doc2);
         doctorRepo.add(doc3);
+        doctorRepo.add(doc4);
 
         // Pacientes
         Patient pat1 = new Patient("juanp", "3100000000", "abc123",
@@ -113,9 +117,8 @@ public class ClinicalSystem {
         ServiceLocator.initialize(patientService, doctorService, auth, appointmentService, consultationService);
         
         // ======== INICIO DIRECTO ========
-        FrmDoctorMenu menu = new FrmDoctorMenu(doc1); // Cardiólogo con 3 pacientes
-        menu.setVisible(true);
-        
+        FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
+        login.setVisible(true);
         // ======== ARRANCAR DIRECTO EL MENÚ DEL PACIENTE ========
         /*
         FrmPatientMenu menuP = new FrmPatientMenu(pat2);
