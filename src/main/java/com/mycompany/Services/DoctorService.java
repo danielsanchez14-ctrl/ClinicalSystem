@@ -18,7 +18,7 @@ import java.util.Optional;
  * @author camil
  */
 public class DoctorService {
-
+    
     private final IDoctorRepository repository;
     private final GlobalUsernameValidator globalValidator;
 
@@ -96,14 +96,15 @@ public class DoctorService {
         if (doctor.getMedicalSpecialty() == null) {
             return false;
         }
-        if (doctor.getUsername() == null || doctor.getUsername().trim().isEmpty()) {
+        if (doctor.getUsername() == null || doctor.getUsername().trim().isEmpty()
+                || doctor.getUsername().equals("admin")) {
             return false;
         }
-
+        
         if (doctor.getPassword() == null || doctor.getPassword().trim().isEmpty()) {
             return false;
         }
-
+        
         if (doctor.getPhoneNumber() == null
                 || !doctor.getPhoneNumber().matches("^(?:\\+57|57)?3\\d{9}$")) {
             return false;
@@ -140,7 +141,7 @@ public class DoctorService {
                 doctor.getId())) {
             return false;
         }
-
+        
         return true;
     }
 
@@ -179,12 +180,12 @@ public class DoctorService {
         if (id == null || id.trim().isEmpty() || specialty == null) {
             return false;
         }
-
+        
         Optional<Doctor> doctorOpt = repository.searchById(id);
         if (doctorOpt.isEmpty()) {
             return false;
         }
-
+        
         Doctor doctor = doctorOpt.get();
         doctor.setMedicalSpecialty(specialty);
         return repository.update(doctor);

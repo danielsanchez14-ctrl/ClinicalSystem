@@ -176,7 +176,7 @@ public class FrmAdminMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        dispose();
+        this.dispose();
         new FrmLogin(ServiceLocator.getInstance().getAuthenticationService()).setVisible(true);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
@@ -191,7 +191,10 @@ public class FrmAdminMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddNewDoctorActionPerformed
 
     private void btnRemoveDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveDoctorActionPerformed
-        // TODO add your handling code here:
+        FrmRemoveDoctorMenu frm = new FrmRemoveDoctorMenu(ServiceLocator.
+                getInstance().getDoctorService(), ServiceLocator.
+                        getInstance().getAppointmentService());
+        openInternalFrame(frm);
     }//GEN-LAST:event_btnRemoveDoctorActionPerformed
 
 
