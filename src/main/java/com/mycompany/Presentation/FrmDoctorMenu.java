@@ -1,0 +1,344 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/MDIApplication.java to edit this template
+ */
+package com.mycompany.Presentation;
+
+import com.mycompany.Models.Doctor;
+import com.mycompany.Models.User;
+import com.mycompany.Services.ServiceLocator;
+import java.awt.FontMetrics;
+import javax.swing.JInternalFrame;
+
+/**
+ * Ventana principal del módulo de doctores (MDI Application).
+ * <p>
+ * Esta clase extiende {@link javax.swing.JFrame} y actúa como el contenedor del
+ * área de trabajo del doctor. Internamente contiene un
+ * {@link javax.swing.JDesktopPane}, que funciona como escritorio virtual donde
+ * se abren las distintas ventanas internas ({@link javax.swing.JInternalFrame})
+ * relacionadas con las funciones del doctor, como ver su agenda, generar
+ * consultas y ver el historial de dichas consultas.
+ * <p>
+ *
+ * <p>
+ * Además, muestra un mensaje de bienvenida dinámico con el nombre completo del
+ * doctor y ajusta el texto automáticamente al ancho de la ventana.
+ * </p>
+ *
+ * @author camil
+ */
+public class FrmDoctorMenu extends javax.swing.JFrame {
+
+    /**
+     * Objeto de tipo {@link Doctor} que representa al usuario (doctor)
+     * actualmente autenticado.
+     */
+    private final Doctor doctor;
+
+    /**
+     * Crea una nueva instancia del menú principal para doctores.
+     * <p>
+     * Configura los elementos visuales del formulario, muestra un mensaje de
+     * bienvenida con el nombre del doctor e inicializa los componentes gráficos
+     * generados por el editor de NetBeans.
+     * </p>
+     *
+     * @param doctor instancia del doctor autenticado en el sistema.
+     */
+    public FrmDoctorMenu(Doctor doctor) {
+        initComponents();
+        this.doctor = doctor;
+        // Texto completo
+        String fullName = doctor.getFullName();
+        String message = "Welcome, Dr. " + fullName;
+
+        // Mostrar todo el nombre en tooltip por si es muy largo
+        lblWelcome.setToolTipText(message);
+
+        // Usar HTML con ajuste automático
+        lblWelcome.setText("<html><div style='text-align:center; white-space: nowrap;'>"
+                + message + "</div></html>");
+        //Escucha de cambios en el tamaño del label (por si cambia el ancho de la ventana)
+        lblWelcome.addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                int width = lblWelcome.getWidth();
+                lblWelcome.setText("<html><div style='text-align:center; width:" + width + "px;'>"
+                        + message + "</div></html>");
+            }
+        });
+    }
+
+    private void refreshWelcomeMessage() {
+        if (doctor != null) {
+            String fullName = doctor.getFullName();
+            String message = "Welcome, Dr. " + fullName;
+
+            lblWelcome.setToolTipText(message);
+
+            // Medir el ancho del texto
+            FontMetrics fm = lblWelcome.getFontMetrics(lblWelcome.getFont());
+            int textWidth = fm.stringWidth(message);
+            int labelWidth = lblWelcome.getWidth();
+            float MIN_FONT_SIZE = 15.0f;
+
+            // Si el texto es más ancho que el label, reducir la fuente
+            if (textWidth > labelWidth && labelWidth > 0) {
+                float ratio = (float) labelWidth / textWidth;
+                float newSize = lblWelcome.getFont().getSize() * ratio * 0.9f; // 0.9 para margen
+                newSize = Math.max(newSize, MIN_FONT_SIZE); //Elige el más grande
+                lblWelcome.setFont(lblWelcome.getFont().deriveFont(newSize));
+            }
+
+            lblWelcome.setText(message);
+
+        }
+    }
+
+    /**
+     * Abre una ventana interna ({@link javax.swing.JInternalFrame}) dentro del
+     * {@link javax.swing.JDesktopPane}.
+     * <p>
+     * Este método se encarga de ocultar todas las demás ventanas internas
+     * abiertas y mostrar únicamente la que se pasa como parámetro. Si la
+     * ventana aún no ha sido agregada al {@code desktopPane}, se añade
+     * automáticamente.
+     * </p>
+     *
+     * <p>
+     * <strong>Flujo general:</strong></p>
+     * <ol>
+     * <li>Oculta todos los {@code JInternalFrame} actualmente visibles.</li>
+     * <li>Agrega el nuevo {@code frame} al {@code desktopPane} si no está
+     * presente.</li>
+     * <li>Lo hace visible, lo trae al frente y le da el foco.</li>
+     * </ol>
+     *
+     * @param frame instancia de {@link javax.swing.JInternalFrame} que se desea
+     * mostrar.
+     */
+    private void openInternalFrame(javax.swing.JInternalFrame frame) {
+        // Oculta las ventanas internas abiertas.
+        for (JInternalFrame f : desktopPane.getAllFrames()) {
+            f.setVisible(false);
+        }
+        // Si la ventana no está en el escritorio, agregarla
+        if (frame.getParent() != desktopPane) {
+            desktopPane.add(frame);
+        }
+        //Mostrar la ventana y traerla al frente
+        frame.setVisible(true);
+        frame.toFront();
+
+        try {
+            frame.setSelected(true); //Intenta darle foco (recibir las acciones del usuario).
+        } catch (java.beans.PropertyVetoException e) {
+            System.err.println("Error selecting frame: " + e.getMessage());
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jButton2 = new javax.swing.JButton();
+        desktopPane = new javax.swing.JDesktopPane();
+        jPanel2 = new javax.swing.JPanel();
+        btnRecords = new javax.swing.JButton();
+        btnSchedule = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
+        lblWelcome = new javax.swing.JLabel();
+        btnUserInfo = new javax.swing.JButton();
+        upperPanel = new javax.swing.JPanel();
+
+        jMenuItem1.setText("jMenuItem1");
+
+        jButton2.setText("jButton1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        desktopPane.setPreferredSize(new java.awt.Dimension(800, 500));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        btnRecords.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnRecords.setText("View Patient Records");
+        btnRecords.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
+        btnRecords.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRecordsActionPerformed(evt);
+            }
+        });
+
+        btnSchedule.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnSchedule.setText("View Schedule");
+        btnSchedule.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 225), 3, true));
+        btnSchedule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScheduleActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setBackground(new java.awt.Color(102, 102, 255));
+        btnLogout.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnLogout.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogout.setText("Cerrar Sesión");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        lblWelcome.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        lblWelcome.setText("Welcome, Juanito Pérez");
+
+        btnUserInfo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnUserInfo.setText("Info");
+        btnUserInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUserInfoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(234, 234, 234)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(btnRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                            .addComponent(btnSchedule, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(147, 147, 147)
+                        .addComponent(btnUserInfo))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogout)))
+                .addGap(39, 39, 39))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUserInfo))
+                .addGap(40, 40, 40)
+                .addComponent(btnSchedule, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnRecords, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(68, Short.MAX_VALUE))
+        );
+
+        desktopPane.add(jPanel2);
+        jPanel2.setBounds(0, 40, 800, 500);
+
+        upperPanel.setBackground(new java.awt.Color(102, 102, 255));
+        upperPanel.setPreferredSize(new java.awt.Dimension(800, 50));
+
+        javax.swing.GroupLayout upperPanelLayout = new javax.swing.GroupLayout(upperPanel);
+        upperPanel.setLayout(upperPanelLayout);
+        upperPanelLayout.setHorizontalGroup(
+            upperPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        upperPanelLayout.setVerticalGroup(
+            upperPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        desktopPane.add(upperPanel);
+        upperPanel.setBounds(0, 0, 800, 50);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(desktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+    /**
+     * Abre la ventana interna {@code JInternalFrame} correspondiente a la
+     * agenda de citas pendientes con el médico.
+     *
+     */
+    private void btnScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScheduleActionPerformed
+        // Instancia la pantalla de la agenda del doctor.
+        FrmDoctorSchedule frm = new FrmDoctorSchedule(
+                ServiceLocator.getInstance().getAppointmentService(),
+                doctor
+        );
+        openInternalFrame(frm); // Abre la instancia.
+    }//GEN-LAST:event_btnScheduleActionPerformed
+    /**
+     * Abre la ventana interna {@code JInternalFrame} con el historial de
+     * consultas del doctor.
+     */
+    private void btnRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRecordsActionPerformed
+        System.out.println(">>> Abriendo FrmDoctorHistory...");
+        // Instancia el JInternalFrame del historial del médico
+        FrmDoctorHistory frm = new FrmDoctorHistory(ServiceLocator.getInstance().getConsultationService(), doctor);
+        openInternalFrame(frm); //Se llama al método que lo abre.
+    }//GEN-LAST:event_btnRecordsActionPerformed
+    /**
+     * Abre la ventana principal del login {@code JFrame}. Además, cierra al MDI
+     * Application.
+     */
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        dispose();
+        new FrmLogin(ServiceLocator.getInstance().getAuthenticationService()).setVisible(true);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    /**
+     * Abre la ventana {@code  JInternalFrame} al formulario con la información
+     * del médico (y donde se le permite actualizar su informació básica).
+     */
+    private void btnUserInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserInfoActionPerformed
+        System.out.println(">>> Abriendo FrmInformation...");
+        FrmInformation frm = new FrmInformation((User) doctor);
+        openInternalFrame(frm);
+        frm.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+                refreshWelcomeMessage(); // Actualiza el nombre
+            }
+
+        });
+    }//GEN-LAST:event_btnUserInfoActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnRecords;
+    private javax.swing.JButton btnSchedule;
+    private javax.swing.JButton btnUserInfo;
+    private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblWelcome;
+    private javax.swing.JPanel upperPanel;
+    // End of variables declaration//GEN-END:variables
+
+}

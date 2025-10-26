@@ -35,7 +35,7 @@ public class Appointment {
     }
 
     public String getScheduledAtAsString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         return scheduledAt.format(formatter);
     }
 

@@ -100,6 +100,19 @@ public class DoctorService {
             return false;
         }
 
+        if (doctor.getPassword() == null || doctor.getPassword().trim().isEmpty()) {
+            return false;
+        }
+
+        if (doctor.getPhoneNumber() == null
+                || !doctor.getPhoneNumber().matches("^(?:\\+57|57)?3\\d{9}$")) {
+            return false;
+        }
+        if (doctor.getDocumentNumber() == null
+                || !doctor.getDocumentNumber().matches("^\\d+$")) {
+            return false;
+        }
+
         // Para register: id no debe existir ya; para update: debe existir previamente
         boolean exists = repository.searchById(doctor.getId()).isPresent();
         if (!isUpdate && exists) {
@@ -123,7 +136,7 @@ public class DoctorService {
         }
 
         //Validación global del userName duplicado
-        if (globalValidator != null && globalValidator.usernameExists(username, 
+        if (globalValidator != null && globalValidator.usernameExists(username,
                 doctor.getId())) {
             return false;
         }
