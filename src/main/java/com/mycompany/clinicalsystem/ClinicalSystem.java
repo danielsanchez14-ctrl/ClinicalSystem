@@ -16,15 +16,15 @@ import java.util.List;
 public class ClinicalSystem {
 
     public static void main(String[] args) {
-        
+
         // ======== REPOSITORIOS EN MEMORIA ========
         IPatientRepository patientRepo = new PatientRepositoryMemory();
         IDoctorRepository doctorRepo = new DoctorRepositoryMemory();
         IAppointmentRepository appointmentRepo = new AppointmentRepositoryMemory();
         IConsultationRepository consultationRepo = new ConsultationRepositoryMemory();
+        ISpecialtyRepository specialtyRepo = new SpecialtyRepositoryMemory();
 
         // ======== DATOS DE PRUEBA ========
-
         // Especialidades válidas según enum
         Specialty cardio = new Specialty(SpecialtyName.CARDIOLOGIA);
         Specialty peds = new Specialty(SpecialtyName.PEDIATRIA);
@@ -100,6 +100,19 @@ public class ClinicalSystem {
         c2.getAppointment().setStatus(AppointmentStatus.COMPLETADA);
         consultationRepo.add(c2);
 
+        // ======== ESPECIALIDADES (Specialties) ========
+        Specialty s1 = new Specialty(SpecialtyName.CARDIOLOGIA);
+        Specialty s2 = new Specialty(SpecialtyName.CIRUJANO);
+        Specialty s3 = new Specialty(SpecialtyName.GENERAL);
+        Specialty s4 = new Specialty(SpecialtyName.INTERNISTA);
+        Specialty s5 = new Specialty(SpecialtyName.ONCOLOGIA);
+
+        specialtyRepo.add(s1);
+        specialtyRepo.add(s2);
+        specialtyRepo.add(s3);
+        specialtyRepo.add(s4);
+        specialtyRepo.add(s5);
+
         // ======== LISTA DE REPOS AUTENTICABLES ========
         List<IAuthenticableRepository> authRepos = new ArrayList<>();
         authRepos.add((IAuthenticableRepository) patientRepo);
@@ -112,10 +125,16 @@ public class ClinicalSystem {
         DoctorService doctorService = new DoctorService(doctorRepo, validator);
         AppointmentService appointmentService = new AppointmentService(appointmentRepo);
         ConsultationService consultationService = new ConsultationService(consultationRepo);
+        SpecialtyService specialtyService = new SpecialtyService(specialtyRepo);
 
         // ======== SERVICE LOCATOR ========
-        ServiceLocator.initialize(patientService, doctorService, auth, appointmentService, consultationService);
-        
+        ServiceLocator.initialize(patientService,
+                doctorService,
+                auth,
+                appointmentService,
+                consultationService,
+                specialtyService);
+
         // ======== INICIO DIRECTO ========
         FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
         login.setVisible(true);
@@ -123,6 +142,6 @@ public class ClinicalSystem {
         /*
         FrmPatientMenu menuP = new FrmPatientMenu(pat2);
         menuP.setVisible(true);
-        */
+         */
     }
 }

@@ -167,6 +167,14 @@ public class FrmLogin extends javax.swing.JFrame {
         var password = txtPasswordField.getPassword();
         String passwordString = new String(password); //Convierte la contraseña a String
 
+        //Se agrega una verificación especial que permita identificar si es administrador
+        if ((username != null && !passwordString.isBlank())
+                && (username.equals("admin") && passwordString.equals("admin"))) {
+            FrmAdminMenu adminMenu = new FrmAdminMenu();
+            adminMenu.setVisible(true);
+            this.dispose();
+            return;
+        }
         //Se utiliza el servicio de autenticación:
         if (authenticationService.login(username, passwordString).isPresent()) {
             //Si la autenticación es exitosa:
