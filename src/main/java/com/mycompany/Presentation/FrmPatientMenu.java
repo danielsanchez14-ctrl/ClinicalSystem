@@ -7,6 +7,7 @@ package com.mycompany.Presentation;
 import com.mycompany.Models.Patient;
 import com.mycompany.Models.User;
 import com.mycompany.Services.ServiceLocator;
+import java.awt.FontMetrics;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,17 +15,19 @@ import javax.swing.JOptionPane;
  * @author mateo
  */
 public class FrmPatientMenu extends javax.swing.JFrame {
-    
+
     private final Patient patient;
+
     /**
      * Creates new form FrmPatientMenu
+     *
      * @param patient
      */
-    public FrmPatientMenu(Patient patient){
+    public FrmPatientMenu(Patient patient) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.patient = patient;
-        
+
         // Texto completo
         String fullName = this.patient.getFullName();
         String message = "Welcome, Patient " + fullName;
@@ -45,6 +48,32 @@ public class FrmPatientMenu extends javax.swing.JFrame {
                         + message + "</div></html>");
             }
         });
+    }
+
+    private void refreshWelcomeMessage() {
+        if (patient != null) {
+            String fullName = patient.getFullName();
+            String message = "Welcome, Dr. " + fullName;
+
+            jLabel1.setToolTipText(message);
+
+            // Medir el ancho del texto
+            FontMetrics fm = jLabel1.getFontMetrics(jLabel1.getFont());
+            int textWidth = fm.stringWidth(message);
+            int labelWidth = jLabel1.getWidth();
+            float MIN_FONT_SIZE = 15.0f;
+            // Si el texto es más ancho que el label, reducir la fuente
+            if (textWidth > labelWidth && labelWidth > 0) {
+                float ratio = (float) labelWidth / textWidth;
+                float newSize = jLabel1.getFont().getSize() * ratio * 0.9f; // 0.9 para margen
+
+                newSize = Math.max(newSize, MIN_FONT_SIZE); //Elige el más grande
+                jLabel1.setFont(jLabel1.getFont().deriveFont(newSize));
+            }
+
+            jLabel1.setText(message);
+
+        }
     }
 
     /**
@@ -185,25 +214,25 @@ public class FrmPatientMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btnScheduledAppointmentsActionPerformed
 
     private void btnNewAppointmentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewAppointmentActionPerformed
-        
+
     }//GEN-LAST:event_btnNewAppointmentActionPerformed
 
     private void btnSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignOutActionPerformed
         JOptionPane.showMessageDialog(this, "You signed out!");
         //Al cerrar sesión se regresará al login:
-        
+
         FrmLogin login = new FrmLogin(ServiceLocator.getInstance().getAuthenticationService());
         login.setLocationRelativeTo(null);
         login.setVisible(true);
-            
+
         this.dispose();
-        
+
     }//GEN-LAST:event_btnSignOutActionPerformed
 
     private void btnNewAppointmentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewAppointmentMouseClicked
-        FrmNewAppointment newAppt = new FrmNewAppointment(ServiceLocator.getInstance().getAppointmentService(), 
-                                                            ServiceLocator.getInstance().getDoctorService(), 
-                                                                ServiceLocator.getInstance().getPatientService(), patient);
+        FrmNewAppointment newAppt = new FrmNewAppointment(ServiceLocator.getInstance().getAppointmentService(),
+                ServiceLocator.getInstance().getDoctorService(),
+                ServiceLocator.getInstance().getPatientService(), patient);
         this.desktopPane.add(newAppt);
         newAppt.setVisible(true);
     }//GEN-LAST:event_btnNewAppointmentMouseClicked
@@ -216,8 +245,8 @@ public class FrmPatientMenu extends javax.swing.JFrame {
 
     private void btnAppointmentHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAppointmentHistoryMouseClicked
         FrmPatientHistory patientHistory = new FrmPatientHistory(ServiceLocator.getInstance().getAppointmentService(),
-                                                                    ServiceLocator.getInstance().getConsultationService(), 
-                                                                    patient);
+                ServiceLocator.getInstance().getConsultationService(),
+                patient);
         this.desktopPane.add(patientHistory);
         patientHistory.setVisible(true);
     }//GEN-LAST:event_btnAppointmentHistoryMouseClicked
@@ -226,42 +255,15 @@ public class FrmPatientMenu extends javax.swing.JFrame {
         FrmInformation information = new FrmInformation(patient);
         desktopPane.add(information);
         information.setVisible(true);
+        information.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+                refreshWelcomeMessage(); // Actualiza el nombre
+            }
+
+        });
     }//GEN-LAST:event_btnEditPatientInfoMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPatientMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPatientMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPatientMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPatientMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmPatientMenu(null).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAppointmentHistory;

@@ -7,6 +7,7 @@ package com.mycompany.Presentation;
 import com.mycompany.Models.Doctor;
 import com.mycompany.Models.User;
 import com.mycompany.Services.ServiceLocator;
+import java.awt.FontMetrics;
 import javax.swing.JInternalFrame;
 
 /**
@@ -58,8 +59,7 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         // Usar HTML con ajuste automático
         lblWelcome.setText("<html><div style='text-align:center; white-space: nowrap;'>"
                 + message + "</div></html>");
-
-        // Escucha de cambios en el tamaño del label (por si cambia el ancho de la ventana)
+        //Escucha de cambios en el tamaño del label (por si cambia el ancho de la ventana)
         lblWelcome.addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
@@ -68,6 +68,32 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
                         + message + "</div></html>");
             }
         });
+    }
+
+    private void refreshWelcomeMessage() {
+        if (doctor != null) {
+            String fullName = doctor.getFullName();
+            String message = "Welcome, Dr. " + fullName;
+
+            lblWelcome.setToolTipText(message);
+
+            // Medir el ancho del texto
+            FontMetrics fm = lblWelcome.getFontMetrics(lblWelcome.getFont());
+            int textWidth = fm.stringWidth(message);
+            int labelWidth = lblWelcome.getWidth();
+            float MIN_FONT_SIZE = 15.0f;
+
+            // Si el texto es más ancho que el label, reducir la fuente
+            if (textWidth > labelWidth && labelWidth > 0) {
+                float ratio = (float) labelWidth / textWidth;
+                float newSize = lblWelcome.getFont().getSize() * ratio * 0.9f; // 0.9 para margen
+                newSize = Math.max(newSize, MIN_FONT_SIZE); //Elige el más grande
+                lblWelcome.setFont(lblWelcome.getFont().deriveFont(newSize));
+            }
+
+            lblWelcome.setText(message);
+
+        }
     }
 
     /**
@@ -289,6 +315,13 @@ public class FrmDoctorMenu extends javax.swing.JFrame {
         System.out.println(">>> Abriendo FrmInformation...");
         FrmInformation frm = new FrmInformation((User) doctor);
         openInternalFrame(frm);
+        frm.addInternalFrameListener(new javax.swing.event.InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent e) {
+                refreshWelcomeMessage(); // Actualiza el nombre
+            }
+
+        });
     }//GEN-LAST:event_btnUserInfoActionPerformed
 
     /**
