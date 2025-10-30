@@ -17,7 +17,7 @@ public class ClinicalSystem {
 
         // ======== REPOSITORIOS EN MEMORIA ========
         IPatientRepository patientRepo = new PatientRepositoryMemory();
-        IDoctorRepository doctorRepo = new DoctorRepositoryMemory();
+        IDoctorRepository doctorRepo = new DoctorRepositoryJSON();
         IAppointmentRepository appointmentRepo = new AppointmentRepositoryMemory();
         IConsultationRepository consultationRepo = new ConsultationRepositoryMemory();
         ISpecialtyRepository specialtyRepo = new SpecialtyRepositoryMemory();
