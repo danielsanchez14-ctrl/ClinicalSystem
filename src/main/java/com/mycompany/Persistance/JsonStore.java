@@ -10,9 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- * Clase utilitaria para manejo de persistencia en formato JSON.
- * Permite leer y escribir cualquier tipo de objeto usando Gson.
- * 
+ * Utilidad para lectura/escritura de archivos JSON usando Gson.
+ * <p>
+ * Provee métodos genéricos para serializar y deserializar objetos y listas,
+ * y gestiona la creación de directorios si es necesario.
+ * </p>
+ *
  * @author camil
  */
 public class JsonStore {
@@ -27,6 +30,10 @@ public class JsonStore {
 
     /**
      * Guarda una lista u objeto genérico en un archivo JSON.
+     *
+     * @param filePath ruta del archivo donde se escribirá el JSON
+     * @param data     objeto o lista a serializar
+     * @param <T>      tipo del objeto a escribir
      */
     public <T> void writeToFile(String filePath, T data) {
         try {
@@ -44,6 +51,12 @@ public class JsonStore {
     /**
      * Lee un archivo JSON y lo convierte a la estructura indicada.
      * Si el archivo no existe o está vacío, devuelve defaultValue.
+     *
+     * @param filePath     ruta del archivo JSON a leer
+     * @param type         tipo esperado (p. ej. new TypeToken<List<T>>(){}.getType())
+     * @param defaultValue valor por defecto a retornar si el archivo no existe o está vacío
+     * @param <T>          tipo del objeto esperado
+     * @return instancia leída o defaultValue en caso de error/ausencia
      */
     public <T> T readFromFile(String filePath, Type type, T defaultValue) {
         if (!Files.exists(Paths.get(filePath))) {
@@ -76,6 +89,9 @@ public class JsonStore {
 
     /**
      * Asegura que exista la carpeta donde se guardará el JSON.
+     *
+     * @param filePath ruta completa del archivo (incluye carpeta)
+     * @throws IOException si no se puede crear el directorio
      */
     private void ensureDirectoryExists(String filePath) throws IOException {
         File file = new File(filePath);

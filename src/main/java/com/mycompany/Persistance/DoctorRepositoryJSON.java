@@ -12,33 +12,71 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DoctorRepositoryJSON extends JsonRepository<Doctor> implements IDoctorRepository, IAuthenticableRepository {
+/**
+ * Repositorio de persistencia para objetos Doctor utilizando un archivo JSON.
+ * <p>
+ * Implementa operaciones básicas de CRUD, búsqueda por especialidad y soporte
+ * para autenticación (búsqueda por username). Utiliza JsonRepository como base
+ * para la lectura/escritura del archivo.
+ * </p>
+ *
+ * @author camil
+ */
+public class DoctorRepositoryJSON extends JsonRepository<Doctor>
+        implements IDoctorRepository, IAuthenticableRepository {
 
     private static final String FILE_PATH = "data/doctors.json";
-    private static final Type LIST_TYPE = new TypeToken<List<Doctor>>() {}.getType();
+    private static final Type LIST_TYPE = new TypeToken<List<Doctor>>() {
+    }.getType();
 
     public DoctorRepositoryJSON() {
         super(FILE_PATH, LIST_TYPE);
     }
 
+    /**
+     * Agrega un doctor al repositorio si no existe otro con el mismo username o
+     * número de documento.
+     *
+     * @param doctor doctor a agregar
+     * @return true si se agregó correctamente, false si ya existe uno igual
+     */
     @Override
     public boolean add(Doctor doctor) {
+        boolean exists = data.stream()
+                .anyMatch(d -> d.getUsername().equals(doctor.getUsername())
+                        || d.getDocumentNumber().equals(doctor.getDocumentNumber()));
+        if (exists)
+            return false;
         boolean added = data.add(doctor);
-        if (added) save();
+        if (added)
+            save();
         return added;
     }
 
+    /**
+     * Realiza un "soft delete" marcando el doctor como inactivo.
+     *
+     * @param id id del doctor a eliminar
+     * @return true si se encontró y marcó como inactivo, false si no existe
+     */
     @Override
     public boolean deleteById(String id) {
         Optional<Doctor> doctorOpt = searchById(id);
         if (doctorOpt.isPresent()) {
-            data.remove(doctorOpt.get());
+            Doctor doctor = doctorOpt.get();
+            doctor.setCurrentStatus(false); // Soft delete
             save();
             return true;
         }
         return false;
     }
 
+    /**
+     * Actualiza los datos de un doctor existente (por id).
+     *
+     * @param doctor instancia con los nuevos datos
+     * @return true si se actualizó correctamente, false si no se encontró
+     */
     @Override
     public boolean update(Doctor doctor) {
         for (int i = 0; i < data.size(); i++) {
@@ -51,6 +89,12 @@ public class DoctorRepositoryJSON extends JsonRepository<Doctor> implements IDoc
         return false;
     }
 
+    /**
+     * Busca un doctor por su id.
+     *
+     * @param id identificador del doctor
+     * @return Optional con el doctor si se encontró, vacío en caso contrario
+     */
     @Override
     public Optional<Doctor> searchById(String id) {
         return data.stream()
@@ -58,6 +102,12 @@ public class DoctorRepositoryJSON extends JsonRepository<Doctor> implements IDoc
                 .findFirst();
     }
 
+    /**
+     * Devuelve la lista de doctores que pertenecen a una especialidad determinada.
+     *
+     * @param specialty especialidad a filtrar
+     * @return lista de doctores con la especialidad indicada
+     */
     @Override
     public List<Doctor> searchBySpecialty(Specialty specialty) {
         return data.stream()
@@ -65,11 +115,24 @@ public class DoctorRepositoryJSON extends JsonRepository<Doctor> implements IDoc
                 .toList();
     }
 
+    /**
+     * Lista todos los doctores activos (no eliminados lógicamente).
+     *
+     * @return lista de doctores con currentStatus == true
+     */
     @Override
     public List<Doctor> listAll() {
-        return new ArrayList<>(data);
+        return data.stream()
+                .filter(Doctor::isCurrentStatus)
+                .toList();
     }
 
+    /**
+     * Busca un usuario por su nombre de usuario (username) para autenticación.
+     *
+     * @param username nombre de usuario
+     * @return Optional con el usuario si se encontró, vacío en caso contrario
+     */
     @Override
     public Optional<User> searchByUsername(String username) {
         return data.stream()

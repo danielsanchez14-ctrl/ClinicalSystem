@@ -53,15 +53,15 @@
   },
   {
     "medicalSpecialty": {
-      "id": "9e451784-7e5c-4707-9ee8-8da47876386a",
+      "id": "88011870-fd92-403b-8399-019028d28cea",
       "specialtyName": "CARDIOLOGIA"
     },
-    "id": "4ee55304-a54a-493c-bd13-623ce3086281",
-    "fullName": "Dr. Gregory House",
-    "documentNumber": "12345678",
-    "username": "dr.houser",
-    "phoneNumber": "3200000000",
-    "password": "vicodin123",
-    "currentStatus": true
+    "id": "f51c209c-a800-4f25-8de8-5c6024cfed46",
+    "fullName": "Gregory House",
+    "documentNumber": "123456789",
+    "username": "drHouse",
+    "phoneNumber": "999999999",
+    "password": "diagnose123",
+    "currentStatus": false
   }
 ]
