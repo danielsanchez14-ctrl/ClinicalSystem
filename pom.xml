@@ -35,10 +35,17 @@
             <artifactId>LGoodDatePicker</artifactId>
             <version>11.2.1</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.mycompany.clinicalsystem.ClinicalSystem</exec.mainClass>
     </properties>
+    
 </project>

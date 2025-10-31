@@ -26,4 +26,6 @@ public interface IDoctorRepository {
     List<Doctor> searchBySpecialty(Specialty specialty);
 
     List<Doctor> listAll();
+
+    List<Doctor> listAllIncludingInactiveDoctors();
 }

@@ -62,7 +62,7 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
     @Override
     public Optional<Doctor> searchById(String id) {
         //if (id == null || id.isEmpty()) {
-            //return Optional.empty();
+        //return Optional.empty();
         //}
         return doctors.stream()
                 .filter(Doctor::isCurrentStatus)
@@ -83,5 +83,10 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
         return doctors.stream()
                 .filter(Doctor::isCurrentStatus)
                 .toList();
+    }
+
+    @Override
+    public List<Doctor> listAllIncludingInactiveDoctors() {
+        return this.doctors;
     }
 }

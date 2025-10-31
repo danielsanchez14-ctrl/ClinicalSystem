@@ -17,11 +17,13 @@ public class ClinicalSystem {
 
         // ======== REPOSITORIOS EN MEMORIA ========
         IPatientRepository patientRepo = new PatientRepositoryMemory();
-        IDoctorRepository doctorRepo = new DoctorRepositoryMemory();
+        IDoctorRepository doctorRepoM = new DoctorRepositoryMemory();
         IAppointmentRepository appointmentRepo = new AppointmentRepositoryMemory();
         IConsultationRepository consultationRepo = new ConsultationRepositoryMemory();
         ISpecialtyRepository specialtyRepo = new SpecialtyRepositoryMemory();
 
+        // ======== REPOSITORIOS EN ARCHIVO ========
+        IDoctorRepository doctorRepo = DoctorRepositoryInFile.init(doctorRepoM, "doctors.json");
         // ======== DATOS DE PRUEBA ========
         // Especialidades válidas según enum
         Specialty cardio = new Specialty(SpecialtyName.CARDIOLOGIA);
