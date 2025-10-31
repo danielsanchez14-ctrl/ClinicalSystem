@@ -12,49 +12,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DoctorRepositoryJSON implements IAuthenticableRepository, IDoctorRepository{
-    private final String filePath = "data/doctors.json";
-    private final JsonStore jsonStore;
-    private final Type listType = new TypeToken<List<Doctor>>() {}.getType();
+public class DoctorRepositoryJSON extends JsonRepository<Doctor> implements IDoctorRepository, IAuthenticableRepository {
 
-    private final List<Doctor> doctors;
+    private static final String FILE_PATH = "data/doctors.json";
+    private static final Type LIST_TYPE = new TypeToken<List<Doctor>>() {}.getType();
 
     public DoctorRepositoryJSON() {
-        this.jsonStore = new JsonStore();
-        this.doctors = jsonStore.readFromFile(filePath, listType, new ArrayList<>());
-    }
-
-    private void saveChanges() {
-        jsonStore.writeToFile(filePath, doctors);
-    }
-
-    @Override
-    public Optional<User> searchByUsername(String username) {
-        return doctors.stream()
-                .filter(Doctor::isCurrentStatus)
-                .filter(d -> d.getUsername().equals(username.trim()))
-                .map(d -> (User) d)
-                .findFirst();
+        super(FILE_PATH, LIST_TYPE);
     }
 
     @Override
     public boolean add(Doctor doctor) {
-        boolean added = doctors.add(doctor);
-        if (added) {
-            saveChanges();
-        }
+        boolean added = data.add(doctor);
+        if (added) save();
         return added;
     }
 
     @Override
     public boolean deleteById(String id) {
-        Optional<Doctor> doctorOpt = doctors.stream()
-                .filter(d -> d.getId().equals(id))
-                .findFirst();
-
+        Optional<Doctor> doctorOpt = searchById(id);
         if (doctorOpt.isPresent()) {
-            doctorOpt.get().setCurrentStatus(false);
-            saveChanges();
+            data.remove(doctorOpt.get());
+            save();
             return true;
         }
         return false;
@@ -62,10 +41,10 @@ public class DoctorRepositoryJSON implements IAuthenticableRepository, IDoctorRe
 
     @Override
     public boolean update(Doctor doctor) {
-        for (int i = 0; i < doctors.size(); i++) {
-            if (doctors.get(i).getId().equals(doctor.getId())) {
-                doctors.set(i, doctor);
-                saveChanges();
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getId().equals(doctor.getId())) {
+                data.set(i, doctor);
+                save();
                 return true;
             }
         }
@@ -74,24 +53,28 @@ public class DoctorRepositoryJSON implements IAuthenticableRepository, IDoctorRe
 
     @Override
     public Optional<Doctor> searchById(String id) {
-        return doctors.stream()
-                .filter(Doctor::isCurrentStatus)
+        return data.stream()
                 .filter(d -> d.getId().equals(id))
                 .findFirst();
     }
 
     @Override
     public List<Doctor> searchBySpecialty(Specialty specialty) {
-        return doctors.stream()
-                .filter(Doctor::isCurrentStatus)
+        return data.stream()
                 .filter(d -> specialty.equals(d.getMedicalSpecialty()))
                 .toList();
     }
 
     @Override
     public List<Doctor> listAll() {
-        return doctors.stream()
-                .filter(Doctor::isCurrentStatus)
-                .toList();
+        return new ArrayList<>(data);
+    }
+
+    @Override
+    public Optional<User> searchByUsername(String username) {
+        return data.stream()
+                .filter(d -> d.getUsername().equals(username))
+                .map(d -> (User) d)
+                .findFirst();
     }
 }

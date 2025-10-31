@@ -2,16 +2,11 @@ package com.mycompany.Persistance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
+import com.google.gson.JsonSyntaxException;
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -21,76 +16,73 @@ import java.nio.file.Paths;
  * @author camil
  */
 public class JsonStore {
+
     private final Gson gson;
-    
+
     public JsonStore() {
         this.gson = new GsonBuilder()
-                .setPrettyPrinting()
+                .setPrettyPrinting() // para que los JSON sean legibles
                 .create();
     }
 
     /**
-     * Lee un archivo JSON y lo convierte a un objeto del tipo especificado.
-     * Si el archivo no existe, lo crea con el valor por defecto.
-     *
-     * @param path Ruta del archivo JSON
-     * @param typeOfT Tipo genérico de dato (usando TypeToken)
-     * @param defaultValue Valor por defecto si el archivo no existe o está vacío
-     * @return Objeto del tipo especificado
+     * Guarda una lista u objeto genérico en un archivo JSON.
      */
-    public <T> T readFromFile(String path, java.lang.reflect.Type typeOfT, T defaultValue) {
+    public <T> void writeToFile(String filePath, T data) {
         try {
-            Path filePath = Paths.get(path);
+            ensureDirectoryExists(filePath);
 
-            if (!Files.exists(filePath)) {
-                if (filePath.getParent() != null)
-                    Files.createDirectories(filePath.getParent());
-                writeToFile(path, defaultValue);
+            try (Writer writer = new FileWriter(filePath)) {
+                gson.toJson(data, writer);
+            }
+        } catch (IOException e) {
+            System.err.println("❌ Error al escribir el archivo JSON: " + filePath);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Lee un archivo JSON y lo convierte a la estructura indicada.
+     * Si el archivo no existe o está vacío, devuelve defaultValue.
+     */
+    public <T> T readFromFile(String filePath, Type type, T defaultValue) {
+        if (!Files.exists(Paths.get(filePath))) {
+            return defaultValue;
+        }
+
+        try (Reader reader = new FileReader(filePath)) {
+            // Evita error si el archivo está vacío
+            if (new File(filePath).length() == 0) {
                 return defaultValue;
             }
 
-            try (Reader reader = new InputStreamReader(
-                    new FileInputStream(filePath.toFile()), StandardCharsets.UTF_8)) {
+            T result = gson.fromJson(reader, type);
+            return (result != null) ? result : defaultValue;
 
-                T obj = gson.fromJson(reader, typeOfT);
-                return obj != null ? obj : defaultValue;
-            }
+        } catch (FileNotFoundException e) {
+            return defaultValue;
+
+        } catch (JsonSyntaxException e) {
+            System.err.println("⚠️ Error de sintaxis JSON en: " + filePath);
+            e.printStackTrace();
+            return defaultValue;
 
         } catch (IOException e) {
-            throw new RuntimeException("Error leyendo JSON: " + path, e);
+            System.err.println("❌ Error al leer el archivo JSON: " + filePath);
+            e.printStackTrace();
+            return defaultValue;
         }
     }
 
     /**
-     * Escribe un objeto en un archivo JSON.
-     *
-     * @param path Ruta del archivo JSON
-     * @param obj Objeto a guardar
+     * Asegura que exista la carpeta donde se guardará el JSON.
      */
-    public void writeToFile(String path, Object obj) {
-        try {
-            Path filePath = Paths.get(path);
-            if (filePath.getParent() != null)
-                Files.createDirectories(filePath.getParent());
+    private void ensureDirectoryExists(String filePath) throws IOException {
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
 
-            try (Writer writer = new OutputStreamWriter(
-                    new FileOutputStream(filePath.toFile()), StandardCharsets.UTF_8)) {
-
-                gson.toJson(obj, writer);
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException("Error escribiendo JSON: " + path, e);
+        if (parentDir != null && !parentDir.exists()) {
+            Files.createDirectories(parentDir.toPath());
         }
-    }
-
-    /**
-     * Verifica si un archivo existe en el sistema.
-     *
-     * @param path Ruta del archivo
-     * @return true si existe, false en caso contrario
-     */
-    public boolean exists(String path) {
-        return Files.exists(Paths.get(path));
     }
 }
