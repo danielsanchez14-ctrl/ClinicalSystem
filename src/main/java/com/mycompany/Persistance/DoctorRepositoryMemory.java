@@ -61,9 +61,6 @@ public class DoctorRepositoryMemory implements IAuthenticableRepository, IDoctor
 
     @Override
     public Optional<Doctor> searchById(String id) {
-        //if (id == null || id.isEmpty()) {
-        //return Optional.empty();
-        //}
         return doctors.stream()
                 .filter(Doctor::isCurrentStatus)
                 .filter(d -> d.getId().equals(id))

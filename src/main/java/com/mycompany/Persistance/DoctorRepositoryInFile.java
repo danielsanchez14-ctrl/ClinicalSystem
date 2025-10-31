@@ -20,6 +20,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * Clase concreta encargada del guardado y gestión de persistencia en archivos.
+ * Utiliza una clase de repositorio en memoria para evitar reescribir código de
+ * operaciones como agregar, eliminar, etc. En su lugar, introduce el guardado y
+ * carga desde archivos, así como la sobrescritura de archivos cada vez que se
+ * haga algún cambio o modificación.
  *
  * @author kosmo
  */
@@ -29,7 +34,13 @@ public class DoctorRepositoryInFile extends PersistenceHelper<Doctor> implements
     private final IDoctorRepository repo; //Repositorio antiguo en memoria RAM
     private final Gson _gson; //Gson para manejar serializazión y deserialización
 
-    public DoctorRepositoryInFile(IDoctorRepository repo, String fileName) {
+    /**
+     * Constructor de la clase.
+     *
+     * @param repo el repositorio en memoria.
+     * @param fileName la ruta del archivo.
+     */
+    private DoctorRepositoryInFile(IDoctorRepository repo, String fileName) {
         super(fileName); //Almacena el nombre del archivo
         this.repo = repo; //Guarda como atributo un repositorio en memoria
 
@@ -37,6 +48,11 @@ public class DoctorRepositoryInFile extends PersistenceHelper<Doctor> implements
         this._gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
+    /**
+     * Método estático que instancia la clase y carga los datos en memoria.
+     * @param repo repositorio en memoria.
+     * @param fileName ruta del archivo.
+     */
     public static IDoctorRepository init(IDoctorRepository repo, String fileName) {
 
         DoctorRepositoryInFile repository;
@@ -121,6 +137,7 @@ public class DoctorRepositoryInFile extends PersistenceHelper<Doctor> implements
     /**
      * Implementación del método abstracto de carga de la información en el
      * archivo.
+     * @return lista de médicos o lista vacía
      */
     @Override
     protected List<Doctor> load() {
