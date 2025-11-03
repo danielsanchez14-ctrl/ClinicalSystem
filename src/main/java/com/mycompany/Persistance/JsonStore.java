@@ -1,13 +1,12 @@
 package com.mycompany.Persistance;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-
+import com.google.gson.*;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Utilidad para lectura/escritura de archivos JSON usando Gson.
@@ -24,75 +23,103 @@ public class JsonStore {
 
     public JsonStore() {
         this.gson = new GsonBuilder()
-                .setPrettyPrinting() // para que los JSON sean legibles
+                // --- LocalDate ---
+                .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+                    @Override
+                    public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+                        return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                    }
+                })
+                .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+                    @Override
+                    public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        return LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
+                    }
+                })
+
+                // --- LocalTime ---
+                .registerTypeAdapter(LocalTime.class, new JsonSerializer<LocalTime>() {
+                    @Override
+                    public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
+                        return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_TIME));
+                    }
+                })
+                .registerTypeAdapter(LocalTime.class, new JsonDeserializer<LocalTime>() {
+                    @Override
+                    public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        return LocalTime.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_TIME);
+                    }
+                })
+
+                // --- LocalDateTime ---
+                .registerTypeAdapter(LocalDateTime.class, new JsonSerializer<LocalDateTime>() {
+                    @Override
+                    public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
+                        return new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    }
+                })
+                .registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        return LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    }
+                })
+
+                // --- Duration ---
+                .registerTypeAdapter(Duration.class, new JsonSerializer<Duration>() {
+                    @Override
+                    public JsonElement serialize(Duration src, Type typeOfSrc, JsonSerializationContext context) {
+                        return new JsonPrimitive(src.toString()); // Ej: "PT30M"
+                    }
+                })
+                .registerTypeAdapter(Duration.class, new JsonDeserializer<Duration>() {
+                    @Override
+                    public Duration deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        return Duration.parse(json.getAsString());
+                    }
+                })
+
+                .setPrettyPrinting()
                 .create();
     }
 
-    /**
-     * Guarda una lista u objeto genérico en un archivo JSON.
-     *
-     * @param filePath ruta del archivo donde se escribirá el JSON
-     * @param data     objeto o lista a serializar
-     * @param <T>      tipo del objeto a escribir
-     */
     public <T> void writeToFile(String filePath, T data) {
         try {
             ensureDirectoryExists(filePath);
-
-            try (Writer writer = new FileWriter(filePath)) {
+            try (Writer writer = new OutputStreamWriter(
+                    new FileOutputStream(filePath),
+                    StandardCharsets.UTF_8)) {
                 gson.toJson(data, writer);
             }
         } catch (IOException e) {
-            System.err.println("❌ Error al escribir el archivo JSON: " + filePath);
-            e.printStackTrace();
+            throw new RuntimeException("Error al escribir el archivo JSON: " + filePath, e);
         }
     }
 
-    /**
-     * Lee un archivo JSON y lo convierte a la estructura indicada.
-     * Si el archivo no existe o está vacío, devuelve defaultValue.
-     *
-     * @param filePath     ruta del archivo JSON a leer
-     * @param type         tipo esperado (p. ej. new TypeToken<List<T>>(){}.getType())
-     * @param defaultValue valor por defecto a retornar si el archivo no existe o está vacío
-     * @param <T>          tipo del objeto esperado
-     * @return instancia leída o defaultValue en caso de error/ausencia
-     */
     public <T> T readFromFile(String filePath, Type type, T defaultValue) {
         if (!Files.exists(Paths.get(filePath))) {
             return defaultValue;
         }
 
-        try (Reader reader = new FileReader(filePath)) {
-            // Evita error si el archivo está vacío
-            if (new File(filePath).length() == 0) {
-                return defaultValue;
-            }
+        File file = new File(filePath);
+        if (file.length() == 0) {
+            return defaultValue;
+        }
 
+        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             T result = gson.fromJson(reader, type);
-            return (result != null) ? result : defaultValue;
-
-        } catch (FileNotFoundException e) {
-            return defaultValue;
-
+            return result != null ? result : defaultValue;
         } catch (JsonSyntaxException e) {
-            System.err.println("⚠️ Error de sintaxis JSON en: " + filePath);
-            e.printStackTrace();
-            return defaultValue;
-
+            throw new RuntimeException("Error de sintaxis en el archivo JSON: " + filePath, e);
         } catch (IOException e) {
-            System.err.println("❌ Error al leer el archivo JSON: " + filePath);
-            e.printStackTrace();
-            return defaultValue;
+            throw new RuntimeException("Error al leer el archivo JSON: " + filePath, e);
         }
     }
 
-    /**
-     * Asegura que exista la carpeta donde se guardará el JSON.
-     *
-     * @param filePath ruta completa del archivo (incluye carpeta)
-     * @throws IOException si no se puede crear el directorio
-     */
     private void ensureDirectoryExists(String filePath) throws IOException {
         File file = new File(filePath);
         File parentDir = file.getParentFile();

@@ -15,11 +15,11 @@ public class ClinicalSystem {
 
     public static void main(String[] args) {
 
-        // ======== REPOSITORIOS EN MEMORIA ========
+        // ======== REPOSITORIOS ========
         IPatientRepository patientRepo = new PatientRepositoryMemory();
         IDoctorRepository doctorRepo = new DoctorRepositoryJSON();
-        IAppointmentRepository appointmentRepo = new AppointmentRepositoryMemory();
-        IConsultationRepository consultationRepo = new ConsultationRepositoryMemory();
+        IAppointmentRepository appointmentRepo = new AppointmentRepositoryJSON();
+        IConsultationRepository consultationRepo = new ConsultationRepositoryJSON();
         ISpecialtyRepository specialtyRepo = new SpecialtyRepositoryMemory();
 
         // ======== DATOS DE PRUEBA ========

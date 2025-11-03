@@ -25,12 +25,12 @@ import java.util.Optional;
 public class DoctorRepositoryJSON extends JsonRepository<Doctor>
         implements IDoctorRepository, IAuthenticableRepository {
 
-    private static final String FILE_PATH = "data/doctors.json";
+    private static final String FILE_NAME = "doctors.json";
     private static final Type LIST_TYPE = new TypeToken<List<Doctor>>() {
     }.getType();
 
     public DoctorRepositoryJSON() {
-        super(FILE_PATH, LIST_TYPE);
+        super(FILE_NAME, LIST_TYPE);
     }
 
     /**
@@ -42,11 +42,6 @@ public class DoctorRepositoryJSON extends JsonRepository<Doctor>
      */
     @Override
     public boolean add(Doctor doctor) {
-        boolean exists = data.stream()
-                .anyMatch(d -> d.getUsername().equals(doctor.getUsername())
-                        || d.getDocumentNumber().equals(doctor.getDocumentNumber()));
-        if (exists)
-            return false;
         boolean added = data.add(doctor);
         if (added)
             save();
@@ -61,14 +56,15 @@ public class DoctorRepositoryJSON extends JsonRepository<Doctor>
      */
     @Override
     public boolean deleteById(String id) {
-        Optional<Doctor> doctorOpt = searchById(id);
-        if (doctorOpt.isPresent()) {
-            Doctor doctor = doctorOpt.get();
-            doctor.setCurrentStatus(false); // Soft delete
-            save();
-            return true;
-        }
-        return false;
+        return data.stream()
+                .filter(d -> d.getId().equals(id))
+                .findFirst()
+                .map(doctor -> {
+                    doctor.setCurrentStatus(false);
+                    save();
+                    return true;
+                })
+                .orElse(false);
     }
 
     /**
