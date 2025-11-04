@@ -9,21 +9,31 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Utilidad para lectura/escritura de archivos JSON usando Gson.
- * <p>
- * Provee métodos genéricos para serializar y deserializar objetos y listas,
- * y gestiona la creación de directorios si es necesario.
- * </p>
+ * Utilidad para lectura y escritura de archivos JSON usando Gson.
  *
+ * <p>
+ * Provee métodos genéricos para serializar y deserializar objetos y listas.
+ * Maneja tipos de fecha y hora de Java (LocalDate, LocalTime, LocalDateTime, Duration)
+ * y asegura la creación de directorios necesarios.
+ * <p>
+ * Todos los métodos lanzan excepciones estándar (UncheckedIOException, IllegalArgumentException, JsonParseException)
+ * en caso de fallos de lectura, escritura o sintaxis de JSON.
+ * </p>
+ * 
  * @author camil
  */
 public class JsonStore {
 
     private final Gson gson;
 
+    /**
+     * Crea una instancia de {@code JsonStore} con soporte para serialización/deserialización
+     * de {@link LocalDate}, {@link LocalTime}, {@link LocalDateTime} y {@link Duration},
+     * además de formateo bonito de JSON.
+     */
     public JsonStore() {
         this.gson = new GsonBuilder()
-                // --- LocalDate ---
+                // Adaptadores para LocalDate, LocalTime, LocalDateTime y Duration
                 .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
                     @Override
                     public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
@@ -37,8 +47,6 @@ public class JsonStore {
                         return LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE);
                     }
                 })
-
-                // --- LocalTime ---
                 .registerTypeAdapter(LocalTime.class, new JsonSerializer<LocalTime>() {
                     @Override
                     public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
@@ -52,8 +60,6 @@ public class JsonStore {
                         return LocalTime.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_TIME);
                     }
                 })
-
-                // --- LocalDateTime ---
                 .registerTypeAdapter(LocalDateTime.class, new JsonSerializer<LocalDateTime>() {
                     @Override
                     public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
@@ -67,8 +73,6 @@ public class JsonStore {
                         return LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                     }
                 })
-
-                // --- Duration ---
                 .registerTypeAdapter(Duration.class, new JsonSerializer<Duration>() {
                     @Override
                     public JsonElement serialize(Duration src, Type typeOfSrc, JsonSerializationContext context) {
@@ -87,7 +91,20 @@ public class JsonStore {
                 .create();
     }
 
+    /**
+     * Serializa un objeto o lista y lo escribe en el archivo especificado.
+     *
+     * @param filePath ruta completa del archivo JSON
+     * @param data     objeto o lista a serializar
+     * @param <T>      tipo del objeto
+     * @throws IllegalArgumentException si {@code filePath} es nulo o vacío
+     * @throws UncheckedIOException      si ocurre un error de escritura en disco
+     * @throws IllegalStateException     si no se puede acceder al archivo
+     */
     public <T> void writeToFile(String filePath, T data) {
+        if (filePath == null || filePath.isEmpty()) {
+            throw new IllegalArgumentException("La ruta del archivo no puede ser nula o vacía.");
+        }
         try {
             ensureDirectoryExists(filePath);
             try (Writer writer = new OutputStreamWriter(
@@ -95,18 +112,32 @@ public class JsonStore {
                     StandardCharsets.UTF_8)) {
                 gson.toJson(data, writer);
             }
+        } catch (FileNotFoundException e) {
+            throw new IllegalStateException("Archivo no encontrado: " + filePath, e);
         } catch (IOException e) {
-            throw new RuntimeException("Error al escribir el archivo JSON: " + filePath, e);
+            throw new UncheckedIOException("Error al escribir en el archivo JSON: " + filePath, e);
         }
     }
 
+    /**
+     * Lee un objeto o lista desde un archivo JSON.
+     *
+     * @param filePath     ruta completa del archivo JSON
+     * @param type         tipo de objeto esperado
+     * @param defaultValue valor por defecto si el archivo no existe o está vacío
+     * @param <T>          tipo del objeto
+     * @return objeto leído desde JSON o {@code defaultValue} si el archivo no existe o está vacío
+     * @throws IllegalArgumentException si {@code filePath} es nulo o vacío
+     * @throws JsonParseException       si el JSON tiene sintaxis incorrecta
+     * @throws UncheckedIOException     si ocurre un error de lectura
+     */
     public <T> T readFromFile(String filePath, Type type, T defaultValue) {
-        if (!Files.exists(Paths.get(filePath))) {
-            return defaultValue;
+        if (filePath == null || filePath.isEmpty()) {
+            throw new IllegalArgumentException("La ruta del archivo no puede ser nula o vacía.");
         }
+        Path path = Paths.get(filePath);
 
-        File file = new File(filePath);
-        if (file.length() == 0) {
+        if (!Files.exists(path) || path.toFile().length() == 0) {
             return defaultValue;
         }
 
@@ -114,15 +145,20 @@ public class JsonStore {
             T result = gson.fromJson(reader, type);
             return result != null ? result : defaultValue;
         } catch (JsonSyntaxException e) {
-            throw new RuntimeException("Error de sintaxis en el archivo JSON: " + filePath, e);
+            throw new JsonParseException("Error de sintaxis en el archivo JSON: " + filePath, e);
         } catch (IOException e) {
-            throw new RuntimeException("Error al leer el archivo JSON: " + filePath, e);
+            throw new UncheckedIOException("Error al leer el archivo JSON: " + filePath, e);
         }
     }
 
+    /**
+     * Asegura que el directorio padre del archivo exista, creándolo si es necesario.
+     *
+     * @param filePath ruta del archivo
+     * @throws IOException si ocurre un error al crear directorios
+     */
     private void ensureDirectoryExists(String filePath) throws IOException {
-        File file = new File(filePath);
-        File parentDir = file.getParentFile();
+        Path parentDir = Paths.get(filePath).getParent();
 
         if (parentDir != null && !parentDir.exists()) {
             Files.createDirectories(parentDir.toPath());
