@@ -1,0 +1,22 @@
+[
+  {
+    "id": "23b7bbc4-1b47-4fab-897f-0876d49bc130",
+    "specialtyName": "CARDIOLOGIA"
+  },
+  {
+    "id": "15218284-4c3b-4a34-ad08-0a969714ffc4",
+    "specialtyName": "CIRUJANO"
+  },
+  {
+    "id": "df8d6ed7-1855-4b59-a392-0ff96e3c3522",
+    "specialtyName": "GENERAL"
+  },
+  {
+    "id": "4e256de7-c99d-46c0-a24f-811d9728608e",
+    "specialtyName": "INTERNISTA"
+  },
+  {
+    "id": "d2a1e8c6-2cfe-4dac-94ed-08269a994e18",
+    "specialtyName": "ONCOLOGIA"
+  }
+]

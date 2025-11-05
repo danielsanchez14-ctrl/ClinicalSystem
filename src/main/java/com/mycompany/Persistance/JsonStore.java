@@ -141,7 +141,7 @@ public class JsonStore {
             return defaultValue;
         }
 
-        try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+        try (Reader reader = new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)) {
             T result = gson.fromJson(reader, type);
             return result != null ? result : defaultValue;
         } catch (JsonSyntaxException e) {
@@ -160,8 +160,8 @@ public class JsonStore {
     private void ensureDirectoryExists(String filePath) throws IOException {
         Path parentDir = Paths.get(filePath).getParent();
 
-        if (parentDir != null && !parentDir.exists()) {
-            Files.createDirectories(parentDir.toPath());
+        if (parentDir != null && !Files.exists(parentDir)) {
+            Files.createDirectories(parentDir);
         }
     }
 }

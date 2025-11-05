@@ -91,7 +91,7 @@ public class DoctorRepositoryJSON extends JsonRepository<Doctor>
         try{
             Optional<Doctor> doctorOpt = searchById(id);
             if (doctorOpt.isPresent()){
-                doctor.get().setCurrentStatus(false);
+                doctorOpt.get().setCurrentStatus(false);
                 save();
                 return true;
             }

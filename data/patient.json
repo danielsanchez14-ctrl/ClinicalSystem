@@ -1,0 +1,52 @@
+[
+  {
+    "birthDate": "2000-05-12",
+    "id": "67fed446-fcd1-4acf-970a-5b2534bf6651",
+    "fullName": "Juan Pérez",
+    "documentNumber": "1098765432",
+    "username": "juanp",
+    "phoneNumber": "3100000000",
+    "password": "abc123",
+    "currentStatus": true
+  },
+  {
+    "birthDate": "1998-08-30",
+    "id": "2c8279c5-e0a5-4d9a-833c-d7ff563f9dd4",
+    "fullName": "María Gómez",
+    "documentNumber": "1098123456",
+    "username": "mariag",
+    "phoneNumber": "3200000000",
+    "password": "maria456",
+    "currentStatus": true
+  },
+  {
+    "birthDate": "2002-02-14",
+    "id": "6f3db046-7e34-453b-bec6-92bd7d70ba88",
+    "fullName": "Camila Torres",
+    "documentNumber": "1056789123",
+    "username": "camitorres",
+    "phoneNumber": "3154445566",
+    "password": "cami789",
+    "currentStatus": true
+  },
+  {
+    "birthDate": "1995-01-09",
+    "id": "cfc7fcc6-471f-41e1-8288-09b909812686",
+    "fullName": "Pedro Morales",
+    "documentNumber": "1078945612",
+    "username": "pedro",
+    "phoneNumber": "3115556677",
+    "password": "pedro123",
+    "currentStatus": true
+  },
+  {
+    "birthDate": "2007-01-12",
+    "id": "d0c322eb-3835-4b82-a6c5-0a80de8743dc",
+    "fullName": "Jesica Estor Soto",
+    "documentNumber": "10278647",
+    "username": "Jess",
+    "phoneNumber": "3017533543",
+    "password": "12345678",
+    "currentStatus": true
+  }
+]

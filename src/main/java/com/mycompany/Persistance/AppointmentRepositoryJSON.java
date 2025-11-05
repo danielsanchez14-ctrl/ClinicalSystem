@@ -94,7 +94,7 @@ public class AppointmentRepositoryJSON extends JsonRepository<Appointment> imple
                 return false;
             }
         } catch (RuntimeException e) {
-            System.err.println("Error al actualizar el estado de la cita: " + e.getMessage);
+            System.err.println("Error al actualizar el estado de la cita: " + e.getMessage());
             return false;
         }
     }

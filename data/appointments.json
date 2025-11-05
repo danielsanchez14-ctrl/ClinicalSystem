@@ -1,0 +1,176 @@
+[
+  {
+    "id": "c78f5514-43b6-4f2b-afb9-5116b6d625f8",
+    "scheduledAt": "2025-10-24T10:30:00",
+    "duration": "PT30M",
+    "patient": {
+      "birthDate": "2000-05-12",
+      "id": "67fed446-fcd1-4acf-970a-5b2534bf6651",
+      "fullName": "Juan Pérez",
+      "documentNumber": "1098765432",
+      "username": "juanp",
+      "phoneNumber": "3100000000",
+      "password": "abc123",
+      "currentStatus": true
+    },
+    "doctor": {
+      "medicalSpecialty": {
+        "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+        "specialtyName": "CARDIOLOGIA"
+      },
+      "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+      "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+      "documentNumber": "11111111",
+      "username": "drJuanse",
+      "phoneNumber": "3001112233",
+      "password": "123",
+      "currentStatus": true
+    },
+    "status": "PROGRAMADA"
+  },
+  {
+    "id": "1284cc48-fa87-4ca6-be7a-b2a9f6fa7d0f",
+    "scheduledAt": "2025-10-24T11:15:00",
+    "duration": "PT45M",
+    "patient": {
+      "birthDate": "1998-08-30",
+      "id": "2c8279c5-e0a5-4d9a-833c-d7ff563f9dd4",
+      "fullName": "María Gómez",
+      "documentNumber": "1098123456",
+      "username": "mariag",
+      "phoneNumber": "3200000000",
+      "password": "maria456",
+      "currentStatus": true
+    },
+    "doctor": {
+      "medicalSpecialty": {
+        "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+        "specialtyName": "CARDIOLOGIA"
+      },
+      "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+      "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+      "documentNumber": "11111111",
+      "username": "drJuanse",
+      "phoneNumber": "3001112233",
+      "password": "123",
+      "currentStatus": true
+    },
+    "status": "COMPLETADA"
+  },
+  {
+    "id": "379a6200-9a56-4360-b2d0-2ca23a7af384",
+    "scheduledAt": "2025-10-25T09:00:00",
+    "duration": "PT20M",
+    "patient": {
+      "birthDate": "2002-02-14",
+      "id": "6f3db046-7e34-453b-bec6-92bd7d70ba88",
+      "fullName": "Camila Torres",
+      "documentNumber": "1056789123",
+      "username": "camitorres",
+      "phoneNumber": "3154445566",
+      "password": "cami789",
+      "currentStatus": true
+    },
+    "doctor": {
+      "medicalSpecialty": {
+        "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+        "specialtyName": "CARDIOLOGIA"
+      },
+      "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+      "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+      "documentNumber": "11111111",
+      "username": "drJuanse",
+      "phoneNumber": "3001112233",
+      "password": "123",
+      "currentStatus": true
+    },
+    "status": "COMPLETADA"
+  },
+  {
+    "id": "47520fec-838c-4d13-8e06-a8aa57479a99",
+    "scheduledAt": "2025-10-26T14:00:00",
+    "duration": "PT40M",
+    "patient": {
+      "birthDate": "1995-01-09",
+      "id": "cfc7fcc6-471f-41e1-8288-09b909812686",
+      "fullName": "Pedro Morales",
+      "documentNumber": "1078945612",
+      "username": "pedro",
+      "phoneNumber": "3115556677",
+      "password": "pedro123",
+      "currentStatus": true
+    },
+    "doctor": {
+      "medicalSpecialty": {
+        "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+        "specialtyName": "CARDIOLOGIA"
+      },
+      "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+      "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+      "documentNumber": "11111111",
+      "username": "drJuanse",
+      "phoneNumber": "3001112233",
+      "password": "123",
+      "currentStatus": true
+    },
+    "status": "CANCELADA"
+  },
+  {
+    "id": "1268eae4-65e2-478e-9679-745954a3ca89",
+    "scheduledAt": "2025-10-27T15:00:00",
+    "duration": "PT30M",
+    "patient": {
+      "birthDate": "2002-02-14",
+      "id": "6f3db046-7e34-453b-bec6-92bd7d70ba88",
+      "fullName": "Camila Torres",
+      "documentNumber": "1056789123",
+      "username": "camitorres",
+      "phoneNumber": "3154445566",
+      "password": "cami789",
+      "currentStatus": true
+    },
+    "doctor": {
+      "medicalSpecialty": {
+        "id": "d973b480-d9c7-436d-b968-00ee81282bc3",
+        "specialtyName": "PEDIATRIA"
+      },
+      "id": "ea56bfa0-d47f-41d7-9bb7-254bcc21bd40",
+      "fullName": "Anna Lee",
+      "documentNumber": "22222222",
+      "username": "drLee",
+      "phoneNumber": "3002223344",
+      "password": "123",
+      "currentStatus": true
+    },
+    "status": "PROGRAMADA"
+  },
+  {
+    "id": "78bb1ca2-eef2-4aa0-9336-560df034362f",
+    "scheduledAt": "2025-11-29T15:00:00",
+    "duration": "PT1H",
+    "patient": {
+      "birthDate": "2007-01-12",
+      "id": "d0c322eb-3835-4b82-a6c5-0a80de8743dc",
+      "fullName": "Jesica Estor Soto",
+      "documentNumber": "10278647",
+      "username": "Jess",
+      "phoneNumber": "3017533543",
+      "password": "12345678",
+      "currentStatus": true
+    },
+    "doctor": {
+      "medicalSpecialty": {
+        "id": "8abeaa72-1d5c-4470-97e0-711e69bc8550",
+        "specialtyName": "GENERAL"
+      },
+      "id": "75ec995a-885e-4154-9532-ac5fa2803708",
+      "fullName": "John Smith",
+      "documentNumber": "44444444",
+      "username": "drSmith",
+      "phoneNumber": "3007344089",
+      "password": "123",
+      "currentStatus": true
+    },
+    "status": "PROGRAMADA"
+  }
+]

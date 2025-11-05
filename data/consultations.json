@@ -1,0 +1,107 @@
+[
+  {
+    "id": "a4f41197-cdad-4ec1-8fbd-249eadc28ffa",
+    "appointment": {
+      "id": "1284cc48-fa87-4ca6-be7a-b2a9f6fa7d0f",
+      "scheduledAt": "2025-10-24T11:15:00",
+      "duration": "PT45M",
+      "patient": {
+        "birthDate": "1998-08-30",
+        "id": "2c8279c5-e0a5-4d9a-833c-d7ff563f9dd4",
+        "fullName": "María Gómez",
+        "documentNumber": "1098123456",
+        "username": "mariag",
+        "phoneNumber": "3200000000",
+        "password": "maria456",
+        "currentStatus": true
+      },
+      "doctor": {
+        "medicalSpecialty": {
+          "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+          "specialtyName": "CARDIOLOGIA"
+        },
+        "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+        "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+        "documentNumber": "11111111",
+        "username": "drJuanse",
+        "phoneNumber": "3001112233",
+        "password": "123",
+        "currentStatus": true
+      },
+      "status": "COMPLETADA"
+    },
+    "diagnosis": "Chequeo de control cardíaco",
+    "treatment": "Todo estable. Continuar medicación.",
+    "registrationDate": "2025-11-06T14:18:05.2344044"
+  },
+  {
+    "id": "08952939-08ae-4e93-a39a-8a027de38699",
+    "appointment": {
+      "id": "3aee8c02-e1f3-4ded-bafb-1b1ab2333ff1",
+      "scheduledAt": "2025-08-10T09:00:00",
+      "duration": "PT30M",
+      "patient": {
+        "birthDate": "2000-05-12",
+        "id": "67fed446-fcd1-4acf-970a-5b2534bf6651",
+        "fullName": "Juan Pérez",
+        "documentNumber": "1098765432",
+        "username": "juanp",
+        "phoneNumber": "3100000000",
+        "password": "abc123",
+        "currentStatus": true
+      },
+      "doctor": {
+        "medicalSpecialty": {
+          "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+          "specialtyName": "CARDIOLOGIA"
+        },
+        "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+        "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+        "documentNumber": "11111111",
+        "username": "drJuanse",
+        "phoneNumber": "3001112233",
+        "password": "123",
+        "currentStatus": true
+      },
+      "status": "COMPLETADA"
+    },
+    "diagnosis": "Evaluación postoperatoria",
+    "treatment": "Sin complicaciones. Revisión en 6 meses.",
+    "registrationDate": "2025-11-06T14:18:05.2404171"
+  },
+  {
+    "id": "df876499-2e37-400e-aace-e3d76d6c1c9f",
+    "appointment": {
+      "id": "379a6200-9a56-4360-b2d0-2ca23a7af384",
+      "scheduledAt": "2025-10-25T09:00:00",
+      "duration": "PT20M",
+      "patient": {
+        "birthDate": "2002-02-14",
+        "id": "6f3db046-7e34-453b-bec6-92bd7d70ba88",
+        "fullName": "Camila Torres",
+        "documentNumber": "1056789123",
+        "username": "camitorres",
+        "phoneNumber": "3154445566",
+        "password": "cami789",
+        "currentStatus": true
+      },
+      "doctor": {
+        "medicalSpecialty": {
+          "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+          "specialtyName": "CARDIOLOGIA"
+        },
+        "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+        "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+        "documentNumber": "11111111",
+        "username": "drJuanse",
+        "phoneNumber": "3001112233",
+        "password": "123",
+        "currentStatus": true
+      },
+      "status": "PROGRAMADA"
+    },
+    "diagnosis": "murio",
+    "treatment": "entiero",
+    "registrationDate": "2025-11-06T14:18:31.5931534"
+  }
+]
