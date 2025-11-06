@@ -1,13 +1,13 @@
 [
   {
-    "id": "a4f41197-cdad-4ec1-8fbd-249eadc28ffa",
+    "id": "0ff9abe1-7d71-485b-af88-202446d798ae",
     "appointment": {
-      "id": "1284cc48-fa87-4ca6-be7a-b2a9f6fa7d0f",
+      "id": "99f2aa8d-3d9a-4dcf-a113-46dbd41dd21b",
       "scheduledAt": "2025-10-24T11:15:00",
       "duration": "PT45M",
       "patient": {
         "birthDate": "1998-08-30",
-        "id": "2c8279c5-e0a5-4d9a-833c-d7ff563f9dd4",
+        "id": "c95dfc3b-f2d8-4988-af5f-fee79df7d6e4",
         "fullName": "María Gómez",
         "documentNumber": "1098123456",
         "username": "mariag",
@@ -17,10 +17,10 @@
       },
       "doctor": {
         "medicalSpecialty": {
-          "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+          "id": "4f89c302-3f72-40ca-b57d-57de46a58899",
           "specialtyName": "CARDIOLOGIA"
         },
-        "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+        "id": "e137c67f-2ae7-4150-8e38-3c1496033a5f",
         "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
         "documentNumber": "11111111",
         "username": "drJuanse",
@@ -32,17 +32,17 @@
     },
     "diagnosis": "Chequeo de control cardíaco",
     "treatment": "Todo estable. Continuar medicación.",
-    "registrationDate": "2025-11-06T14:18:05.2344044"
+    "registrationDate": "2025-11-06T14:42:11.4228433"
   },
   {
-    "id": "08952939-08ae-4e93-a39a-8a027de38699",
+    "id": "bc009e43-ed62-46eb-8133-25240ea97d2a",
     "appointment": {
-      "id": "3aee8c02-e1f3-4ded-bafb-1b1ab2333ff1",
+      "id": "a9145912-5be9-4075-b431-f4a908c9460a",
       "scheduledAt": "2025-08-10T09:00:00",
       "duration": "PT30M",
       "patient": {
         "birthDate": "2000-05-12",
-        "id": "67fed446-fcd1-4acf-970a-5b2534bf6651",
+        "id": "d745ee27-b227-40d6-ad96-6ffc46da9250",
         "fullName": "Juan Pérez",
         "documentNumber": "1098765432",
         "username": "juanp",
@@ -52,10 +52,10 @@
       },
       "doctor": {
         "medicalSpecialty": {
-          "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+          "id": "4f89c302-3f72-40ca-b57d-57de46a58899",
           "specialtyName": "CARDIOLOGIA"
         },
-        "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+        "id": "e137c67f-2ae7-4150-8e38-3c1496033a5f",
         "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
         "documentNumber": "11111111",
         "username": "drJuanse",
@@ -67,17 +67,17 @@
     },
     "diagnosis": "Evaluación postoperatoria",
     "treatment": "Sin complicaciones. Revisión en 6 meses.",
-    "registrationDate": "2025-11-06T14:18:05.2404171"
+    "registrationDate": "2025-11-06T14:42:11.4308395"
   },
   {
-    "id": "df876499-2e37-400e-aace-e3d76d6c1c9f",
+    "id": "5fb11906-fdc8-4b8e-bda9-7f07abac9afb",
     "appointment": {
-      "id": "379a6200-9a56-4360-b2d0-2ca23a7af384",
+      "id": "d98057c4-7e1a-4d69-a162-1fbb68b9fea7",
       "scheduledAt": "2025-10-25T09:00:00",
       "duration": "PT20M",
       "patient": {
         "birthDate": "2002-02-14",
-        "id": "6f3db046-7e34-453b-bec6-92bd7d70ba88",
+        "id": "1726e925-6780-430b-bd70-8d1f6c620f4e",
         "fullName": "Camila Torres",
         "documentNumber": "1056789123",
         "username": "camitorres",
@@ -87,10 +87,10 @@
       },
       "doctor": {
         "medicalSpecialty": {
-          "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+          "id": "4f89c302-3f72-40ca-b57d-57de46a58899",
           "specialtyName": "CARDIOLOGIA"
         },
-        "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
+        "id": "e137c67f-2ae7-4150-8e38-3c1496033a5f",
         "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
         "documentNumber": "11111111",
         "username": "drJuanse",
@@ -100,8 +100,8 @@
       },
       "status": "PROGRAMADA"
     },
-    "diagnosis": "murio",
-    "treatment": "entiero",
-    "registrationDate": "2025-11-06T14:18:31.5931534"
+    "diagnosis": "Arritmia Cardiaca",
+    "treatment": "Carbamazepina, revición en 6 meses",
+    "registrationDate": "2025-11-06T14:43:18.0738631"
   }
 ]

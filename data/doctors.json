@@ -1,23 +1,23 @@
 [
   {
     "medicalSpecialty": {
-      "id": "c974bee8-729c-4803-9352-5af6d90a0a10",
+      "id": "4f89c302-3f72-40ca-b57d-57de46a58899",
       "specialtyName": "CARDIOLOGIA"
     },
-    "id": "80370e4a-e616-4791-ac80-434e98ec6b2f",
-    "fullName": "Juan Sebastián Maximiliano Pérez de la Vega",
+    "id": "e137c67f-2ae7-4150-8e38-3c1496033a5f",
+    "fullName": "Juan Maximiliano Pérez",
     "documentNumber": "11111111",
-    "username": "drJuanse",
+    "username": "drMax",
     "phoneNumber": "3001112233",
     "password": "123",
     "currentStatus": true
   },
   {
     "medicalSpecialty": {
-      "id": "d973b480-d9c7-436d-b968-00ee81282bc3",
+      "id": "9c463247-dd2b-43d0-a4dd-4683ac2ce49b",
       "specialtyName": "PEDIATRIA"
     },
-    "id": "ea56bfa0-d47f-41d7-9bb7-254bcc21bd40",
+    "id": "3d3344cf-b9d0-4d6c-ad55-a71af757a176",
     "fullName": "Anna Lee",
     "documentNumber": "22222222",
     "username": "drLee",
@@ -27,27 +27,40 @@
   },
   {
     "medicalSpecialty": {
-      "id": "81cf0659-009c-4b94-9959-a11c3c4ca7e4",
+      "id": "ec02108c-f93c-4576-b066-01f69a6d640b",
       "specialtyName": "INTERNISTA"
     },
-    "id": "c49976a5-10c8-44e5-800d-10534c75d25f",
+    "id": "660df962-b8df-4da5-b1b0-65737895e129",
     "fullName": "Andrés Rojas",
     "documentNumber": "33333333",
     "username": "drRojas",
     "phoneNumber": "3003334455",
     "password": "123",
-    "currentStatus": true
+    "currentStatus": false
   },
   {
     "medicalSpecialty": {
-      "id": "8abeaa72-1d5c-4470-97e0-711e69bc8550",
+      "id": "f15363e8-8ac9-4c6f-a019-a2db10c2587d",
       "specialtyName": "GENERAL"
     },
-    "id": "75ec995a-885e-4154-9532-ac5fa2803708",
+    "id": "0ce79b30-c606-4247-88e3-981b29bf502b",
     "fullName": "John Smith",
     "documentNumber": "44444444",
     "username": "drSmith",
     "phoneNumber": "3007344089",
+    "password": "123",
+    "currentStatus": true
+  },
+  {
+    "medicalSpecialty": {
+      "id": "1d7c0399-31b5-47f8-a8ef-22eae7747d04",
+      "specialtyName": "NEUROLOGO"
+    },
+    "id": "8f205eb4-35b4-470c-9299-24f899bdc0e8",
+    "fullName": "Luisa Torres",
+    "documentNumber": "1025574564",
+    "username": "drTorres",
+    "phoneNumber": "3017533543",
     "password": "123",
     "currentStatus": true
   }
