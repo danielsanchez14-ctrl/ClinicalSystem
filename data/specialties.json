@@ -1,0 +1,26 @@
+[
+  {
+    "id": "d6b2059a-a824-4a4b-abed-07d8118156e3",
+    "specialtyName": "CARDIOLOGIA"
+  },
+  {
+    "id": "0306a648-fbf2-4415-a1b3-7fc434aa6691",
+    "specialtyName": "CIRUJANO"
+  },
+  {
+    "id": "48e0ed97-07f5-41c8-936a-3cfa750b55e7",
+    "specialtyName": "GENERAL"
+  },
+  {
+    "id": "f239564a-8a8b-486f-9a76-2045218b96bc",
+    "specialtyName": "INTERNISTA"
+  },
+  {
+    "id": "76b55ec3-b0ed-4fd5-a9bf-381ef36f7839",
+    "specialtyName": "ONCOLOGIA"
+  },
+  {
+    "id": "1d7c0399-31b5-47f8-a8ef-22eae7747d04",
+    "specialtyName": "NEUROLOGO"
+  }
+]

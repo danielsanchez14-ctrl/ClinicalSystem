@@ -21,12 +21,10 @@ public class User {
     private String phoneNumber;
     private String password;
     private boolean currentStatus; // true = cuenta activa, false = eliminada lógicamente
-    private boolean activeSession; // true = sesión activa (logueado)
 
     public User() {
         this.id = UUID.randomUUID().toString();
         this.currentStatus = true;
-        this.activeSession = false;
     }
 
     public User(String username, String phoneNumber, String password, String fullName, String documentNumber) {
@@ -37,15 +35,10 @@ public class User {
         this.fullName = fullName;
         this.documentNumber = documentNumber;
         this.currentStatus = true;
-        this.activeSession = false;
     }
 
     public boolean isCurrentStatus() {
         return currentStatus;
-    }
-
-    public boolean isActiveSession() {
-        return activeSession;
     }
 
     
@@ -103,13 +96,6 @@ public class User {
      */
     public void setCurrentStatus(boolean currentStatus) {
         this.currentStatus = currentStatus;
-    }
-    
-    /**
-     * @param activeSession the activeSession to set
-     */
-    public void setActiveSession(boolean activeSession) {
-        this.activeSession = activeSession;
     }
 
     /**

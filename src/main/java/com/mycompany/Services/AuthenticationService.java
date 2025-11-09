@@ -62,7 +62,6 @@ public class AuthenticationService implements IAuthentication {
                 }
                 if (user.getPassword().equals(password)) {
                     currentUser = user;
-                    currentUser.setActiveSession(true);
                     return Optional.of(user);
                 }
             }
@@ -76,7 +75,6 @@ public class AuthenticationService implements IAuthentication {
     @Override
     public void logout() {
         if (currentUser != null) {
-            currentUser.setActiveSession(false);
             currentUser = null;
         }
     }

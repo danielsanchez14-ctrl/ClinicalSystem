@@ -1,0 +1,67 @@
+[
+  {
+    "medicalSpecialty": {
+      "id": "4f89c302-3f72-40ca-b57d-57de46a58899",
+      "specialtyName": "CARDIOLOGIA"
+    },
+    "id": "e137c67f-2ae7-4150-8e38-3c1496033a5f",
+    "fullName": "Juan Maximiliano Pérez",
+    "documentNumber": "11111111",
+    "username": "drMax",
+    "phoneNumber": "3001112233",
+    "password": "123",
+    "currentStatus": true
+  },
+  {
+    "medicalSpecialty": {
+      "id": "9c463247-dd2b-43d0-a4dd-4683ac2ce49b",
+      "specialtyName": "PEDIATRIA"
+    },
+    "id": "3d3344cf-b9d0-4d6c-ad55-a71af757a176",
+    "fullName": "Anna Lee",
+    "documentNumber": "22222222",
+    "username": "drLee",
+    "phoneNumber": "3002223344",
+    "password": "123",
+    "currentStatus": true
+  },
+  {
+    "medicalSpecialty": {
+      "id": "ec02108c-f93c-4576-b066-01f69a6d640b",
+      "specialtyName": "INTERNISTA"
+    },
+    "id": "660df962-b8df-4da5-b1b0-65737895e129",
+    "fullName": "Andrés Rojas",
+    "documentNumber": "33333333",
+    "username": "drRojas",
+    "phoneNumber": "3003334455",
+    "password": "123",
+    "currentStatus": false
+  },
+  {
+    "medicalSpecialty": {
+      "id": "f15363e8-8ac9-4c6f-a019-a2db10c2587d",
+      "specialtyName": "GENERAL"
+    },
+    "id": "0ce79b30-c606-4247-88e3-981b29bf502b",
+    "fullName": "John Smith",
+    "documentNumber": "44444444",
+    "username": "drSmith",
+    "phoneNumber": "3007344089",
+    "password": "123",
+    "currentStatus": true
+  },
+  {
+    "medicalSpecialty": {
+      "id": "1d7c0399-31b5-47f8-a8ef-22eae7747d04",
+      "specialtyName": "NEUROLOGO"
+    },
+    "id": "8f205eb4-35b4-470c-9299-24f899bdc0e8",
+    "fullName": "Luisa Torres",
+    "documentNumber": "1025574564",
+    "username": "drTorres",
+    "phoneNumber": "3017533543",
+    "password": "123",
+    "currentStatus": true
+  }
+]
